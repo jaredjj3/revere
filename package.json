@@ -7,10 +7,14 @@
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
   "license": "MIT",
   "devDependencies": {
+    "@types/yargs": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
     "@typescript-eslint/parser": "^4.14.1",
     "eslint": "^7.19.0",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
+  },
+  "dependencies": {
+    "yargs": "^16.2.0"
   }
 }
