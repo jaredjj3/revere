@@ -5,5 +5,11 @@
   "main": "src/index.ts",
   "repository": "git@github.com:jaredjj3/revere.git",
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.19.0",
+    "typescript": "^4.1.3"
+  }
 }
