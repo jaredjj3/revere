@@ -1,4 +1,5 @@
 # revere
 notification service
 
-![logo](https://user-images.githubusercontent.com/19232300/106394323-1746ed80-63ca-11eb-8046-4a261739af99.png)
+## architecture
+![architecture](https://user-images.githubusercontent.com/19232300/106395966-1cf50100-63d3-11eb-88fb-825d53e16e38.png)
