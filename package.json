@@ -1,0 +1,9 @@
+{
+  "name": "revere",
+  "version": "1.0.0",
+  "description": "notification service",
+  "main": "src/index.ts",
+  "repository": "git@github.com:jaredjj3/revere.git",
+  "author": "Jared Johnson <jared@jaredjohnson.dev>",
+  "license": "MIT"
+}
