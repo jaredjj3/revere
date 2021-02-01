@@ -8,7 +8,7 @@ const VERSION = 0;
 
 type Metadata = {
   version: number;
-  h1: string;
+  header: string;
 };
 
 export class SquozeDetector implements Detector<SquozeMessage> {
@@ -26,24 +26,24 @@ export class SquozeDetector implements Detector<SquozeMessage> {
     if (!prev && !next) {
       return null;
     }
-    if (prev.h1 !== next.h1) {
+    if (prev.header !== next.header) {
       return {
         type: MessageType.Squoze,
         detectedAt: new Date(),
-        content: `squoze has a new headline:\n\n'${next.h1}'`,
+        content: `squoze has a new headline:\n\n'${next.header}'`,
       };
     }
     return null;
   }
 
   private async getPrevData(): Promise<Metadata> {
-    return { version: VERSION, h1: '' };
+    return { version: VERSION, header: '' };
   }
 
   private async getNextData(): Promise<Metadata> {
     const rawHomepage = await this.getRawHomepage();
     const h1 = this.getH1(rawHomepage);
-    return { version: VERSION, h1 };
+    return { version: VERSION, header: h1 };
   }
 
   private getH1(rawHomepage: string): string {
