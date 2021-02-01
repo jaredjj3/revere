@@ -3,6 +3,7 @@ export enum MessageType {
 }
 
 export type Message = {
+  type: MessageType;
   detectedAt: Date;
   content: string;
 };

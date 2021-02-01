@@ -32,10 +32,6 @@ const getNotifier = (notifier: NotifierName): Notifier => {
   }
 };
 
-const toString = (message: Message): string => {
-  return `${message.detectedAt}\n\n${message.content}`;
-};
-
 const main = async () => {
   console.log('loading .env file');
   dotenv.config();
@@ -51,9 +47,8 @@ const main = async () => {
 
   const messages = (await Promise.all(detectors.map((detector) => detector.detect()))).flat();
   messages.sort((m1, m2) => m1.detectedAt.getSeconds() - m2.detectedAt.getSeconds());
-  const strs = messages.map(toString);
 
-  await Promise.all(notifiers.flatMap((notifier) => strs.map((str) => notifier.notify(str))));
+  await Promise.all(notifiers.flatMap((notifier) => messages.map((message) => notifier.notify(message))));
 
   console.log('done');
   process.exit(0);

@@ -1,19 +1,20 @@
 import Discord from 'discord.js';
+import { Message } from '../messages';
 import { Notifier } from './types';
 
 export class DiscordNotifier implements Notifier {
   client = new Discord.Client();
   isReady = false;
 
-  async notify(message: string): Promise<void> {
+  async notify(message: Message): Promise<void> {
     await this.ready();
     const channel = await this.getChannel();
     // https://discordjs.guide/popular-topics/faq.html#how-do-i-send-a-message-to-a-specific-channel
     const embed = new Discord.MessageEmbed()
-      .setTitle('SQUOZE ALERT')
+      .setTitle(`${message.type.toUpperCase()} ALERT`)
       .setURL('https://isthesqueezesquoze.com')
       .setColor('#ff0000')
-      .setDescription(message);
+      .setDescription(`${message.detectedAt}\n\n${message.content}`);
     await (channel as any).send(embed);
   }
 

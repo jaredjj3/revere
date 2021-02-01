@@ -1,8 +1,10 @@
+import { Message } from '../messages';
+
 export enum NotifierName {
   Console = 'console',
   Discord = 'discord',
 }
 
 export interface Notifier {
-  notify(message: string): Promise<void>;
+  notify(message: Message): Promise<void>;
 }
