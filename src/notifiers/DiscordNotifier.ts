@@ -1,6 +1,6 @@
 import Discord from 'discord.js';
-import { MissingEnvError } from '../errors';
 import { Message } from '../messages';
+import { Env, env } from '../util';
 import { Notifier } from './types';
 
 export class DiscordNotifier implements Notifier {
@@ -20,26 +20,25 @@ export class DiscordNotifier implements Notifier {
   }
 
   private async getChannel(): Promise<Discord.Channel> {
-    if (!process.env.CHANNEL_ID) {
-      throw new MissingEnvError('missing env: CHANNEL_ID');
-    }
-    return await this.client.channels.fetch(process.env.CHANNEL_ID);
+    const channelId = env(Env.CHANNEL_ID);
+    return await this.client.channels.fetch(channelId);
   }
 
   private async ready(): Promise<void> {
     if (this.isReady) {
       return;
     }
+
     const readyPromise = new Promise<void>((resolve) => {
       this.client.on('ready', () => {
         this.isReady = true;
         resolve();
       });
     });
-    if (!process.env.CHANNEL_ID) {
-      throw new MissingEnvError('missing env: BOT_TOKEN');
-    }
-    const loginPromise = this.client.login(process.env.BOT_TOKEN);
+
+    const botToken = env(Env.BOT_TOKEN);
+    const loginPromise = this.client.login(botToken);
+
     await Promise.all([readyPromise, loginPromise]);
   }
 }
