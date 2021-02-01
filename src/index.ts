@@ -3,6 +3,7 @@ import { Detector, DetectorName, DETECTORS } from './detectors';
 import { SquozeDetector } from './detectors/SquozeDetector';
 import { Message } from './messages';
 import { Notifier, NotifierName, NOTIFIERS } from './notifiers';
+import { ConsoleNotifier } from './notifiers/ConsoleNotifier';
 import { DiscordNotifier } from './notifiers/DiscordNotifier';
 
 const argv = yargs(process.argv.slice(2)).options({
@@ -10,7 +11,7 @@ const argv = yargs(process.argv.slice(2)).options({
   notifiers: { alias: 'n', type: 'array', choices: NOTIFIERS, default: NOTIFIERS },
 }).argv;
 
-const getDetector = (detector: DetectorName): Detector => {
+const getDetector = (detector: DetectorName): Detector<Message> => {
   switch (detector) {
     case DetectorName.Squoze:
       return new SquozeDetector();
@@ -23,6 +24,8 @@ const getNotifier = (notifier: NotifierName): Notifier => {
   switch (notifier) {
     case NotifierName.Discord:
       return new DiscordNotifier();
+    case NotifierName.Console:
+      return new ConsoleNotifier();
     default:
       throw new Error(`unrecognized notifier: ${notifier}`);
   }
