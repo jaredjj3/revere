@@ -6,11 +6,10 @@ import { Message } from './messages';
 import { Notifier, NotifierName, NOTIFIERS } from './notifiers';
 import { ConsoleNotifier } from './notifiers/ConsoleNotifier';
 import { DiscordNotifier } from './notifiers/DiscordNotifier';
-import { Env } from './types';
 
 const argv = yargs(process.argv.slice(2)).options({
   detectors: { alias: 'd', type: 'array', choices: DETECTORS, default: DETECTORS },
-  notifiers: { alias: 'n', type: 'array', choices: NOTIFIERS, default: NOTIFIERS },
+  notifiers: { alias: 'n', type: 'array', choices: NOTIFIERS, default: [NotifierName.Console] },
 }).argv;
 
 const getDetector = (detector: DetectorName): Detector<Message> => {
@@ -33,34 +32,13 @@ const getNotifier = (notifier: NotifierName): Notifier => {
   }
 };
 
-const getEnv = () => {
-  const env: Partial<Env> = {
-    BOT_TOKEN: process.env.BOT_TOKEN,
-    CHANNEL_ID: process.env.CHANNEL_ID,
-  };
-
-  const missing = new Array<string>();
-  for (const [key, val] of Object.entries(env)) {
-    if (!val) {
-      missing.push(key);
-    }
-  }
-  if (missing.length) {
-    throw new Error(`missing env vars, please add to root level .env file: ${missing.join(', ')}`);
-  }
-
-  return env as Env;
-};
-
 const toString = (message: Message): string => {
   return `${message.detectedAt}\n\n${message.content}`;
 };
 
 const main = async () => {
-  console.log('loading env from .env file');
+  console.log('loading .env file');
   dotenv.config();
-  const env = getEnv();
-  console.log('env loaded');
 
   const detectorNames = Array.from(new Set(argv.detectors)).sort();
   const notifierNames = Array.from(new Set(argv.notifiers)).sort();

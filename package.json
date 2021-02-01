@@ -7,6 +7,7 @@
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
   "license": "MIT",
   "scripts": {
+    "setup": "touch .env",
     "notify": "yarn ts-node src/index.ts",
     "docker": "docker build -t revere:latest . && docker-compose run --rm app"
   },

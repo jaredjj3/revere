@@ -2,7 +2,7 @@ version: '3.9'
 services:
   app:
     build: .
-    env_file:
-      - .env
+    image: revere:latest
     volumes:
-      - ./src:/app/src
+      - ${PWD}/src:/app/src
+      - ${PWD}/.env:/app/.env
