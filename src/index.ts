@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import 'reflect-metadata';
 import yargs from 'yargs';
 import { Detector, DetectorName, DETECTORS } from './detectors';
 import { SquozeDetector } from './detectors/SquozeDetector';
