@@ -3,7 +3,7 @@ import { parse } from 'node-html-parser';
 import { MessageType, SquozeMessage } from '../messages';
 import { Detector } from './types';
 
-const HOSTNAME = 'isthesqueezesquoze.com';
+const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 const VERSION = 0;
 
 type Metadata = {
@@ -55,7 +55,7 @@ export class SquozeDetector implements Detector<SquozeMessage> {
   private getRawHomepage(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       https
-        .request({ hostname: HOSTNAME }, (res) => {
+        .request({ hostname: SQUOZE_HOSTNAME }, (res) => {
           let str = '';
 
           res.on('data', (chunk) => {
