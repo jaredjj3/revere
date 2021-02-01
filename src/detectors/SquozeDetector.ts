@@ -11,7 +11,7 @@ type Metadata = {
   h1: string;
 };
 
-export class SquozeDetector implements Detector {
+export class SquozeDetector implements Detector<SquozeMessage> {
   async detect(): Promise<SquozeMessage[]> {
     const [prev, next] = await Promise.all([this.getPrevData(), this.getNextData()]);
     const message = this.getMessage(prev, next);
