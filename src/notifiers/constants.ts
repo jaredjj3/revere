@@ -1,3 +1,3 @@
-import { Notifier } from './types';
+import { NotifierName } from './types';
 
-export const NOTIFIERS = [Notifier.Console];
+export const NOTIFIERS = [NotifierName.Discord];

@@ -1,6 +1,7 @@
 import * as https from 'https';
 import { parse } from 'node-html-parser';
-import { Detector, Message } from './types';
+import { MessageType, SquozeMessage } from '../messages';
+import { Detector } from './types';
 
 const HOSTNAME = 'isthesqueezesquoze.com';
 const VERSION = 0;
@@ -11,7 +12,7 @@ type Metadata = {
 };
 
 export class SquozeDetector implements Detector {
-  async detect(): Promise<Message[]> {
+  async detect(): Promise<SquozeMessage[]> {
     const [prev, next] = await Promise.all([this.getPrevData(), this.getNextData()]);
     const message = this.getMessage(prev, next);
     if (message) {
@@ -21,12 +22,16 @@ export class SquozeDetector implements Detector {
     }
   }
 
-  private getMessage(prev: Metadata, next: Metadata): Message | null {
+  private getMessage(prev: Metadata, next: Metadata): SquozeMessage | null {
     if (!prev && !next) {
       return null;
     }
     if (prev.h1 !== next.h1) {
-      return { detectedAt: new Date(), content: `squoze has a new headline: '${prev.h1}':  to '${next.h1}'` };
+      return {
+        type: MessageType.Squoze,
+        detectedAt: new Date(),
+        content: `squoze has a new headline:\n\n'${next.h1}'`,
+      };
     }
     return null;
   }
