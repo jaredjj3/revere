@@ -43,14 +43,9 @@ export class SquozeDetector implements Detector<SquozeMessage> {
 
   private async getNextData(): Promise<Metadata> {
     const rawHomepage = await this.getRawHomepage();
-    const h1 = this.getH1(rawHomepage);
-    return { createdAt: new Date(), version: VERSION, header: h1 };
-  }
-
-  private getH1(rawHomepage: string): string {
     const root = parse(rawHomepage);
-    const h1 = root.querySelector('h1');
-    return h1.innerText.toLowerCase();
+    const header = root.querySelector('h1').innerText.toLowerCase();
+    return { createdAt: new Date(), version: VERSION, header };
   }
 
   private getRawHomepage(): Promise<string> {
