@@ -7,8 +7,9 @@ const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 const VERSION = 0;
 
 type Metadata = {
-  version: number;
+  createdAt: Date;
   header: string;
+  version: number;
 };
 
 export class SquozeDetector implements Detector<SquozeMessage> {
@@ -37,13 +38,13 @@ export class SquozeDetector implements Detector<SquozeMessage> {
   }
 
   private async getPrevData(): Promise<Metadata> {
-    return { version: VERSION, header: '' };
+    return { createdAt: new Date(), version: VERSION, header: '' };
   }
 
   private async getNextData(): Promise<Metadata> {
     const rawHomepage = await this.getRawHomepage();
     const h1 = this.getH1(rawHomepage);
-    return { version: VERSION, header: h1 };
+    return { createdAt: new Date(), version: VERSION, header: h1 };
   }
 
   private getH1(rawHomepage: string): string {
