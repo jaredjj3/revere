@@ -30,7 +30,7 @@ In order to run any command in a docker container, run:
 yarn docker [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 ```
 
-### notify
+### `notify`
 
 In order to run revere once for a given set of detectors (named `detector1` and `detector2`) and notifiers (named `notifier1` and `notifier2`), run:
 
