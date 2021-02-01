@@ -1,3 +1,3 @@
-import { Detector } from './types';
+import { DetectorName } from './types';
 
-export const DETECTORS: ReadonlyArray<Detector> = [Detector.Squoze];
+export const DETECTORS: ReadonlyArray<DetectorName> = [DetectorName.Squoze];
