@@ -10,12 +10,13 @@ export class DiscordNotifier implements Notifier {
   async notify(message: Message): Promise<void> {
     await this.ready();
     const channel = await this.getChannel();
-    // https://discordjs.guide/popular-topics/faq.html#how-do-i-send-a-message-to-a-specific-channel
     const embed = new Discord.MessageEmbed()
       .setTitle(`${message.type.toUpperCase()} ALERT`)
       .setURL('https://isthesqueezesquoze.com')
       .setColor('#ff0000')
       .setDescription(`${message.detectedAt}\n\n${message.content}`);
+    // https://discordjs.guide/popular-topics/faq.html#how-do-i-send-a-message-to-a-specific-channel
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (channel as any).send(embed);
   }
 
