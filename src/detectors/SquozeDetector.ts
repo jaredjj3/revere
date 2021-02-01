@@ -1,6 +1,6 @@
 import * as https from 'https';
 import { parse } from 'node-html-parser';
-import { MessageType, SquozeMessage } from '../messages';
+import { MessageType, Severity, SquozeMessage } from '../messages';
 import { Detector } from './types';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
@@ -30,6 +30,7 @@ export class SquozeDetector implements Detector<SquozeMessage> {
     if (prev.header !== next.header) {
       return {
         type: MessageType.Squoze,
+        severity: Severity.Warning,
         detectedAt: new Date(),
         content: `squoze has a new headline:\n\n'${next.header}'`,
       };
