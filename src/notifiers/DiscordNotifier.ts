@@ -1,4 +1,5 @@
 import Discord from 'discord.js';
+import { MissingEnvError } from '../errors';
 import { Message } from '../messages';
 import { Notifier } from './types';
 
@@ -20,7 +21,7 @@ export class DiscordNotifier implements Notifier {
 
   private async getChannel(): Promise<Discord.Channel> {
     if (!process.env.CHANNEL_ID) {
-      throw new Error('missing env: CHANNEL_ID');
+      throw new MissingEnvError('missing env: CHANNEL_ID');
     }
     return await this.client.channels.fetch(process.env.CHANNEL_ID);
   }
@@ -36,7 +37,7 @@ export class DiscordNotifier implements Notifier {
       });
     });
     if (!process.env.CHANNEL_ID) {
-      throw new Error('missing env: BOT_TOKEN');
+      throw new MissingEnvError('missing env: BOT_TOKEN');
     }
     const loginPromise = this.client.login(process.env.BOT_TOKEN);
     await Promise.all([readyPromise, loginPromise]);

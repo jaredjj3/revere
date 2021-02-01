@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import yargs from 'yargs';
 import { Detector, DetectorName, DETECTORS } from './detectors';
 import { SquozeDetector } from './detectors/SquozeDetector';
+import { RevereError } from './errors';
 import { Message } from './messages';
 import { Notifier, NotifierName, NOTIFIERS } from './notifiers';
 import { ConsoleNotifier } from './notifiers/ConsoleNotifier';
@@ -17,7 +18,7 @@ const getDetector = (detector: DetectorName): Detector<Message> => {
     case DetectorName.Squoze:
       return new SquozeDetector();
     default:
-      throw new Error(`unrecognized detector: ${detector}`);
+      throw new RevereError(`unmapped detector: ${detector}`);
   }
 };
 
@@ -28,7 +29,7 @@ const getNotifier = (notifier: NotifierName): Notifier => {
     case NotifierName.Console:
       return new ConsoleNotifier();
     default:
-      throw new Error(`unrecognized notifier: ${notifier}`);
+      throw new RevereError(`unmapped notifier: ${notifier}`);
   }
 };
 
