@@ -11,6 +11,7 @@
     "docker": "docker build -t revere:latest . && docker-compose run --rm app"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/node": "^14.14.22",
     "@types/yargs": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^4.14.1",
@@ -22,6 +23,7 @@
   },
   "dependencies": {
     "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
     "node-html-parser": "^2.1.0",
     "yargs": "^16.2.0"
   }

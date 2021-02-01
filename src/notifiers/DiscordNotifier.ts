@@ -1,5 +1,4 @@
 import Discord from 'discord.js';
-import { ENV } from '../env';
 import { Notifier } from './types';
 
 export class DiscordNotifier implements Notifier {
@@ -19,7 +18,10 @@ export class DiscordNotifier implements Notifier {
   }
 
   private async getChannel(): Promise<Discord.Channel> {
-    return await this.client.channels.fetch(ENV.CHANNEL_ID);
+    if (!process.env.CHANNEL_ID) {
+      throw new Error('missing env: CHANNEL_ID');
+    }
+    return await this.client.channels.fetch(process.env.CHANNEL_ID);
   }
 
   private async ready(): Promise<void> {
@@ -32,7 +34,10 @@ export class DiscordNotifier implements Notifier {
         resolve();
       });
     });
-    const loginPromise = this.client.login(ENV.BOT_TOKEN);
+    if (!process.env.CHANNEL_ID) {
+      throw new Error('missing env: BOT_TOKEN');
+    }
+    const loginPromise = this.client.login(process.env.BOT_TOKEN);
     await Promise.all([readyPromise, loginPromise]);
   }
 }
