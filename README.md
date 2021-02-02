@@ -65,3 +65,23 @@ yarn docker revere subscribe
 ## architecture
 
 ![architecture](https://user-images.githubusercontent.com/19232300/106395966-1cf50100-63d3-11eb-88fb-825d53e16e38.png)
+
+## vscode
+
+### `settings.json`
+
+The recommended settings setup the project to fix eslint and prettier errors on save:
+
+```json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.packageManager": "yarn",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": true
+  }
+}
+```
