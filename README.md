@@ -4,30 +4,36 @@ notification service
 
 ## prerequisites
 
-If you want to run locally, you will need:
-
-- [yarn](https://classic.yarnpkg.com/en/docs/install/) (please don't use `npm`)
-
-If you want to run using Docker, you will need:
+If you want to run using Docker (preferred), you will need:
 
 - [yarn](https://classic.yarnpkg.com/en/docs/install/) or [npm](https://www.npmjs.com/get-npm) (replace `yarn` commands with `npm`)
 - [docker](https://docs.docker.com/get-docker/)
 - [docker-compose](https://docs.docker.com/compose/install/) (the docker-for-\* packages usually come with `docker-compose` installed)
+
+If you want to run locally, you will need:
+
+- [yarn](https://classic.yarnpkg.com/en/docs/install/) (please don't use `npm`)
 
 ## getting started
 
 If running this project for the first time, run:
 
 ```bash
-yarn setup
+yarn && yarn setup
 ```
 
 ## commands
 
-In order to run any command in a docker container, run:
+In order to run any command in a Docker container (preferred), run:
 
 ```bash
-yarn docker [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
+yarn docker cmd [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
+```
+
+In order to run any command locally, run:
+
+```bash
+yarn cmd [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 ```
 
 ### `notify`
@@ -35,7 +41,7 @@ yarn docker [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 In order to run revere once for a given set of detectors (named `detector1` and `detector2`) and notifiers (named `notifier1` and `notifier2`), run:
 
 ```bash
-yarn notify -d detector1 -d detector2 -n notifier1 -n notifier2
+yarn docker cmd notify -d detector1 -d detector2 -n notifier1 -n notifier2
 ```
 
 By default, if no detectors are specified, all detectors will be run. If no notifiers are specified, only the `console` notifier is run. A list of detectors is [here](src/detectors/constants.ts) and a list of notifiers is [here](src/notifiers/constants.ts).
