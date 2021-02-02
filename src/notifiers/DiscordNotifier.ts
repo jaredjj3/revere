@@ -1,8 +1,10 @@
 import Discord from 'discord.js';
+import { injectable } from 'inversify';
 import { Message } from '../messages';
 import { Env, env } from '../util';
 import { Notifier } from './types';
 
+@injectable()
 export class DiscordNotifier implements Notifier {
   client = new Discord.Client();
   isReady = false;

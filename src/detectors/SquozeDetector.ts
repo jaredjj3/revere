@@ -1,7 +1,8 @@
 import * as https from 'https';
+import { injectable } from 'inversify';
 import { parse } from 'node-html-parser';
 import { MessageType, Severity, SquozeMessage } from '../messages';
-import { Detector } from './types';
+import { Detector, DetectorName } from './types';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 const VERSION = 0;
@@ -12,7 +13,10 @@ type Metadata = {
   version: number;
 };
 
+@injectable()
 export class SquozeDetector implements Detector<SquozeMessage> {
+  name = DetectorName.Squoze;
+
   async detect(): Promise<SquozeMessage[]> {
     const [prev, next] = await Promise.all([this.getPrevData(), this.getNextData()]);
     const message = this.getMessage(prev, next);
