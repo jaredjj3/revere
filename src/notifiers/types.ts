@@ -6,5 +6,6 @@ export enum NotifierName {
 }
 
 export interface Notifier {
+  name: NotifierName;
   notify(message: Message): Promise<void>;
 }

@@ -1,14 +1,23 @@
 import { Container } from 'inversify';
-import { DetectorName, SquozeDetector } from './detectors';
-import { ConsoleNotifier, DiscordNotifier, NotifierName } from './notifiers';
+import { CommandName, NotifyCommand } from './commands';
+import { SquozeDetector } from './detectors';
+import { TYPES } from './inversify.types';
+import { ConsoleNotifier, DiscordNotifier } from './notifiers';
 
-const container = new Container();
+export const container = new Container();
 
 // detectors
-container.bind(DetectorName.Squoze).to(SquozeDetector);
+container.bind(TYPES.Detector).to(SquozeDetector);
+container.bind(TYPES.SquozeDetector).to(SquozeDetector);
 
 // notifiers
-container.bind(NotifierName.Console).to(ConsoleNotifier);
-container.bind(NotifierName.Discord).to(DiscordNotifier);
+container.bind(TYPES.Notifier).to(ConsoleNotifier);
+container.bind(TYPES.ConsoleNotifier).to(ConsoleNotifier);
 
-export { container };
+container.bind(TYPES.Notifier).to(DiscordNotifier);
+container.bind(TYPES.DiscordNotifier).to(DiscordNotifier);
+
+// command
+container.bind(TYPES.Command).to(NotifyCommand).whenTargetIsDefault();
+container.bind(TYPES.Command).to(NotifyCommand).whenTargetNamed(CommandName.Notify);
+container.bind(TYPES.NotifyCommand).to(NotifyCommand);
