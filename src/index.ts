@@ -6,6 +6,7 @@ import { container } from './inversify.config';
 
 const toCmdName = (str: string | undefined): CommandName => {
   const cmdNames = Object.values(CommandName);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!str || !cmdNames.includes(str as any)) {
     throw new RevereError(`invalid command: ${str}`);
   }
