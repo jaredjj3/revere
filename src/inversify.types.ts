@@ -1,10 +1,11 @@
 export const TYPES = {
-  SquozeDetector: 'SquozeDetector',
-  ConsoleNotifier: 'ConsoleNotifier',
-  DiscordNotifier: 'DiscordNotifier',
-  NotifyCommand: 'NotifyCommand',
-  DiscordSubscriber: 'DiscordSubscriber',
   Command: 'Command',
+  ConsoleNotifier: 'ConsoleNotifier',
   Detector: 'Detector',
+  DiscordNotifier: 'DiscordNotifier',
+  DiscordSubscriber: 'DiscordSubscriber',
   Notifier: 'Notifier',
+  NotifyCommand: 'NotifyCommand',
+  SquozeDetector: 'SquozeDetector',
+  SubscribeCommand: 'SubscriberCommand',
 };

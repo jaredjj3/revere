@@ -1,5 +1,6 @@
 export enum CommandName {
   Notify = 'notify',
+  Subscribe = 'subscribe',
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
