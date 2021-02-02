@@ -3,6 +3,7 @@ export const TYPES = {
   ConsoleNotifier: 'ConsoleNotifier',
   DiscordNotifier: 'DiscordNotifier',
   NotifyCommand: 'NotifyCommand',
+  DiscordListener: 'DiscordListener',
   Command: 'Command',
   Detector: 'Detector',
   Notifier: 'Notifier',

@@ -4,7 +4,7 @@ export enum CommandName {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Command<A = any> {
-  name: string;
+  name: CommandName;
   description: string;
   parse(argv: string[]): A;
   run(args: A): Promise<void>;
