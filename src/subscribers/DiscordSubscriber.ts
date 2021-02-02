@@ -16,7 +16,13 @@ export class DiscordSubscriber {
 
   async waitForMessages(): Promise<void> {
     await this.ready();
-    console.log('waiting for discord messages...');
+    console.log('started waiting for discord messages...');
+    await new Promise<void>((resolve) => {
+      process.on('SIGINT', () => {
+        console.log('...stopped waiting for discord messages');
+        resolve();
+      });
+    });
   }
 
   private async onMessage(message: Discord.Message) {
@@ -24,19 +30,20 @@ export class DiscordSubscriber {
       return;
     }
 
-    console.log(`received discord command: '${message.content}'`);
-    const [commandName, ...argv] = message.content.split(' ').slice(1);
-    const command = this.getCommand(commandName);
-
-    await message.reply(`running command: ${command.name}`);
-
-    const args = command.parse(argv);
     try {
+      console.log(`\nreceived discord command: '${message.content}'`);
+      const [commandName, ...argv] = message.content.split(' ').slice(1);
+      const command = this.getCommand(commandName);
+
+      await message.reply(`running command: ${command.name}`);
+
+      const args = command.parse(argv);
       await command.run(args);
     } catch (err) {
       console.error(err);
       await message.channel.send(`something went wrong running: '${message.content}'`);
     }
+    console.log('\n');
   }
 
   private getCommand(commandName: string): Command {

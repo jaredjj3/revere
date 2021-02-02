@@ -19,7 +19,13 @@ If you want to run locally, you will need:
 If running this project for the first time, run:
 
 ```bash
-yarn && yarn setup
+yarn setup
+```
+
+If you plan to run this project locally, run:
+
+```bash
+yarn install
 ```
 
 ## commands
@@ -27,13 +33,13 @@ yarn && yarn setup
 In order to run any command in a Docker container (preferred), run:
 
 ```bash
-yarn docker cmd [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
+yarn docker revere [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 ```
 
 In order to run any command locally, run:
 
 ```bash
-yarn cmd [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
+yarn revere [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 ```
 
 ### `notify`
@@ -41,12 +47,20 @@ yarn cmd [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
 In order to run revere once for a given set of detectors (named `detector1` and `detector2`) and notifiers (named `notifier1` and `notifier2`), run:
 
 ```bash
-yarn docker cmd notify -d detector1 -d detector2 -n notifier1 -n notifier2
+yarn docker revere notify -d detector1 -d detector2 -n notifier1 -n notifier2
 ```
 
 By default, if no detectors are specified, all detectors will be run. If no notifiers are specified, only the `console` notifier is run. A list of detectors is [here](src/detectors/constants.ts) and a list of notifiers is [here](src/notifiers/constants.ts).
 
 Environment variables are lazily fetched because not all detectors and notifiers need every environment variable to run. If an environment variable that is determined to be required is not specified, revere will throw an error with the name of the environment variable needed. Add this variable to the .env file `ENV_VAR_NAME=VALUE`.
+
+### `subscribe`
+
+In order to have revere listen to a discord channel, specify CHANNEL_ID in the .env file and run:
+
+```bash
+yarn docker revere subscribe
+```
 
 ## architecture
 

@@ -16,8 +16,5 @@ export class SubscribeCommand implements Command<void> {
 
   async run(): Promise<void> {
     await this.discordSubscriber.waitForMessages();
-    await new Promise(() => {
-      return;
-    });
   }
 }

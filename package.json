@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "touch .env",
-    "cmd": "yarn ts-node src/index.ts",
+    "revere": "yarn ts-node src/index.ts",
     "docker": "docker build -t revere:latest . && docker-compose run --rm app"
   },
   "devDependencies": {
