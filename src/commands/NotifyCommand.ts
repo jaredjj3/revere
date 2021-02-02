@@ -21,7 +21,6 @@ type NotifyArgs = {
 @injectable()
 export class NotifyCommand implements Command<NotifyArgs> {
   name = CommandName.Notify;
-  description = 'Runs the specified detectors and pipes it to the specified notifiers';
 
   constructor(
     @multiInject(TYPES.Detector) private detectors: Detector[],
