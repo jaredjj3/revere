@@ -8,7 +8,7 @@ import { Env, env } from '../util';
 const COMMAND_PREFIX = '!revere';
 
 @injectable()
-export class DiscordListener {
+export class DiscordSubscriber {
   private client = new Discord.Client();
   private isReady = false;
 

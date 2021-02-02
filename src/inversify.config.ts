@@ -2,8 +2,8 @@ import { Container } from 'inversify';
 import { CommandName, NotifyCommand } from './commands';
 import { SquozeDetector } from './detectors';
 import { TYPES } from './inversify.types';
-import { DiscordListener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier } from './notifiers';
+import { DiscordSubscriber } from './subscribers';
 
 export const container = new Container();
 
@@ -23,5 +23,5 @@ container.bind(TYPES.Command).to(NotifyCommand).whenTargetIsDefault();
 container.bind(TYPES.Command).to(NotifyCommand).whenTargetNamed(CommandName.Notify);
 container.bind(TYPES.NotifyCommand).to(NotifyCommand);
 
-// listeners
-container.bind(TYPES.DiscordListener).to(DiscordListener);
+// subscribers
+container.bind(TYPES.DiscordSubscriber).to(DiscordSubscriber);
