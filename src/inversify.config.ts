@@ -14,6 +14,6 @@ container.bind(TYPES.SquozeDetector).to(SquozeDetector);
 
 // notifiers
 container.bind(TYPES.ConsoleNotifier).to(ConsoleNotifier);
-container.bind(TYPES.DiscordNotifier).to(DiscordNotifier);
+container.bind(TYPES.DiscordNotifier).to(DiscordNotifier).inSingletonScope();
 
 // subscribers

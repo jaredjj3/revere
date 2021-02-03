@@ -30,6 +30,7 @@ USAGE
 <!-- commands -->
 * [`revere help [COMMAND]`](#revere-help-command)
 * [`revere notify`](#revere-notify)
+* [`revere subscribe [FILE]`](#revere-subscribe-file)
 
 ## `revere help [COMMAND]`
 
@@ -63,4 +64,20 @@ OPTIONS
 ```
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.0/src/commands/notify.ts)_
+
+## `revere subscribe [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere subscribe [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/subscribe.ts](https://github.com/jaredjj3/revere/blob/v1.0.0/src/commands/subscribe.ts)_
 <!-- commandsstop -->

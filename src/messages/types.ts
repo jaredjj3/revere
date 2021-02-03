@@ -1,4 +1,6 @@
 export enum MessageType {
+  None = 'None',
+  Stdout = 'Stdout',
   Squoze = 'Squoze',
 }
 
@@ -14,6 +16,10 @@ export type Message = {
   severity: Severity;
   detectedAt: Date;
   content: string;
+};
+
+export type StdoutMessage = Message & {
+  type: MessageType.Stdout;
 };
 
 export type SquozeMessage = Message & {
