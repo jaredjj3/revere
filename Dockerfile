@@ -7,6 +7,7 @@ COPY yarn.lock .
 RUN yarn
 
 COPY tsconfig.json .
+COPY bin bin
+COPY src src
 
-ENTRYPOINT [ "yarn" ]
-CMD [ "revere" ]
+ENTRYPOINT [ "bin/run" ]

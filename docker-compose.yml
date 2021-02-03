@@ -4,5 +4,4 @@ services:
     build: .
     image: revere:latest
     volumes:
-      - ${PWD}/src:/app/src
       - ${PWD}/.env:/app/.env

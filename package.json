@@ -3,8 +3,17 @@
   "description": "notification service",
   "version": "1.0.0",
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
-  "bin": {
-    "revere": "./bin/run"
+  "repository": "git@github.com:jaredjj3/revere.git",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "typecheck": "yarn tsc --noEmit",
+    "docker": "docker build -t revere:latest . && docker-compose run --rm app",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "revere": "bin/run",
+    "setup": "touch .env",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
   },
   "bugs": "https://github.com/jaredjj3/revere/issues",
   "dependencies": {
@@ -57,16 +66,7 @@
       "@oclif/plugin-help"
     ]
   },
-  "repository": "git@github.com:jaredjj3/revere.git",
-  "scripts": {
-    "typecheck": "yarn tsc --noEmit",
-    "docker": "docker build -t revere:latest . && docker-compose run --rm app",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "revere": "bin/run",
-    "setup": "touch .env",
-    "test": "echo NO TESTS",
-    "version": "oclif-dev readme && git add README.md"
-  },
-  "types": "lib/index.d.ts"
+  "bin": {
+    "revere": "./bin/run"
+  }
 }
