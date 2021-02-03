@@ -44,7 +44,7 @@ export default class Subscribe extends Command {
     }
 
     const notifier = container.get<DiscordNotifier>(TYPES.DiscordNotifier);
-    const notify = async (content: string) => {
+    const maybeNotify = async (content: string) => {
       if (this.shouldReplyWithInfo) {
         await notifier.notify({
           type: MessageType.Stdout,
@@ -60,10 +60,10 @@ export default class Subscribe extends Command {
       this.log(`received commandStr from discord: ${commandStr}`);
       const argv = message.content.split(' ').slice(1);
       const output = await this.spawnRun(argv);
-      notify(output);
+      maybeNotify(output);
     } catch (err) {
       console.error(err);
-      notify(err.message);
+      maybeNotify(err.message);
     }
   }
 
