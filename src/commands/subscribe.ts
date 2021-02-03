@@ -58,7 +58,7 @@ export default class Subscribe extends Command {
     try {
       this.log(`received commandStr from discord: ${commandStr}`);
 
-      const argv = message.content.trim().split(' ').slice(1);
+      const argv = this.getArgv(commandStr);
       const output = await this.spawnRun(argv);
 
       this.log(
@@ -90,10 +90,18 @@ export default class Subscribe extends Command {
     return COMMAND_PREFIXES.some((prefix) => str.startsWith(prefix));
   }
 
+  private getArgv(str: string): string[] {
+    const trimmed = str.trim();
+    // TODO sanitize input?
+    const splitted = trimmed.split(' ');
+    const sliced = splitted.slice(1); // drop the COMMAND_PREFIX
+    return sliced;
+  }
+
   private async spawnRun(argv: string[]): Promise<string> {
     const command = argv[0];
     if (BANNED_COMMANDS.includes(command)) {
-      throw new RevereError(`cannot run command: ${command}`);
+      throw new RevereError(`banned command: '${command}'`);
     }
 
     const run = spawn('bin/run', argv, { shell: false });
@@ -108,11 +116,14 @@ export default class Subscribe extends Command {
       buffer.push(chunk.toString());
     });
 
-    const close = new Promise<string>((resolve) => {
+    const close = new Promise<string>((resolve, reject) => {
       run.on('close', () => {
         const str = buffer.join('');
-        console.log('closed');
-        resolve(str);
+        if (run.exitCode === 0) {
+          resolve(str);
+        } else {
+          reject(new RevereError(`${str}\n\nnon-zero exit code: ${run.exitCode}`));
+        }
       });
     });
 
