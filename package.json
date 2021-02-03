@@ -1,14 +1,39 @@
 {
   "name": "revere",
-  "version": "1.0.0",
   "description": "notification service",
-  "main": "src/index.ts",
-  "repository": "git@github.com:jaredjj3/revere.git",
+  "version": "1.0.0",
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
-  "license": "MIT",
-  "bugs": "https://github.com/jaredjj3/revere/issues",
   "bin": {
     "revere": "./bin/run"
+  },
+  "bugs": "https://github.com/jaredjj3/revere/issues",
+  "dependencies": {
+    "@oclif/command": "^1",
+    "@oclif/config": "^1",
+    "@oclif/plugin-help": "^3",
+    "@types/lodash": "^4.14.168",
+    "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
+    "inversify": "^5.0.5",
+    "lodash": "^4.17.20",
+    "node-html-parser": "^2.1.0",
+    "reflect-metadata": "^0.1.13",
+    "tslib": "^1",
+    "yargs": "^16.2.0"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1",
+    "@types/dotenv": "^8.2.0",
+    "@types/inversify": "^2.0.33",
+    "@types/node": "^10",
+    "@types/yargs": "^16.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.14.1",
+    "@typescript-eslint/parser": "^4.14.1",
+    "eslint": "^7.19.0",
+    "globby": "^10",
+    "prettier": "^2.2.1",
+    "ts-node": "^8",
+    "typescript": "^3.3"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -19,14 +44,12 @@
     "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "scripts": {
-    "setup": "touch .env",
-    "revere": "bin/run",
-    "docker": "docker build -t revere:latest . && docker-compose run --rm app",
-    "postpack": "rm -f oclif.manifest.json",
-    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
-    "version": "oclif-dev readme && git add README.md"
-  },
+  "homepage": "https://github.com/git@github.com:jaredjj3/revere.git",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.ts",
   "oclif": {
     "commands": "./lib/commands",
     "bin": "revere",
@@ -34,32 +57,15 @@
       "@oclif/plugin-help"
     ]
   },
-  "dependencies": {
-    "@oclif/command": "^1.8.0",
-    "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.1",
-    "@types/lodash": "^4.14.168",
-    "discord.js": "^12.5.1",
-    "dotenv": "^8.2.0",
-    "inversify": "^5.0.5",
-    "lodash": "^4.17.20",
-    "node-html-parser": "^2.1.0",
-    "reflect-metadata": "^0.1.13",
-    "tslib": "^2.1.0",
-    "yargs": "^16.2.0"
+  "repository": "git@github.com:jaredjj3/revere.git",
+  "scripts": {
+    "docker": "docker build -t revere:latest . && docker-compose run --rm app",
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
+    "revere": "bin/run",
+    "setup": "touch .env",
+    "test": "echo NO TESTS",
+    "version": "oclif-dev readme && git add README.md"
   },
-  "devDependencies": {
-    "@oclif/dev-cli": "^1.26.0",
-    "@types/dotenv": "^8.2.0",
-    "@types/inversify": "^2.0.33",
-    "@types/node": "^14.14.22",
-    "@types/yargs": "^16.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.14.1",
-    "@typescript-eslint/parser": "^4.14.1",
-    "eslint": "^7.19.0",
-    "globby": "^11.0.2",
-    "prettier": "^2.2.1",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.1.3"
-  }
+  "types": "lib/index.d.ts"
 }

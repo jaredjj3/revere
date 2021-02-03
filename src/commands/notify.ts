@@ -1,16 +1,16 @@
 import { Command, flags } from '@oclif/command';
-import { sortBy } from '@oclif/plugin-help/lib/util';
-import { Detector, DetectorName } from '../detectors';
+import { flatten, sortBy } from 'lodash';
+import { Detector } from '../detectors';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
 import { Message } from '../messages';
-import { Notifier, NotifierName } from '../notifiers';
+import { Notifier } from '../notifiers';
 import { capitalize } from '../util';
 
-const ALLOWED_DETECTORS = [DetectorName.Squoze];
-const ALLOWED_NOTIFIERS = [NotifierName.Console, NotifierName.Discord];
-const DEFAULT_DETECTORS = [DetectorName.Squoze];
-const DEFAULT_NOTIFIERS = [NotifierName.Console];
+const ALLOWED_DETECTORS = ['squoze'];
+const ALLOWED_NOTIFIERS = ['console', 'discord'];
+const DEFAULT_DETECTORS = ['squoze'];
+const DEFAULT_NOTIFIERS = ['console'];
 
 export default class Notify extends Command {
   static description = 'runs specified detectors and notifiers';
@@ -36,7 +36,7 @@ export default class Notify extends Command {
 
   private async getMessages(detectors: Detector[]): Promise<Message[]> {
     const result = await Promise.all(detectors.map((detector) => detector.detect()));
-    const messages = result.flat();
+    const messages = flatten(result);
     return sortBy(messages, (message) => message.detectedAt.getMilliseconds());
   }
 
@@ -51,7 +51,7 @@ export default class Notify extends Command {
   }
 
   private getDetector(detectorName: string): Detector {
-    if (!(ALLOWED_DETECTORS as string[]).includes(detectorName)) {
+    if (!ALLOWED_DETECTORS.includes(detectorName)) {
       throw new RevereError(`detector not allowed: ${detectorName}`);
     }
     const serviceIdentifier = `${capitalize(detectorName)}Detector`;
@@ -59,7 +59,7 @@ export default class Notify extends Command {
   }
 
   private getNotifier(notifierName: string): Notifier {
-    if (!(ALLOWED_NOTIFIERS as string[]).includes(notifierName)) {
+    if (!ALLOWED_NOTIFIERS.includes(notifierName)) {
       throw new RevereError(`notifier not allowed: ${notifierName}`);
     }
     const serviceIdentifier = `${capitalize(notifierName)}Notifier`;

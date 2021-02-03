@@ -1,8 +1,7 @@
-node_modules
-.vscode
-.env
 *-debug.log
 *-error.log
+.env
+.vscode
 /.nyc_output
 /dist
 /lib
