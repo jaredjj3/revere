@@ -1,87 +1,49 @@
-# revere
+revere
+======
 
 notification service
 
-## prerequisites
+[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
+[![Version](https://img.shields.io/npm/v/revere.svg)](https://npmjs.org/package/revere)
+[![Downloads/week](https://img.shields.io/npm/dw/revere.svg)](https://npmjs.org/package/revere)
+[![License](https://img.shields.io/npm/l/revere.svg)](https://github.com/jaredjj3/revere/blob/master/package.json)
 
-If you want to run using Docker (preferred), you will need:
+<!-- toc -->
+* [Usage](#usage)
+* [Commands](#commands)
+<!-- tocstop -->
+# Usage
+<!-- usage -->
+```sh-session
+$ npm install -g revere
+$ revere COMMAND
+running command...
+$ revere (-v|--version|version)
+revere/1.0.0 darwin-x64 node-v14.3.0
+$ revere --help [COMMAND]
+USAGE
+  $ revere COMMAND
+...
+```
+<!-- usagestop -->
+# Commands
+<!-- commands -->
+* [`revere help [COMMAND]`](#revere-help-command)
 
-- [yarn](https://classic.yarnpkg.com/en/docs/install/) or [npm](https://www.npmjs.com/get-npm) (replace `yarn` commands with `npm`)
-- [docker](https://docs.docker.com/get-docker/)
-- [docker-compose](https://docs.docker.com/compose/install/) (the docker-for-\* packages usually come with `docker-compose` installed)
+## `revere help [COMMAND]`
 
-If you want to run locally, you will need:
+display help for revere
 
-- [yarn](https://classic.yarnpkg.com/en/docs/install/) (please don't use `npm`)
+```
+USAGE
+  $ revere help [COMMAND]
 
-## getting started
+ARGUMENTS
+  COMMAND  command to show help for
 
-If running this project for the first time, run:
-
-```bash
-yarn setup
+OPTIONS
+  --all  see all commands in CLI
 ```
 
-If you plan to run this project locally, run:
-
-```bash
-yarn install
-```
-
-## commands
-
-In order to run any command in a Docker container (preferred), run:
-
-```bash
-yarn docker revere [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
-```
-
-In order to run any command locally, run:
-
-```bash
-yarn revere [COMMAND] [-f1 FLAG1...] [-f2 FLAG2...]
-```
-
-### `notify`
-
-In order to run revere once for a given set of detectors (named `detector1` and `detector2`) and notifiers (named `notifier1` and `notifier2`), run:
-
-```bash
-yarn docker revere notify -d detector1 -d detector2 -n notifier1 -n notifier2
-```
-
-By default, if no detectors are specified, all detectors will be run. If no notifiers are specified, only the `console` notifier is run. A list of detectors is [here](src/detectors/constants.ts) and a list of notifiers is [here](src/notifiers/constants.ts).
-
-Environment variables are lazily fetched because not all detectors and notifiers need every environment variable to run. If an environment variable that is determined to be required is not specified, revere will throw an error with the name of the environment variable needed. Add this variable to the .env file `ENV_VAR_NAME=VALUE`.
-
-### `subscribe`
-
-In order to have revere listen to a discord channel, specify CHANNEL_ID in the .env file and run:
-
-```bash
-yarn docker revere subscribe
-```
-
-## architecture
-
-![architecture](https://user-images.githubusercontent.com/19232300/106395966-1cf50100-63d3-11eb-88fb-825d53e16e38.png)
-
-## vscode
-
-### `settings.json`
-
-The recommended settings setup the project to fix eslint and prettier errors on save:
-
-```json
-{
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "eslint.packageManager": "yarn",
-  "typescript.preferences.importModuleSpecifier": "relative",
-  "javascript.preferences.importModuleSpecifier": "relative",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": true
-  }
-}
-```
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+<!-- commandsstop -->
