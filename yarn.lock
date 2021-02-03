@@ -164,6 +164,11 @@
   resolved "https://registry.yarnpkg.com/@oclif/screen/-/screen-1.0.4.tgz#b740f68609dfae8aa71c3a6cab15d816407ba493"
   integrity sha512-60CHpq+eqnTxLZQ4PGHYNwUX572hgpMHGPtTWMjdTMsAvlm69lZV/4ly6O3sAYkomo4NggGcomrDpBe34rxUqw==
 
+"@prisma/engines@2.16.0-44.854c8ba7f0dce66f115af36af24e66989a8c02a1":
+  version "2.16.0-44.854c8ba7f0dce66f115af36af24e66989a8c02a1"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-2.16.0-44.854c8ba7f0dce66f115af36af24e66989a8c02a1.tgz#c7a53f31eafca0e4c010663740ee22ea678f757e"
+  integrity sha512-vt8w+vqCEaTUGZes7mrY5BkF3zZIPTQ9x+C9Ynmr9d+WW54vTqJt7lDFS6eps0LYoqdcCHEs3r/SydCqjII+OQ==
+
 "@types/dotenv@^8.2.0":
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-8.2.0.tgz#5cd64710c3c98e82d9d15844375a33bf1b45d053"
@@ -1563,6 +1568,13 @@ prism-media@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/prism-media/-/prism-media-1.2.3.tgz#37bbb11726674a73fe56a2df4de76aa91d2141b7"
   integrity sha512-fSrR66n0l6roW9Rx4rSLMyTPTjRTiXy5RVqDOurACQ6si1rKHHKDU5gwBJoCsIV0R3o9gi+K50akl/qyw1C74A==
+
+prisma@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-2.16.0.tgz#a4d3d82932f8aa4b4c5415d254bd9966ed9b5c33"
+  integrity sha512-tV+28U0dfmuC0lRWZlqI3PLx+5U2UFw4h5fikBexglXsMOE60S732UDnQPOKS/wztJE7EDS36lk6FInFVDpkPQ==
+  dependencies:
+    "@prisma/engines" "2.16.0-44.854c8ba7f0dce66f115af36af24e66989a8c02a1"
 
 progress@^2.0.0:
   version "2.0.3"
