@@ -27,8 +27,8 @@ export default class Notify extends Command {
     const detectors = flags.detectors.map(this.getDetector.bind(this));
     const notifiers = flags.notifiers.map(this.getNotifier.bind(this));
 
-    this.log(`running detectors: ${detectors.map((detector) => detector.name).join(', ')}`);
-    this.log(`running notifiers: ${notifiers.map((notifier) => notifier.name).join(', ')}`);
+    this.log(`running detectors: ${flags.detectors.join(', ')}`);
+    this.log(`running notifiers: ${flags.notifiers.join(', ')}`);
 
     const messages = await this.getMessages(detectors);
     await this.sendMessages(notifiers, messages);

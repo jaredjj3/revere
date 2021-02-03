@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import { SquozeDetector } from './detectors';
 import { TYPES } from './inversify.types';
 import { ConsoleNotifier, DiscordNotifier } from './notifiers';
-import { DiscordSubscriber } from './subscribers';
 
 dotenv.config();
 
@@ -18,4 +17,3 @@ container.bind(TYPES.ConsoleNotifier).to(ConsoleNotifier);
 container.bind(TYPES.DiscordNotifier).to(DiscordNotifier);
 
 // subscribers
-container.bind(TYPES.DiscordSubscriber).to(DiscordSubscriber);
