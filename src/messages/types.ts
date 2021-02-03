@@ -13,8 +13,8 @@ export enum Severity {
 
 export type Message = {
   type: MessageType;
+  timestamp: Date;
   severity: Severity;
-  detectedAt: Date;
   content: string;
 };
 

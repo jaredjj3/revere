@@ -38,7 +38,7 @@ export default class Notify extends Command {
   private async getMessages(detectors: Detector[]): Promise<Message[]> {
     const result = await Promise.all(detectors.map((detector) => detector.detect()));
     const messages = flatten(result);
-    return sortBy(messages, (message) => message.detectedAt.getMilliseconds());
+    return sortBy(messages, (message) => message.timestamp.getMilliseconds());
   }
 
   private async sendMessages(notifiers: Notifier[], messages: Message[]): Promise<void> {

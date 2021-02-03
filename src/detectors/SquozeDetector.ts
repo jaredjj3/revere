@@ -32,8 +32,8 @@ export class SquozeDetector implements Detector<SquozeMessage> {
     if (prev.header !== next.header) {
       return {
         type: MessageType.Squoze,
+        timestamp: new Date(),
         severity: Severity.Warning,
-        detectedAt: new Date(),
         content: `squoze has a new headline:\n\n'${next.header}'`,
       };
     }

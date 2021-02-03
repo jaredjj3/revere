@@ -80,7 +80,7 @@ export default class Subscribe extends Command {
     const notifier = container.get<DiscordNotifier>(TYPES.DiscordNotifier);
     await notifier.notify({
       type: MessageType.Stdout,
-      detectedAt: new Date(),
+      timestamp: new Date(),
       severity: Severity.Info,
       content,
     });

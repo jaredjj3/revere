@@ -36,7 +36,7 @@ export class DiscordNotifier implements Notifier {
         return new Discord.MessageEmbed()
           .setTitle(`SQUOZE ALERT`)
           .setURL('https://isthesqueezesquoze.com')
-          .setDescription(`${message.detectedAt}\n\n${message.content}`);
+          .setDescription(`${message.timestamp}\n\n${message.content}`);
       case MessageType.Stdout:
         return '```' + message.content + '```';
       default:
