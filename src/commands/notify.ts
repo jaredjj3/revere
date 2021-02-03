@@ -32,6 +32,7 @@ export default class Notify extends Command {
 
     const messages = await this.getMessages(detectors);
     await this.sendMessages(notifiers, messages);
+    this.exit(0);
   }
 
   private async getMessages(detectors: Detector[]): Promise<Message[]> {
