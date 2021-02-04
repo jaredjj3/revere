@@ -7,8 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+model SquozeMetdata {
+  id        Int @id @default(autoincrement())
+  httpCode  Int    
+  createdAt DateTime
+  header    String?
 }
