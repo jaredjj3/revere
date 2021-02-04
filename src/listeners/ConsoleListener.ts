@@ -12,6 +12,8 @@ export class ConsoleListener implements Listener {
 
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
+    process.on('SIGTERM', this.exit);
+    process.on('SIGINT', this.exit);
     setTimeout(() => this.readline.prompt(true), 0); // flush main stack
   }
 
@@ -19,8 +21,7 @@ export class ConsoleListener implements Listener {
     const trimmed = line.trim();
 
     if (trimmed === EXIT_COMMAND) {
-      console.log('farewell');
-      process.exit(0);
+      this.exit();
     }
 
     const argv = trimmed.split(' ');
@@ -33,5 +34,10 @@ export class ConsoleListener implements Listener {
     }
 
     this.readline.prompt(true);
+  };
+
+  exit = (): never => {
+    console.log('farewell');
+    process.exit(0);
   };
 }

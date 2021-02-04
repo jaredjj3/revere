@@ -17,7 +17,7 @@ container.bind<Discord.Client>(TYPES.DiscordClient).toConstantValue(new Discord.
 container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Discord.Client>((ctx) => async () => {
   const client = ctx.container.get<Discord.Client>(TYPES.DiscordClient);
   if (!client.readyAt) {
-    const login = client.login(env('BOT_TOKEN'));
+    const login = client.login(env('DISCORD_BOT_TOKEN'));
     const ready = new Promise<void>((resolve) => client.on('ready', resolve));
     await Promise.all([login, ready]);
   }

@@ -36,7 +36,7 @@ export class DiscordListener implements Listener {
       console.debug('skipped non-command');
       return;
     }
-    if (message.channel.id !== env('CHANNEL_ID')) {
+    if (message.channel.id !== env('DISCORD_CHANNEL_ID')) {
       console.debug(`skipped message for another channel: ${message.channel.id}`);
       return;
     }

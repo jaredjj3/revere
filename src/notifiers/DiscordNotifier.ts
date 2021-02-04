@@ -21,7 +21,7 @@ export class DiscordNotifier implements Notifier {
     const clientProvider = container.get<DiscordClientProvider>(TYPES.DiscordClientProvider);
     const client = await clientProvider();
 
-    const channelId = env('CHANNEL_ID');
+    const channelId = env('DISCORD_CHANNEL_ID');
     const channel = await client.channels.fetch(channelId);
     const formatted = this.format(message);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
