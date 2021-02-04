@@ -1,5 +1,5 @@
 import { Command, flags } from '@oclif/command';
-import { flatten, sortBy } from 'lodash';
+import { flatten, sortBy, uniq } from 'lodash';
 import { Detector } from '../detectors';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
@@ -24,11 +24,11 @@ export default class Notify extends Command {
   async run(): Promise<void> {
     const { flags } = this.parse(Notify);
 
-    const detectors = flags.detectors.map(this.getDetector.bind(this));
-    const notifiers = flags.notifiers.map(this.getNotifier.bind(this));
+    const detectors = uniq(flags.detectors).map(this.getDetector.bind(this));
+    const notifiers = uniq(flags.notifiers).map(this.getNotifier.bind(this));
 
-    this.log(`running detectors: ${flags.detectors.join(', ')}`);
-    this.log(`running notifiers: ${flags.notifiers.join(', ')}`);
+    this.log(`running detectors: ${uniq(flags.detectors).join(', ')}`);
+    this.log(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);
 
     const messages = await this.getMessages(detectors);
     await this.sendMessages(notifiers, messages);

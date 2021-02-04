@@ -5,4 +5,5 @@ export const TYPES = {
   ConsoleNotifier: 'ConsoleNotifier',
   DiscordNotifier: 'DiscordNotifier',
   DiscordSubscriber: 'DiscordSubscriber',
+  DiscordListener: 'DiscordListener',
 };

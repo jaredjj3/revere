@@ -29,6 +29,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`revere help [COMMAND]`](#revere-help-command)
+* [`revere listen [FILE]`](#revere-listen-file)
 * [`revere notify`](#revere-notify)
 * [`revere subscribe`](#revere-subscribe)
 
@@ -48,6 +49,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+
+## `revere listen [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere listen [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/listen.ts](https://github.com/jaredjj3/revere/blob/v1.0.1/src/commands/listen.ts)_
 
 ## `revere notify`
 

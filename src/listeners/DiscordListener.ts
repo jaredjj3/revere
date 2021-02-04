@@ -1,33 +1,25 @@
-import { Command, flags } from '@oclif/command';
 import { spawn } from 'child_process';
 import * as Discord from 'discord.js';
+import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.types';
 import { MessageType, Severity } from '../messages';
-import { DiscordNotifier } from '../notifiers';
+import { Notifier } from '../notifiers';
 import { env } from '../util';
+import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
 const BANNED_COMMANDS = ['subscribe'];
 const COMMAND_TIMEOUT_MS = 5000;
 
-export default class Subscribe extends Command {
-  static description = 'subscribe to discord messages';
-
-  static flags = {
-    help: flags.help({ char: 'h' }),
-    debug: flags.boolean({ char: 'd', default: false }),
-  };
-
-  private flags: { debug: boolean } | undefined;
-
-  async run(): Promise<void> {
-    this.flags = this.parse(Subscribe).flags;
+@injectable()
+export class DiscordListener implements Listener {
+  async listen(notifiers: Notifier[]): Promise<void> {
     const client = await this.getClient();
-    client.on('message', this.onMessage.bind(this));
-    this.log('listening for messages...');
+    client.on('message', this.onMessage(notifiers));
+    console.log('listening for messages...');
   }
 
   async getClient(): Promise<Discord.Client> {
@@ -36,7 +28,7 @@ export default class Subscribe extends Command {
     return client;
   }
 
-  async onMessage(message: Discord.Message): Promise<void> {
+  onMessage = (notifiers: Notifier[]) => async (message: Discord.Message): Promise<void> => {
     const client = await this.getClient();
 
     if (message.author.id === client.user?.id) {
@@ -52,38 +44,30 @@ export default class Subscribe extends Command {
       return;
     }
 
-    const debug = !!this.flags?.debug;
     const commandStr = message.content;
 
     try {
-      this.log(`received commandStr from discord: ${commandStr}`);
-
+      console.log(`received commandStr from discord: ${commandStr}`);
       const argv = this.getArgv(commandStr);
       const output = await this.spawnRun(argv);
-
-      this.log(
-        `\nspawnRun OUTPUT START=======================\n${output}\nspawnRun OUTPUT END=======================\n`
-      );
-
-      let content = `successfully ran command: '${commandStr}'`;
-      content += debug ? `\n\n${output}` : '';
-      this.notify(content);
+      this.notify(notifiers, `successfully ran command: '${commandStr}'\n\n${output}`);
     } catch (err) {
       console.error(err);
-      let content = `unsuccessfully ran command: '${commandStr}'`;
-      content += debug ? `\n\n${err.message}` : '';
-      this.notify(content);
+      this.notify(notifiers, `unsuccessfully ran command: '${commandStr}'\n\n${err.message}`);
     }
-  }
+  };
 
-  private async notify(content: string): Promise<void> {
-    const notifier = container.get<DiscordNotifier>(TYPES.DiscordNotifier);
-    await notifier.notify({
-      type: MessageType.Stdout,
-      timestamp: new Date(),
-      severity: Severity.Info,
-      content,
-    });
+  private async notify(notifiers: Notifier[], content: string): Promise<void> {
+    await Promise.all(
+      notifiers.map((notifier) =>
+        notifier.notify({
+          type: MessageType.Stdout,
+          timestamp: new Date(),
+          severity: Severity.Info,
+          content,
+        })
+      )
+    );
   }
 
   private isCommand(str: string): boolean {

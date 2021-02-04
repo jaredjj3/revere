@@ -5,6 +5,8 @@ import 'reflect-metadata';
 import { Detector, SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { TYPES } from './inversify.types';
+import { Listener } from './listeners';
+import { DiscordListener } from './listeners/DiscordListener';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { env } from './util';
 
@@ -26,3 +28,4 @@ container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Di
 container.bind<Detector>(TYPES.SquozeDetector).to(SquozeDetector);
 container.bind<Notifier>(TYPES.ConsoleNotifier).to(ConsoleNotifier);
 container.bind<Notifier>(TYPES.DiscordNotifier).to(DiscordNotifier);
+container.bind<Listener>(TYPES.DiscordListener).to(DiscordListener);

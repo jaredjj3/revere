@@ -1,9 +1,17 @@
 version: '3.9'
 services:
-  app:
+  revere:
     build: .
     tty: true
     stdin_open: true
     image: revere:latest
     volumes:
       - ${PWD}/.env:/app/.env
+
+  db:
+    image: postgres:11
+    restart: always
+    environment:
+      POSTGRES_DB: revere
+      POSTGRES_USER: revere
+      POSTGRES_PASSWORD: revere
