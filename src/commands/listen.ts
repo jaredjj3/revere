@@ -6,10 +6,10 @@ import { NAMES, TYPES } from '../inversify.constants';
 import { Listener } from '../listeners';
 import { Notifier } from '../notifiers';
 
-const ALLOWED_LISTENERS = [NAMES.discord];
+const ALLOWED_LISTENERS = [NAMES.console, NAMES.discord];
 const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-const DEFAULT_LISTENERS = [NAMES.discord];
-const DEFAULT_NOTIFIERS = [NAMES.discord];
+const DEFAULT_LISTENERS = [NAMES.console];
+const DEFAULT_NOTIFIERS = [NAMES.console];
 
 export default class Listen extends Command {
   static description = 'setup a listener to wait for commands';

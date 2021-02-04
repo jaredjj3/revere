@@ -5,8 +5,7 @@ import 'reflect-metadata';
 import { Detector, SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
-import { Listener } from './listeners';
-import { DiscordListener } from './listeners/DiscordListener';
+import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { env } from './util';
 
@@ -31,3 +30,4 @@ container.bind<Notifier>(TYPES.Notifier).to(ConsoleNotifier).whenTargetNamed(NAM
 container.bind<Notifier>(TYPES.Notifier).to(DiscordNotifier).whenTargetNamed(NAMES.discord);
 
 container.bind<Listener>(TYPES.Listener).to(DiscordListener).whenTargetNamed(NAMES.discord);
+container.bind<Listener>(TYPES.Listener).to(ConsoleListener).whenTargetNamed(NAMES.console);
