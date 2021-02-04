@@ -8,8 +8,8 @@ datasource db {
 }
 
 model SquozeMetdata {
-  id        Int @id @default(autoincrement())
-  httpCode  Int    
-  createdAt DateTime
-  header    String?
+  id             Int      @id @default(autoincrement())
+  httpStatusCode Int
+  createdAt      DateTime
+  header         String?
 }
