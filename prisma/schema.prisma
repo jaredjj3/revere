@@ -12,4 +12,5 @@ model SquozeResponse {
   createdAt      DateTime @default(now())
   httpStatusCode Int
   header         String?
+  errorMessage   String?
 }
