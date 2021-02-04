@@ -67,7 +67,7 @@ export class SquozeDetector implements Detector<SquozeMessage> {
     } catch (err) {
       console.warn('http request failed');
       return await this.prisma.squozeResponse.create({
-        data: { httpStatusCode: -1 },
+        data: { httpStatusCode: -1, errorMessage: err.message },
       });
     }
   }
