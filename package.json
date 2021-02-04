@@ -11,7 +11,7 @@
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "revere": "bin/run",
-    "setup": "touch .env",
+    "setup": "cp -n templates/template.env .env || echo '.env already exists'",
     "test": "echo NO TESTS",
     "version": "oclif-dev readme && git add README.md"
   },
