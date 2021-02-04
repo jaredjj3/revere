@@ -7,9 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SquozeMetdata {
+model SquozeResponses {
   id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
   httpStatusCode Int
-  createdAt      DateTime
   header         String?
 }
