@@ -6,6 +6,9 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn
 
+COPY prisma prisma
+RUN yarn prisma generate
+
 COPY tsconfig.json .
 COPY bin bin
 COPY src src
