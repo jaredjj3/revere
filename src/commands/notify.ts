@@ -3,14 +3,14 @@ import { flatten, sortBy, uniq } from 'lodash';
 import { Detector } from '../detectors';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
+import { NAMES, TYPES } from '../inversify.constants';
 import { Message } from '../messages';
 import { Notifier } from '../notifiers';
-import { capitalize } from '../util';
 
-const ALLOWED_DETECTORS = ['squoze'];
-const ALLOWED_NOTIFIERS = ['console', 'discord'];
-const DEFAULT_DETECTORS = ['squoze'];
-const DEFAULT_NOTIFIERS = ['console'];
+const ALLOWED_DETECTORS = [NAMES.squoze];
+const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
+const DEFAULT_DETECTORS = [NAMES.squoze];
+const DEFAULT_NOTIFIERS = [NAMES.console];
 
 export default class Notify extends Command {
   static description = 'runs specified detectors and notifiers';
@@ -55,15 +55,13 @@ export default class Notify extends Command {
     if (!ALLOWED_DETECTORS.includes(detectorName)) {
       throw new RevereError(`detector not allowed: ${detectorName}`);
     }
-    const serviceIdentifier = `${capitalize(detectorName)}Detector`;
-    return container.get<Detector>(serviceIdentifier);
+    return container.getNamed<Detector>(TYPES.Detector, detectorName);
   }
 
   private getNotifier(notifierName: string): Notifier {
     if (!ALLOWED_NOTIFIERS.includes(notifierName)) {
       throw new RevereError(`notifier not allowed: ${notifierName}`);
     }
-    const serviceIdentifier = `${capitalize(notifierName)}Notifier`;
-    return container.get<Notifier>(serviceIdentifier);
+    return container.getNamed<Notifier>(TYPES.Notifier, notifierName);
   }
 }

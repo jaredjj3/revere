@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
-import { TYPES } from '../inversify.types';
+import { TYPES } from '../inversify.constants';
 import { Message, MessageType } from '../messages';
 import { env } from '../util';
 import { Notifier } from './types';

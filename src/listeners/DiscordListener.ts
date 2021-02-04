@@ -4,14 +4,14 @@ import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
-import { TYPES } from '../inversify.types';
+import { TYPES } from '../inversify.constants';
 import { MessageType, Severity } from '../messages';
 import { Notifier } from '../notifiers';
 import { env } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
-const BANNED_COMMANDS = ['subscribe'];
+const BANNED_COMMANDS = ['listen'];
 const COMMAND_TIMEOUT_MS = 5000;
 
 @injectable()

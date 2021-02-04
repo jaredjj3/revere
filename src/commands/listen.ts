@@ -1,14 +1,15 @@
 import { Command, flags } from '@oclif/command';
-import { capitalize, uniq } from 'lodash';
+import { uniq } from 'lodash';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
+import { NAMES, TYPES } from '../inversify.constants';
 import { Listener } from '../listeners';
 import { Notifier } from '../notifiers';
 
-const ALLOWED_LISTENERS = ['discord'];
-const ALLOWED_NOTIFIERS = ['console', 'discord'];
-const DEFAULT_LISTENERS = ['discord'];
-const DEFAULT_NOTIFIERS = ['discord'];
+const ALLOWED_LISTENERS = [NAMES.discord];
+const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
+const DEFAULT_LISTENERS = [NAMES.discord];
+const DEFAULT_NOTIFIERS = [NAMES.discord];
 
 export default class Listen extends Command {
   static description = 'setup a listener to wait for commands';
@@ -35,15 +36,13 @@ export default class Listen extends Command {
     if (!ALLOWED_LISTENERS.includes(listenerName)) {
       throw new RevereError(`listener not allowed: ${listenerName}`);
     }
-    const serviceIdentifier = `${capitalize(listenerName)}Listener`;
-    return container.get<Listener>(serviceIdentifier);
+    return container.getNamed<Listener>(TYPES.Listener, listenerName);
   }
 
   private getNotifier(notifierName: string): Notifier {
     if (!ALLOWED_NOTIFIERS.includes(notifierName)) {
       throw new RevereError(`notifier not allowed: ${notifierName}`);
     }
-    const serviceIdentifier = `${capitalize(notifierName)}Notifier`;
-    return container.get<Notifier>(serviceIdentifier);
+    return container.getNamed<Notifier>(TYPES.Notifier, notifierName);
   }
 }
