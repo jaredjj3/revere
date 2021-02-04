@@ -5,6 +5,7 @@ import { container } from '../inversify.config';
 import { NAMES, TYPES } from '../inversify.constants';
 import { Listener } from '../listeners';
 import { Notifier } from '../notifiers';
+import { env } from '../util';
 
 const ALLOWED_LISTENERS = [NAMES.console, NAMES.discord];
 const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
@@ -22,6 +23,8 @@ export default class Listen extends Command {
 
   async run(): Promise<void> {
     const { flags } = this.parse(Listen);
+
+    console.log('DATABASE_URL', env('DATABASE_URL'));
 
     const notifiers = uniq(flags.notifiers).map(this.getNotifier);
     const listeners = uniq(flags.listeners).map(this.getListener);

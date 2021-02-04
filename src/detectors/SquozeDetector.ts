@@ -1,7 +1,7 @@
 import { PrismaClient, SquozeResponse } from '@prisma/client';
 import * as https from 'https';
 import { injectable } from 'inversify';
-import { parse } from 'node-html-parser';
+import parse from 'node-html-parser';
 import { MessageType, Severity, SquozeMessage } from '../messages';
 import { Detector } from './types';
 
@@ -40,7 +40,7 @@ export class SquozeDetector implements Detector<SquozeMessage> {
       });
     }
 
-    if (prev && prev.header !== next.header) {
+    if (prev && prev.httpStatusCode === 200 && next.httpStatusCode === 200 && prev.header !== next.header) {
       messages.push({
         type,
         timestamp,
@@ -57,34 +57,45 @@ export class SquozeDetector implements Detector<SquozeMessage> {
   }
 
   private async getNextData(): Promise<SquozeResponse> {
-    const [rawHomepage, httpStatusCode] = await this.getRawHomepage();
-    const root = parse(rawHomepage);
-    const header = root.querySelector('h1').innerText.toLowerCase();
-    return await this.prisma.squozeResponse.create({
-      data: { httpStatusCode, header },
-    });
+    try {
+      const [rawHomepage, httpStatusCode] = await this.getRawHomepage();
+      const root = parse(rawHomepage);
+      const header = root.querySelector('h1').innerText.toLowerCase();
+      return await this.prisma.squozeResponse.create({
+        data: { httpStatusCode, header },
+      });
+    } catch (err) {
+      console.warn('http request failed');
+      return await this.prisma.squozeResponse.create({
+        data: { httpStatusCode: -1 },
+      });
+    }
   }
 
   private getRawHomepage(): Promise<[string, number]> {
     return new Promise<[string, number]>((resolve, reject) => {
-      https
-        .request({ hostname: SQUOZE_HOSTNAME }, (res) => {
-          let str = '';
+      const req = https.request({ hostname: SQUOZE_HOSTNAME }, (res) => {
+        let str = '';
 
-          res.on('data', (chunk) => {
-            str += chunk;
-          });
+        res.on('data', (chunk) => {
+          str += chunk;
+        });
 
-          res.on('end', () => {
-            const httpStatusCode = res.statusCode || -1;
-            resolve([str, httpStatusCode]);
-          });
+        res.on('end', () => {
+          const httpStatusCode = res.statusCode || -1;
+          resolve([str, httpStatusCode]);
+        });
 
-          res.on('error', (err) => {
-            reject(err);
-          });
-        })
-        .end();
+        res.on('error', (err) => {
+          reject(err);
+        });
+      });
+
+      req.on('error', (err) => {
+        reject(err);
+      });
+
+      req.end();
     });
   }
 }
