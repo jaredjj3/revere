@@ -12,6 +12,19 @@ services:
       - db
     networks:
       - default
+    command: ['listen', '-l', 'discord', '-n', 'discord']
+
+  scheduler:
+    image: revere:latest
+    build: .
+    env_file:
+      - .env
+      - docker.env
+    links:
+      - db
+    networks:
+      - default
+    command: ['runscheds']
 
   db:
     image: postgres:11

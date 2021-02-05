@@ -30,8 +30,9 @@ USAGE
 <!-- commands -->
 * [`revere help [COMMAND]`](#revere-help-command)
 * [`revere listen`](#revere-listen)
-* [`revere listscheds [FILE]`](#revere-listscheds-file)
+* [`revere listscheds`](#revere-listscheds)
 * [`revere notify`](#revere-notify)
+* [`revere runscheds [FILE]`](#revere-runscheds-file)
 
 ## `revere help [COMMAND]`
 
@@ -66,18 +67,16 @@ OPTIONS
 
 _See code: [src/commands/listen.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/listen.ts)_
 
-## `revere listscheds [FILE]`
+## `revere listscheds`
 
-describe the command here
+list the schedules from the db
 
 ```
 USAGE
-  $ revere listscheds [FILE]
+  $ revere listscheds
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help  show CLI help
 ```
 
 _See code: [src/commands/listscheds.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/listscheds.ts)_
@@ -97,4 +96,20 @@ OPTIONS
 ```
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/notify.ts)_
+
+## `revere runscheds [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere runscheds [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/runscheds.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/runscheds.ts)_
 <!-- commandsstop -->
