@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { createInterface } from 'readline';
 import { Notifier } from '../notifiers';
 import { Listener } from './types';
-import { notify, spawnRun } from './util';
+import { notify, spawnRevere } from './util';
 
 const EXIT_COMMAND = 'exit';
 
@@ -27,7 +27,7 @@ export class ConsoleListener implements Listener {
     const argv = trimmed.split(' ');
 
     try {
-      const output = await spawnRun(argv);
+      const output = await spawnRevere(argv);
       notify(notifiers, output);
     } catch (err) {
       notify(notifiers, err.message);

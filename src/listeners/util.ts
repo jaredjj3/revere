@@ -5,7 +5,7 @@ import { Notifier } from '../notifiers';
 
 const DEFAULT_COMMAND_TIMEOUT_MS = 5000;
 
-export const spawnRun = async (argv: string[], timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS): Promise<string> => {
+export const spawnRevere = async (argv: string[], timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS): Promise<string> => {
   const run = spawn('bin/run', argv, { shell: false });
 
   const buffer = new Array<string>();
