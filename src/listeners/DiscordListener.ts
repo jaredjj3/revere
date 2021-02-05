@@ -10,7 +10,7 @@ import { Listener } from './types';
 import { notify, spawnRevere } from './util';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
-const BANNED_COMMANDS = ['listen'];
+const ALLOWED_COMMANDS = ['notify'];
 
 @injectable()
 export class DiscordListener implements Listener {
@@ -48,7 +48,7 @@ export class DiscordListener implements Listener {
 
       const argv = this.getArgv(userInput);
       const cmd = argv[0];
-      if (BANNED_COMMANDS.includes(cmd)) {
+      if (!ALLOWED_COMMANDS.includes(cmd)) {
         throw new RevereError(`banned command: '${cmd}'`);
       }
 
