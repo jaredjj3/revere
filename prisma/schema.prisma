@@ -14,3 +14,12 @@ model SquozeResponse {
   header         String?
   errorMessage   String?
 }
+
+model Schedule {
+  id             Int     @id @default(autoincrement())
+  name           String  @unique
+  description    String?
+  command        String
+  cronExpression String
+  active         Boolean
+}
