@@ -1,7 +1,7 @@
 {
   "name": "revere",
   "description": "notification service",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Jared Johnson <jared@jaredjohnson.dev>",
   "repository": "git@github.com:jaredjj3/revere.git",
   "types": "lib/index.d.ts",

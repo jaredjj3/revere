@@ -19,7 +19,7 @@ $ npm install -g revere
 $ revere COMMAND
 running command...
 $ revere (-v|--version|version)
-revere/1.0.1 darwin-x64 node-v14.15.4
+revere/1.0.2 darwin-x64 node-v14.15.4
 $ revere --help [COMMAND]
 USAGE
   $ revere COMMAND
@@ -29,9 +29,8 @@ USAGE
 # Commands
 <!-- commands -->
 * [`revere help [COMMAND]`](#revere-help-command)
-* [`revere listen [FILE]`](#revere-listen-file)
+* [`revere listen`](#revere-listen)
 * [`revere notify`](#revere-notify)
-* [`revere subscribe`](#revere-subscribe)
 
 ## `revere help [COMMAND]`
 
@@ -50,21 +49,21 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
-## `revere listen [FILE]`
+## `revere listen`
 
-describe the command here
+setup a listener to wait for commands
 
 ```
 USAGE
-  $ revere listen [FILE]
+  $ revere listen
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                 show CLI help
+  -l, --listeners=listeners  [default: console]
+  -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/listen.ts](https://github.com/jaredjj3/revere/blob/v1.0.1/src/commands/listen.ts)_
+_See code: [src/commands/listen.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/listen.ts)_
 
 ## `revere notify`
 
@@ -80,20 +79,5 @@ OPTIONS
   -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.1/src/commands/notify.ts)_
-
-## `revere subscribe`
-
-subscribe to discord messages
-
-```
-USAGE
-  $ revere subscribe
-
-OPTIONS
-  -d, --debug
-  -h, --help   show CLI help
-```
-
-_See code: [src/commands/subscribe.ts](https://github.com/jaredjj3/revere/blob/v1.0.1/src/commands/subscribe.ts)_
+_See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/notify.ts)_
 <!-- commandsstop -->
