@@ -4,9 +4,17 @@ import { MessageType, Severity } from '../messages';
 import { Notifier } from '../notifiers';
 
 const DEFAULT_COMMAND_TIMEOUT_MS = 5000;
+const ALLOWED_CMD_SRC = ['console', 'discord'];
 
-export const spawnRevere = async (argv: string[], timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS): Promise<string> => {
-  const run = spawn('bin/run', argv, { shell: false });
+export const spawnRevere = async (
+  argv: string[],
+  cmdInputSrc = 'console',
+  timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS
+): Promise<string> => {
+  if (!ALLOWED_CMD_SRC.includes(cmdInputSrc)) {
+    throw new RevereError(`invalid cmdInputSrc: ${cmdInputSrc}`);
+  }
+  const run = spawn('bin/run', argv, { shell: false, env: { ...process.env, CMD_INPUT_SRC: cmdInputSrc } });
 
   const buffer = new Array<string>();
 
