@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
 import { createInterface } from 'readline';
 import { Notifier } from '../notifiers';
+import { notify, spawnRevere } from '../util';
 import { Listener } from './types';
-import { notify, spawnRevere } from './util';
 
 const EXIT_COMMAND = 'exit';
 

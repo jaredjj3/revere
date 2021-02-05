@@ -1,19 +1,45 @@
 import { spawn } from 'child_process';
 import { RevereError } from '../errors';
-import { MessageType, Severity } from '../messages';
-import { Notifier } from '../notifiers';
+import { env } from './env';
+import { getCommandClass } from './getCommandClass';
 
 const DEFAULT_COMMAND_TIMEOUT_MS = 5000;
 const ALLOWED_CMD_SRC = ['console', 'discord'];
 
-export const spawnRevere = async (
-  argv: string[],
-  cmdInputSrc = 'console',
-  timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS
-): Promise<string> => {
-  if (!ALLOWED_CMD_SRC.includes(cmdInputSrc)) {
-    throw new RevereError(`invalid cmdInputSrc: ${cmdInputSrc}`);
+const isHiddenCommand = async (str: string | undefined): Promise<boolean> => {
+  if (!str) {
+    return false;
   }
+
+  if (str === 'help') {
+    return false;
+  }
+
+  const isFlag = str.startsWith('-');
+  if (isFlag) {
+    return false;
+  }
+
+  try {
+    const CommandClass = await getCommandClass(str);
+    return CommandClass.hidden;
+  } catch (err) {
+    console.error(err);
+    return false;
+  }
+};
+
+export const spawnRevere = async (argv: string[], timeoutMs = DEFAULT_COMMAND_TIMEOUT_MS): Promise<string> => {
+  const cmdInputSrc = env('CMD_INPUT_SRC');
+  if (!ALLOWED_CMD_SRC.includes(cmdInputSrc)) {
+    throw new RevereError(`invalid CMD_INPUT_SRC: ${cmdInputSrc}`);
+  }
+
+  if (await isHiddenCommand(argv[0])) {
+    // A regular error is thrown to make it indistinguishable from an missing command error thrown by oclif
+    throw Error(`command ${argv[0]} not found`);
+  }
+
   const run = spawn('bin/run', argv, { shell: false, env: { ...process.env, CMD_INPUT_SRC: cmdInputSrc } });
 
   const buffer = new Array<string>();
@@ -45,13 +71,4 @@ export const spawnRevere = async (
   });
 
   return await Promise.race<string>([close, timeout]);
-};
-
-export const notify = async (notifiers: Notifier[], content: string): Promise<void> => {
-  const timestamp = new Date();
-  await Promise.all(
-    notifiers.map((notifier) =>
-      notifier.notify({ type: MessageType.Stdout, content, severity: Severity.Info, timestamp })
-    )
-  );
 };

@@ -8,6 +8,7 @@ import { MessageType, Severity } from '../messages';
 import { DiscordNotifier } from '../notifiers';
 
 export default class Runscheds extends Command {
+  static hidden = true;
   static description = 'describe the command here';
 
   static flags = {

@@ -12,6 +12,7 @@ const DEFAULT_LISTENERS = [NAMES.console];
 const DEFAULT_NOTIFIERS = [NAMES.console];
 
 export default class Listen extends Command {
+  static hidden = true;
   static description = 'setup a listener to wait for commands';
 
   static flags = {

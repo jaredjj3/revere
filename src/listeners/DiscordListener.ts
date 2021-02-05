@@ -1,16 +1,13 @@
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
-import { RevereError } from '../errors';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
-import { env } from '../util';
+import { env, notify, spawnRevere } from '../util';
 import { Listener } from './types';
-import { notify, spawnRevere } from './util';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
-const BANNED_COMMANDS = ['listen'];
 
 @injectable()
 export class DiscordListener implements Listener {
@@ -47,12 +44,7 @@ export class DiscordListener implements Listener {
       console.log(`received commandStr from discord: ${userInput}`);
 
       const argv = this.getArgv(userInput);
-      const cmd = argv[0];
-      if (BANNED_COMMANDS.includes(cmd)) {
-        throw new RevereError(`banned command: '${cmd}'`);
-      }
-
-      const output = await spawnRevere(argv, 'discord');
+      const output = await spawnRevere(argv);
       notify(notifiers, `successfully ran command: '${userInput}'\n\n${output}`);
     } catch (err) {
       console.error(err);
