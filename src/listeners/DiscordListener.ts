@@ -52,7 +52,7 @@ export class DiscordListener implements Listener {
         throw new RevereError(`banned command: '${cmd}'`);
       }
 
-      const output = await spawnRevere(argv);
+      const output = await spawnRevere(argv, 'discord');
       notify(notifiers, `successfully ran command: '${userInput}'\n\n${output}`);
     } catch (err) {
       console.error(err);

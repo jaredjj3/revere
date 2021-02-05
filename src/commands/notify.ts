@@ -6,11 +6,13 @@ import { container } from '../inversify.config';
 import { NAMES, TYPES } from '../inversify.constants';
 import { Message } from '../messages';
 import { Notifier } from '../notifiers';
+import { env } from '../util';
 
+const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
 const ALLOWED_DETECTORS = [NAMES.squoze];
 const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
 const DEFAULT_DETECTORS = [NAMES.squoze];
-const DEFAULT_NOTIFIERS = [NAMES.console];
+const DEFAULT_NOTIFIERS = CMD_INPUT_SRC === 'discord' ? [NAMES.discord] : [NAMES.console];
 
 export default class Notify extends Command {
   static description = 'runs specified detectors and notifiers';
