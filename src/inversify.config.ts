@@ -7,6 +7,7 @@ import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
 import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
+import { ScheduleService } from './services';
 import { env } from './util';
 
 dotenv.config();
@@ -31,3 +32,5 @@ container.bind<Notifier>(TYPES.Notifier).to(DiscordNotifier).whenTargetNamed(NAM
 
 container.bind<Listener>(TYPES.Listener).to(DiscordListener).whenTargetNamed(NAMES.discord);
 container.bind<Listener>(TYPES.Listener).to(ConsoleListener).whenTargetNamed(NAMES.console);
+
+container.bind<ScheduleService>(TYPES.ScheduleService).to(ScheduleService);

@@ -26,4 +26,12 @@ export class ScheduleService {
   async create(args: Prisma.ScheduleCreateArgs): Promise<Schedule> {
     return await this.prisma.schedule.create(args);
   }
+
+  async activate(id: number): Promise<Schedule> {
+    return await this.prisma.schedule.update({ where: { id }, data: { active: true } });
+  }
+
+  async deactivate(id: number): Promise<Schedule> {
+    return await this.prisma.schedule.update({ where: { id }, data: { active: false } });
+  }
 }
