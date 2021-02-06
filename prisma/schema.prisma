@@ -15,11 +15,37 @@ model SquozeResponse {
   errorMessage   String?
 }
 
-model Schedule {
-  id             Int     @id @default(autoincrement())
-  name           String  @unique
+model Job {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String   @unique
   description    String?
   command        String
   cronExpression String
   active         Boolean
+}
+
+enum CommandRunStatus {
+  UNKNOWN
+  ERROR
+  SUCCESS
+}
+
+enum CommandRunSrc {
+  CONSOLE
+  DISCORD
+  JOB
+}
+
+model CommandRun {
+  id            Int              @id @default(autoincrement())
+  startedAt     DateTime
+  endedAt       DateTime
+  src           CommandRunSrc
+  status        CommandRunStatus
+  command       String
+  gitCommitHash String
+  stdout        String
+  stderr        String
 }

@@ -4,7 +4,6 @@ export const TYPES = {
   Detector: 'Detector',
   Notifier: 'Notifier',
   Listener: 'Listener',
-  ScheduleService: 'ScheduleService',
 };
 
 export const NAMES = {
