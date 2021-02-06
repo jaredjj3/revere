@@ -29,10 +29,8 @@ USAGE
 # Commands
 <!-- commands -->
 * [`revere help [COMMAND]`](#revere-help-command)
-* [`revere listen`](#revere-listen)
-* [`revere listscheds`](#revere-listscheds)
 * [`revere notify`](#revere-notify)
-* [`revere runscheds [FILE]`](#revere-runscheds-file)
+* [`revere start [FILE]`](#revere-start-file)
 
 ## `revere help [COMMAND]`
 
@@ -51,36 +49,6 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
-## `revere listen`
-
-setup a listener to wait for commands
-
-```
-USAGE
-  $ revere listen
-
-OPTIONS
-  -h, --help                 show CLI help
-  -l, --listeners=listeners  [default: console]
-  -n, --notifiers=notifiers  [default: console]
-```
-
-_See code: [src/commands/listen.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/listen.ts)_
-
-## `revere listscheds`
-
-list the schedules from the db
-
-```
-USAGE
-  $ revere listscheds
-
-OPTIONS
-  -h, --help  show CLI help
-```
-
-_See code: [src/commands/listscheds.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/listscheds.ts)_
-
 ## `revere notify`
 
 runs specified detectors and notifiers
@@ -97,13 +65,13 @@ OPTIONS
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/notify.ts)_
 
-## `revere runscheds [FILE]`
+## `revere start [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ revere runscheds [FILE]
+  $ revere start [FILE]
 
 OPTIONS
   -f, --force
@@ -111,5 +79,5 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/runscheds.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/runscheds.ts)_
+_See code: [src/commands/start.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/start.ts)_
 <!-- commandsstop -->
