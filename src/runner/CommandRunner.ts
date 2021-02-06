@@ -18,22 +18,26 @@ type RunOptions = {
 
 @injectable()
 export class CommandRunner {
-  prisma = new PrismaClient();
+  private prisma = new PrismaClient();
 
-  async run(argv: string[], opts: RunOptions = DEFAULT_RUN_OPTIONS): Promise<CommandRun> {
-    // prevent hidden commands from being run
-    if (await this.isHiddenCommand(argv[0])) {
-      // A regular error is thrown to make it indistinguishable from an missing command error thrown by oclif
-      throw Error(`command ${argv[0]} not found`);
-    }
-
-    // run the command
+  async run(argv: string[], runOpts: Partial<RunOptions>): Promise<CommandRun> {
+    const opts: RunOptions = { ...DEFAULT_RUN_OPTIONS, ...runOpts };
     const commandRun = this.buildCommandRun({
-      startedAt: new Date(),
       command: argv.join(' '),
       gitCommitHash: env('GIT_COMMIT_HASH'),
       src: opts.src,
     });
+
+    // prevent hidden commands from being run
+    if (await this.isHiddenCommand(argv[0])) {
+      // A regular error is thrown to make it indistinguishable from an missing command error thrown by oclif
+      commandRun.status = CommandRunStatus.NOT_RUN;
+      await this.prisma.commandRun.create({ data: commandRun });
+      throw Error(` ›   Error: command ${argv[0]} not found`);
+    }
+
+    // run the command
+    commandRun.startedAt = new Date();
     console.log(`running '${argv.join(' ')}' with opts: ${JSON.stringify(opts)}`);
     const run = spawn('bin/run', argv, { shell: false, env: { ...process.env, CMD_INPUT_SRC: opts.src } });
 
@@ -49,7 +53,7 @@ export class CommandRunner {
     const runClose = new Promise<void>((resolve, reject) => {
       run.on('close', () => {
         commandRun.endedAt = new Date();
-        commandRun.exitCode = run.exitCode || -1;
+        commandRun.exitCode = typeof run.exitCode === 'number' ? run.exitCode : -1;
         commandRun.stdout = stdout.join('');
         commandRun.stderr = stderr.join('');
         if (run.exitCode === 0) {

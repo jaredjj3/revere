@@ -1,14 +1,18 @@
+import { CommandRunSrc } from '@prisma/client';
 import { injectable } from 'inversify';
 import { createInterface } from 'readline';
+import { container } from '../inversify.config';
+import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
-import { notify, spawnRevere } from '../util';
+import { CommandRunner } from '../runner';
+import { notify } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';
 
 @injectable()
 export class ConsoleListener implements Listener {
-  readline = createInterface({ input: process.stdin, output: process.stdout, prompt: 'revere> ' });
+  private readline = createInterface({ input: process.stdin, output: process.stdout, prompt: 'revere> ' });
 
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
@@ -25,10 +29,14 @@ export class ConsoleListener implements Listener {
     }
 
     const argv = trimmed.split(' ');
+    const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
 
     try {
-      const output = await spawnRevere(argv);
-      notify(notifiers, output);
+      const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.CONSOLE });
+      notify(
+        notifiers,
+        [commandRun.stdout, commandRun.stderr].filter((str) => str.length > 0).join('\n=======================\n')
+      );
     } catch (err) {
       notify(notifiers, err.message);
     }

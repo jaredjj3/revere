@@ -1,10 +1,12 @@
+import { CommandRunSrc } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
-import { env, notify, spawnRevere } from '../util';
+import { CommandRunner } from '../runner';
+import { env, notify } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
@@ -39,13 +41,19 @@ export class DiscordListener implements Listener {
     }
 
     const userInput = message.content;
+    const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
 
     try {
       console.log(`received commandStr from discord: ${userInput}`);
 
       const argv = this.getArgv(userInput);
-      const output = await spawnRevere(argv);
-      notify(notifiers, `successfully ran command: '${userInput}'\n\n${output}`);
+      const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
+      notify(
+        notifiers,
+        `successfully ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
+          .filter((str) => str.length > 0)
+          .join('\n=======================\n')}`
+      );
     } catch (err) {
       console.error(err);
       notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);

@@ -30,6 +30,7 @@ enum CommandRunStatus {
   UNKNOWN
   ERROR
   SUCCESS
+  NOT_RUN
 }
 
 enum CommandRunSrc {

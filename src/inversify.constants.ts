@@ -4,6 +4,7 @@ export const TYPES = {
   Detector: 'Detector',
   Notifier: 'Notifier',
   Listener: 'Listener',
+  CommandRunner: 'CommandRunner',
 };
 
 export const NAMES = {
