@@ -1,6 +1,5 @@
 import { CommandRunSrc, Job, PrismaClient } from '@prisma/client';
 import { injectable } from 'inversify';
-import { minBy } from 'lodash';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
 import { container } from '../inversify.config';
@@ -33,12 +32,21 @@ export class JobRunner {
   }
 
   private async syncJobs(): Promise<void> {
+    console.log('\nsyncJob CURRENT');
+    console.log(`running jobs: ${this.runs.map((run) => run.job.name)}\n`);
+
     // no mutations
     const [active, inactive, updated] = await Promise.all([
       this.getNewlyActiveJobs(),
       this.getNewlyInactiveJobs(),
       this.getNewlyUpdatedJobs(),
     ]);
+
+    const getName = (job: Job) => job.name;
+    console.log('\nsyncJob CHANGES');
+    console.log(`active jobs: ${active.map(getName).join(', ')}`);
+    console.log(`inactive jobs: ${inactive.map(getName).join(', ')}`);
+    console.log(`updated jobs: ${updated.map(getName).join(', ')}\n`);
 
     // perform mutations
     await Promise.all(inactive.map(this.stopJob.bind(this)));
@@ -57,9 +65,10 @@ export class JobRunner {
   }
 
   private async getNewlyUpdatedJobs(): Promise<Job[]> {
-    const oldestRun = minBy(this.runs, (run) => run.job.updatedAt);
-    const oldestUpdatedAt = oldestRun ? oldestRun.job.updatedAt : new Date(0);
-    return await this.prisma.job.findMany({ where: { updatedAt: { gt: oldestUpdatedAt } } });
+    const jobIds = this.runs.map((run) => run.job.id);
+    const jobs = await this.prisma.job.findMany({ where: { id: { in: jobIds } } });
+    const runByJobId = Object.fromEntries(this.runs.map((run) => [run.job.id, run.job]));
+    return jobs.filter((job) => job.updatedAt > runByJobId[job.id].updatedAt);
   }
 
   private startJob(job: Job): void {
@@ -78,7 +87,7 @@ export class JobRunner {
     }
     console.log(`stopping job: ${job.name}`);
     run.task.destroy();
-    this.runs = this.runs.filter((run) => run.job.id === job.id);
+    this.runs = this.runs.filter((run) => run.job.id !== job.id);
   }
 
   private createRun(job: Job): void {
@@ -101,7 +110,12 @@ export class JobRunner {
     console.log(`running job: ${job.name}`);
     try {
       const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
-      await commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
+      const commandRun = await commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
+      console.log(
+        `\nJOB ${job.name} START=======================\n${[commandRun.stdout, commandRun.stderr]
+          .filter((str) => str.length > 0)
+          .join('\n')}\nJOB ${job.name} END=======================`
+      );
     } catch (err) {
       console.error(err);
     }
