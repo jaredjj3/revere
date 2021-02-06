@@ -1,4 +1,4 @@
-import { CommandRunSrc } from '@prisma/client';
+import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
@@ -49,9 +49,10 @@ export class DiscordListener implements Listener {
 
       const argv = this.getArgv(userInput);
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
+      const adverb = commandRun.status === CommandRunStatus.SUCCESS ? 'successfully' : 'unsucccessfully';
       notify(
         notifiers,
-        `successfully ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
+        `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)
           .join('\n=======================\n')}`
       );

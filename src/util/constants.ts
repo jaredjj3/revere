@@ -5,4 +5,4 @@ export const CrudAction = {
   LIST: 'list',
 };
 
-export const CrudActions = [CrudAction.CREATE, CrudAction.LIST, CrudAction.SHOW, CrudAction.LIST];
+export const CrudActions = [CrudAction.CREATE, CrudAction.LIST, CrudAction.SHOW, CrudAction.UPDATE];

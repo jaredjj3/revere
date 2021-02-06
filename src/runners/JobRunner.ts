@@ -66,7 +66,7 @@ export class JobRunner {
 
   private async getNewlyUpdatedJobs(): Promise<Job[]> {
     const jobIds = this.runs.map((run) => run.job.id);
-    const jobs = await this.prisma.job.findMany({ where: { id: { in: jobIds } } });
+    const jobs = await this.prisma.job.findMany({ where: { active: true, id: { in: jobIds } } });
     const runByJobId = Object.fromEntries(this.runs.map((run) => [run.job.id, run.job]));
     return jobs.filter((job) => job.updatedAt > runByJobId[job.id].updatedAt);
   }
