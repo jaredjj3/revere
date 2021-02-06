@@ -33,6 +33,7 @@ enum CommandRunStatus {
 }
 
 enum CommandRunSrc {
+  UNKNOWN
   CONSOLE
   DISCORD
   JOB
@@ -48,4 +49,5 @@ model CommandRun {
   gitCommitHash String
   stdout        String
   stderr        String
+  exitCode      Int
 }
