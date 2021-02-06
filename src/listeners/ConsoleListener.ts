@@ -4,7 +4,7 @@ import { createInterface } from 'readline';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
-import { CommandRunner } from '../runner';
+import { CommandRunner } from '../runners';
 import { notify } from '../util';
 import { Listener } from './types';
 

@@ -5,7 +5,7 @@ import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { DiscordNotifier, Notifier } from '../notifiers';
-import { CommandRunner } from '../runner';
+import { CommandRunner } from '../runners';
 import { env, notify } from '../util';
 import { Listener } from './types';
 

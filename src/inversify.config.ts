@@ -7,7 +7,7 @@ import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
 import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
-import { CommandRunner } from './runner';
+import { CommandRunner } from './runners';
 import { env } from './util';
 
 dotenv.config();
