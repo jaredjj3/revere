@@ -14,7 +14,7 @@ services:
       - default
     command: ['listen', '-l', 'discord', '-n', 'discord']
 
-  scheduler:
+  jobs:
     image: revere:latest
     build: .
     env_file:
@@ -24,7 +24,7 @@ services:
       - db
     networks:
       - default
-    command: ['runscheds']
+    command: ['start']
 
   db:
     image: postgres:11

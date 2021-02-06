@@ -28,9 +28,25 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`revere echo [FILE]`](#revere-echo-file)
 * [`revere help [COMMAND]`](#revere-help-command)
 * [`revere notify`](#revere-notify)
-* [`revere start [FILE]`](#revere-start-file)
+
+## `revere echo [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere echo [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/echo.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/echo.ts)_
 
 ## `revere help [COMMAND]`
 
@@ -64,20 +80,4 @@ OPTIONS
 ```
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/notify.ts)_
-
-## `revere start [FILE]`
-
-describe the command here
-
-```
-USAGE
-  $ revere start [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-```
-
-_See code: [src/commands/start.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/start.ts)_
 <!-- commandsstop -->
