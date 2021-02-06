@@ -5,3 +5,9 @@ export class MissingEnvError extends RevereError {
     super(`missing env, add to .env file: ${envVarName}`);
   }
 }
+
+export class NotImplementedError extends RevereError {
+  constructor() {
+    super('not implemented');
+  }
+}

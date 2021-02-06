@@ -1,7 +1,21 @@
 import { Prisma, PrismaClient, Schedule } from '@prisma/client';
+import { ScheduledTask } from 'node-cron';
+import { NotImplementedError } from '../errors';
 
 export class ScheduleService {
   prisma = new PrismaClient();
+
+  async runAllAndWatch(): Promise<void> {
+    throw new NotImplementedError();
+  }
+
+  async schedule(): Promise<ScheduledTask> {
+    throw new NotImplementedError();
+  }
+
+  async unschedule(): Promise<ScheduledTask> {
+    throw new NotImplementedError();
+  }
 
   async findAll(): Promise<Schedule[]> {
     return await this.prisma.schedule.findMany();
