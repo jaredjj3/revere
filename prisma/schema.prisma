@@ -40,15 +40,22 @@ enum CommandRunSrc {
   JOB
 }
 
+enum GitCommitStatus {
+  UNKNOWN
+  CLEAN
+  DIRTY
+}
+
 model CommandRun {
-  id            Int              @id @default(autoincrement())
-  startedAt     DateTime
-  endedAt       DateTime
-  src           CommandRunSrc
-  status        CommandRunStatus
-  command       String
-  gitCommitHash String
-  stdout        String
-  stderr        String
-  exitCode      Int
+  id              Int              @id @default(autoincrement())
+  startedAt       DateTime
+  endedAt         DateTime
+  src             CommandRunSrc    @default(UNKNOWN)
+  status          CommandRunStatus @default(UNKNOWN)
+  command         String
+  gitCommitHash   String
+  gitCommitStatus GitCommitStatus  @default(UNKNOWN)
+  stdout          String
+  stderr          String
+  exitCode        Int
 }

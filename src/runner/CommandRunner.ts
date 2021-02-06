@@ -1,5 +1,5 @@
 import Command from '@oclif/command';
-import { CommandRun, CommandRunSrc, CommandRunStatus, Prisma, PrismaClient } from '@prisma/client';
+import { CommandRun, CommandRunSrc, CommandRunStatus, GitCommitStatus, Prisma, PrismaClient } from '@prisma/client';
 import { spawn } from 'child_process';
 import * as fs from 'fs';
 import { injectable } from 'inversify';
@@ -25,6 +25,7 @@ export class CommandRunner {
     const commandRun = this.buildCommandRun({
       command: argv.join(' '),
       gitCommitHash: env('GIT_COMMIT_HASH'),
+      gitCommitStatus: this.getGitCommitStatus(),
       src: opts.src,
     });
 
@@ -92,14 +93,30 @@ export class CommandRunner {
       startedAt: epoch,
       endedAt: epoch,
       command: '',
-      gitCommitHash: env('GIT_COMMIT_HASH'),
       src: CommandRunSrc.UNKNOWN,
       status: CommandRunStatus.UNKNOWN,
+      gitCommitHash: env('GIT_COMMIT_HASH'),
+      gitCommitStatus: GitCommitStatus.UNKNOWN,
       stderr: '',
       stdout: '',
       exitCode: -1,
       ...input,
     };
+  }
+
+  private getGitCommitStatus(): GitCommitStatus {
+    try {
+      switch (env('GIT_COMMIT_STATUS')) {
+        case 'CLEAN':
+          return GitCommitStatus.CLEAN;
+        case 'DIRTY':
+          return GitCommitStatus.DIRTY;
+        default:
+          return GitCommitStatus.UNKNOWN;
+      }
+    } catch (e) {
+      return GitCommitStatus.UNKNOWN;
+    }
   }
 
   private async isHiddenCommand(str: string | undefined): Promise<boolean> {
