@@ -19,6 +19,7 @@ export default class Listen extends Command {
     help: flags.help({ char: 'h' }),
     notifiers: flags.string({ char: 'n', multiple: true, default: DEFAULT_NOTIFIERS }),
     listeners: flags.string({ char: 'l', multiple: true, default: DEFAULT_LISTENERS }),
+    showGreeting: flags.boolean({ default: false }),
   };
 
   async run(): Promise<void> {

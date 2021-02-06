@@ -13,6 +13,7 @@ export default class Start extends Command {
 
   async run(): Promise<void> {
     this.parse(Start);
+    this.log('running jobs');
     const jobRunner = container.get<JobRunner>(TYPES.JobRunner);
     await jobRunner.run();
   }

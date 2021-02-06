@@ -4,41 +4,19 @@ import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { DiscordNotifier, Notifier } from '../notifiers';
+import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { env, notify, onExit } from '../util';
+import { env, notify } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
 
 @injectable()
 export class DiscordListener implements Listener {
-  private isExiting = false;
-
   async listen(notifiers: Notifier[]): Promise<void> {
     const client = await this.getClient();
     client.on('message', this.onMessage(notifiers));
-    onExit(this.onExit(notifiers));
-    this.onEnter(notifiers);
   }
-
-  async onEnter(notifiers: Notifier[]): Promise<void> {
-    const discordNotifiers = notifiers.filter((notifier) => notifier instanceof DiscordNotifier);
-    const commandPrefixes = COMMAND_PREFIXES.join(', ');
-    await notify(
-      discordNotifiers,
-      `Listening to Discord, you can type any of the following to issue a command: ${commandPrefixes}`
-    );
-  }
-
-  onExit = (notifiers: Notifier[]) => async (): Promise<void> => {
-    if (this.isExiting) {
-      return;
-    }
-    this.isExiting = true;
-    await notify(notifiers, 'Farewell, Discord');
-    process.exit(0);
-  };
 
   async getClient(): Promise<Discord.Client> {
     const clientProvider = container.get<DiscordClientProvider>(TYPES.DiscordClientProvider);
