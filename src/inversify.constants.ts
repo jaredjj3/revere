@@ -5,6 +5,7 @@ export const TYPES = {
   Notifier: 'Notifier',
   Listener: 'Listener',
   CommandRunner: 'CommandRunner',
+  JobRunner: 'JobRunner',
 };
 
 export const NAMES = {

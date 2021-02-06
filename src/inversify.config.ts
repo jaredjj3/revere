@@ -8,6 +8,7 @@ import { NAMES, TYPES } from './inversify.constants';
 import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { CommandRunner } from './runners';
+import { JobRunner } from './runners/JobRunner';
 import { env } from './util';
 
 dotenv.config();
@@ -34,3 +35,4 @@ container.bind<Listener>(TYPES.Listener).to(DiscordListener).whenTargetNamed(NAM
 container.bind<Listener>(TYPES.Listener).to(ConsoleListener).whenTargetNamed(NAMES.console);
 
 container.bind<CommandRunner>(TYPES.CommandRunner).to(CommandRunner);
+container.bind<JobRunner>(TYPES.JobRunner).to(JobRunner).inSingletonScope();

@@ -5,7 +5,7 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { notify } from '../util';
+import { notify, onExit } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';
@@ -16,8 +16,7 @@ export class ConsoleListener implements Listener {
 
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
-    process.on('SIGTERM', this.exit);
-    process.on('SIGINT', this.exit);
+    onExit(this.exit);
     setTimeout(() => this.readline.prompt(true), 0); // flush main stack
   }
 

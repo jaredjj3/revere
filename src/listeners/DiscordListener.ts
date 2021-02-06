@@ -6,7 +6,7 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { DiscordNotifier, Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { env, notify } from '../util';
+import { env, notify, onExit } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
@@ -18,8 +18,7 @@ export class DiscordListener implements Listener {
   async listen(notifiers: Notifier[]): Promise<void> {
     const client = await this.getClient();
     client.on('message', this.onMessage(notifiers));
-    process.on('SIGTERM', this.onExit(notifiers));
-    process.on('SIGINT', this.onExit(notifiers));
+    onExit(this.onExit(notifiers));
     this.onEnter(notifiers);
   }
 
