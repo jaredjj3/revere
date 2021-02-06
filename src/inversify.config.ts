@@ -1,7 +1,8 @@
+// organize-imports-ignore
+import 'reflect-metadata';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
-import 'reflect-metadata';
 import { Detector, SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';

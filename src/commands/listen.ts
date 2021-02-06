@@ -5,6 +5,7 @@ import { container } from '../inversify.config';
 import { NAMES, TYPES } from '../inversify.constants';
 import { Listener } from '../listeners';
 import { Notifier } from '../notifiers';
+import { onExit } from '../util';
 
 const ALLOWED_LISTENERS = [NAMES.console, NAMES.discord];
 const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
@@ -32,6 +33,11 @@ export default class Listen extends Command {
 
     console.log(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);
     console.log(`running listeners: ${uniq(flags.listeners).join(', ')}`);
+
+    onExit(() => {
+      console.log('stopping listening');
+      this.exit();
+    });
   }
 
   private getListener(listenerName: string): Listener {

@@ -20,6 +20,7 @@ export class JobRunner {
     if (this.syncJobsTask) {
       return;
     }
+    await this.syncJobs();
     this.syncJobsTask = cron.schedule('* * * * *', this.syncJobs.bind(this));
     onExit(() => {
       if (this.syncJobsTask) {
@@ -27,6 +28,7 @@ export class JobRunner {
         this.runs.map((run) => run.task).forEach((task) => task.destroy());
       }
       this.syncJobsTask = null;
+      process.exit(0);
     });
   }
 

@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  revere:
+  listener:
     image: revere:latest
     build: .
     tty: true
