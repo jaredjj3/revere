@@ -2,11 +2,12 @@ import { CommandRunSrc } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
+import { notify } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { env, notify } from '../util';
+import { env } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];

@@ -1,11 +1,12 @@
 import { CommandRunSrc } from '@prisma/client';
 import { injectable } from 'inversify';
 import { createInterface } from 'readline';
+import { notify } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { notify, onExit } from '../util';
+import { onExit } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';

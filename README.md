@@ -19,7 +19,7 @@ $ npm install -g revere
 $ revere COMMAND
 running command...
 $ revere (-v|--version|version)
-revere/1.0.2 darwin-x64 node-v14.15.4
+revere/1.1.0 darwin-x64 node-v14.15.4
 $ revere --help [COMMAND]
 USAGE
   $ revere COMMAND
@@ -28,25 +28,24 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`revere echo [FILE]`](#revere-echo-file)
+* [`revere echo STRING`](#revere-echo-string)
 * [`revere help [COMMAND]`](#revere-help-command)
 * [`revere notify`](#revere-notify)
 
-## `revere echo [FILE]`
+## `revere echo STRING`
 
-describe the command here
+prints the arguments to stdout
 
 ```
 USAGE
-  $ revere echo [FILE]
+  $ revere echo STRING
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                 show CLI help
+  -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/echo.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/echo.ts)_
+_See code: [src/commands/echo.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/echo.ts)_
 
 ## `revere help [COMMAND]`
 
@@ -79,5 +78,5 @@ OPTIONS
   -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.0.2/src/commands/notify.ts)_
+_See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/notify.ts)_
 <!-- commandsstop -->

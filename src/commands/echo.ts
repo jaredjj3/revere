@@ -1,5 +1,5 @@
 import { Command, flags } from '@oclif/command';
-import { DEFAULT_NOTIFIERS, getNotifier, notify } from '../util';
+import { DEFAULT_NOTIFIERS, getNotifier, notify } from '../helpers';
 
 export default class Echo extends Command {
   static description = 'prints the arguments to stdout';

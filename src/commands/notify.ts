@@ -1,18 +1,9 @@
 import { Command, flags } from '@oclif/command';
 import { flatten, sortBy, uniq } from 'lodash';
 import { Detector } from '../detectors';
-import { RevereError } from '../errors';
-import { container } from '../inversify.config';
-import { NAMES, TYPES } from '../inversify.constants';
+import { DEFAULT_DETECTORS, DEFAULT_NOTIFIERS, getDetector, getNotifier } from '../helpers';
 import { Message } from '../messages';
 import { Notifier } from '../notifiers';
-import { env } from '../util';
-
-const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
-const ALLOWED_DETECTORS = [NAMES.squoze];
-const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-const DEFAULT_DETECTORS = [NAMES.squoze];
-const DEFAULT_NOTIFIERS = CMD_INPUT_SRC === 'discord' ? [NAMES.discord] : [NAMES.console];
 
 export default class Notify extends Command {
   static description = 'runs specified detectors and notifiers';
@@ -26,8 +17,8 @@ export default class Notify extends Command {
   async run(): Promise<void> {
     const { flags } = this.parse(Notify);
 
-    const detectors = uniq(flags.detectors).map(this.getDetector.bind(this));
-    const notifiers = uniq(flags.notifiers).map(this.getNotifier.bind(this));
+    const detectors = uniq(flags.detectors).map(getDetector);
+    const notifiers = uniq(flags.notifiers).map(getNotifier);
 
     this.log(`running detectors: ${uniq(flags.detectors).join(', ')}`);
     this.log(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);
@@ -51,19 +42,5 @@ export default class Notify extends Command {
       }
     }
     await Promise.all(combos.map(({ notifier, message }) => notifier.notify(message)));
-  }
-
-  private getDetector(detectorName: string): Detector {
-    if (!ALLOWED_DETECTORS.includes(detectorName)) {
-      throw new RevereError(`detector not allowed: ${detectorName}`);
-    }
-    return container.getNamed<Detector>(TYPES.Detector, detectorName);
-  }
-
-  private getNotifier(notifierName: string): Notifier {
-    if (!ALLOWED_NOTIFIERS.includes(notifierName)) {
-      throw new RevereError(`notifier not allowed: ${notifierName}`);
-    }
-    return container.getNamed<Notifier>(TYPES.Notifier, notifierName);
   }
 }
