@@ -34,7 +34,7 @@ type CreateFlags = {
 };
 
 export default class Jobs extends Command {
-  static description = 'describe the command here';
+  static description = 'list, create, update, and show jobs';
 
   static flags = {
     help: flags.help({ char: 'h' }),
