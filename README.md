@@ -30,6 +30,7 @@ USAGE
 <!-- commands -->
 * [`revere echo STRING`](#revere-echo-string)
 * [`revere help [COMMAND]`](#revere-help-command)
+* [`revere jobs [FILE]`](#revere-jobs-file)
 * [`revere notify`](#revere-notify)
 
 ## `revere echo STRING`
@@ -63,6 +64,22 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+
+## `revere jobs [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere jobs [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/jobs.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/jobs.ts)_
 
 ## `revere notify`
 
