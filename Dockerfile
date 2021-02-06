@@ -13,4 +13,7 @@ COPY tsconfig.json .
 COPY bin bin
 COPY src src
 
+ARG GIT_COMMIT_HASH
+ENV GIT_COMMIT_HASH=${GIT_COMMIT_HASH}
+
 ENTRYPOINT [ "bin/run" ]

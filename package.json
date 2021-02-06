@@ -7,7 +7,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "typecheck": "yarn tsc --noEmit",
-    "build": "docker build -t revere:latest .",
+    "build": "docker build -t revere:latest --build-arg GIT_COMMIT_HASH=$(git rev-parse HEAD) .",
     "docker": "yarn build && docker-compose run --rm revere",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
