@@ -52,7 +52,7 @@ export class DiscordNotifier implements Notifier {
             { name: 'bid', value: numeral(data.bid).format('$0,0.00'), inline: true },
             { name: 'ask', value: numeral(data.ask).format('$0,0.00'), inline: true },
             { name: 'average volume', value: numeral(data.averageVolume).format('0,0'), inline: true },
-            { name: 'market cap', value: numeral(data.marketCap).format('($ 0.00 a)'), inline: true },
+            { name: 'market cap', value: numeral(data.marketCap).format('($ 0.00 a)').toUpperCase(), inline: true },
             { name: 'short ratio', value: numeral(data.shortRatio).format('0.00'), inline: true },
             ...extraFieldNames.map((name) => ({ name, value: data[name], inline: true })),
           ]);
