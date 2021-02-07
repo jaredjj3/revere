@@ -1,7 +1,7 @@
 import { Command, flags } from '@oclif/command';
 import { flatten, sortBy, uniq } from 'lodash';
 import { Detector } from '../detectors';
-import { DEFAULT_DETECTORS, DEFAULT_NOTIFIERS, getDetector, getNotifier } from '../helpers';
+import { $detectors, $notifiers } from '../helpers';
 import { Message } from '../messages';
 import { Notifier } from '../notifiers';
 
@@ -10,15 +10,15 @@ export default class Notify extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    detectors: flags.string({ char: 'd', multiple: true, default: DEFAULT_DETECTORS }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: DEFAULT_NOTIFIERS }),
+    detectors: flags.string({ char: 'd', multiple: true, default: $detectors.DEFAULT_DETECTORS }),
+    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
   };
 
   async run(): Promise<void> {
     const { flags } = this.parse(Notify);
 
-    const detectors = uniq(flags.detectors).map(getDetector);
-    const notifiers = uniq(flags.notifiers).map(getNotifier);
+    const detectors = uniq(flags.detectors).map($detectors.getDetector);
+    const notifiers = uniq(flags.notifiers).map($notifiers.getNotifier);
 
     this.log(`running detectors: ${uniq(flags.detectors).join(', ')}`);
     this.log(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);

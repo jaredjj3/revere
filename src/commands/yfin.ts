@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command';
 import { difference, pick } from 'lodash';
 import { YFinanceApi } from '../apis';
 import { RevereError } from '../errors';
-import { DEFAULT_NOTIFIERS, getNotifier, notify } from '../helpers';
+import { $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
@@ -17,7 +17,7 @@ export default class Yfin extends Command {
   static flags = {
     help: flags.help({ char: 'h' }),
     symbol: flags.string(),
-    notifiers: flags.string({ char: 'n', multiple: true, default: DEFAULT_NOTIFIERS }),
+    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
   };
 
   static args = [{ name: 'subcommand', required: true, options: ['info'], hidden: false }];
@@ -25,7 +25,7 @@ export default class Yfin extends Command {
   async run(): Promise<void> {
     const { args, flags } = this.parse(Yfin);
 
-    const notifiers = flags.notifiers.map(getNotifier);
+    const notifiers = flags.notifiers.map($notifiers.getNotifier);
 
     switch (args.subcommand) {
       case 'info':
@@ -50,7 +50,7 @@ export default class Yfin extends Command {
       'averageVolume10days',
       'shortName',
     ]);
-    await notify(notifiers, JSON.stringify(data, null, 2));
+    await $notifiers.notify(notifiers, JSON.stringify(data, null, 2));
   }
 
   validate<T>(requiredFlagNames: string[], flags: unknown): flags is T {

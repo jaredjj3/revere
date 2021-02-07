@@ -2,7 +2,7 @@ import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
-import { notify } from '../helpers';
+import { $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
@@ -50,7 +50,7 @@ export class DiscordListener implements Listener {
       const argv = this.getArgv(userInput);
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
       const adverb = commandRun.status === CommandRunStatus.SUCCESS ? 'successfully' : 'unsucccessfully';
-      notify(
+      $notifiers.notify(
         notifiers,
         `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)
@@ -58,7 +58,7 @@ export class DiscordListener implements Listener {
       );
     } catch (err) {
       console.error(err);
-      notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);
+      $notifiers.notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);
     }
   };
 
