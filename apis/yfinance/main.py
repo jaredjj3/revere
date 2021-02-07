@@ -1,15 +1,17 @@
-from flask import Flask
+import flask
+import yfinance as yf
 import signal
 import sys
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 
-def exit():
+def exit(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, exit)
 signal.signal(signal.SIGTERM, exit)
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
+@app.route('/ticker/<symbol>')
+def home(symbol):
+     ticker = yf.Ticker(symbol)
+     return flask.jsonify(ticker.info)
