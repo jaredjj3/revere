@@ -10,6 +10,7 @@ COPY prisma prisma
 RUN yarn prisma generate
 
 COPY tsconfig.json .
+COPY nodemon.json .
 COPY bin bin
 COPY src src
 
@@ -17,5 +18,3 @@ ARG GIT_COMMIT_HASH
 ARG GIT_COMMIT_STATUS
 ENV GIT_COMMIT_HASH=${GIT_COMMIT_HASH}
 ENV GIT_COMMIT_STATUS=${GIT_COMMIT_STATUS}
-
-ENTRYPOINT [ "bin/run" ]

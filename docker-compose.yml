@@ -11,9 +11,11 @@ services:
     links:
       - db
       - yfinance
+    volumes:
+      - ./src:/app/src
     networks:
       - default
-    command: ['listen', '-l', 'discord', '-n', 'discord']
+    command: ['yarn', 'nodemon', 'bin/run', 'listen', '-l', 'discord', '-n', 'discord']
 
   jobs:
     image: revere:latest
@@ -26,7 +28,7 @@ services:
       - yfinance
     networks:
       - default
-    command: ['start']
+    command: ['bin/run', 'start']
 
   yfinance:
     image: yfinance:latest
