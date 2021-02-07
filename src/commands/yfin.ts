@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command';
 import { difference } from 'lodash';
-import { YFinanceApi } from '../apis';
+import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
 import { $notifiers } from '../helpers';
 import { container } from '../inversify.config';
@@ -10,6 +10,7 @@ import { Notifier } from '../notifiers';
 
 type InfoFlags = {
   symbols: string[];
+  fields: string[];
 };
 
 export default class Yfin extends Command {
@@ -19,6 +20,7 @@ export default class Yfin extends Command {
     help: flags.help({ char: 'h' }),
     symbols: flags.string({ char: 's', multiple: true }),
     notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    fields: flags.string({ char: 'f', multiple: true }),
   };
 
   static args = [{ name: 'subcommand', required: true, options: ['info'], hidden: false }];
@@ -30,7 +32,7 @@ export default class Yfin extends Command {
 
     switch (args.subcommand) {
       case 'info':
-        this.validate<InfoFlags>([Yfin.flags.symbols.name], flags);
+        this.validate<InfoFlags>([Yfin.flags.symbols.name, Yfin.flags.fields.name], flags);
         await this.info(notifiers, flags as InfoFlags);
         break;
       default:
@@ -49,6 +51,7 @@ export default class Yfin extends Command {
       data: info,
       severity: Severity.Info,
       timestamp: new Date(),
+      extraFieldNames: flags.fields as Array<keyof YFinanceApiInfoResponse>,
     }));
     await Promise.all(
       notifiers.flatMap((notifier) => {

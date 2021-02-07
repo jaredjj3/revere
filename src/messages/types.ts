@@ -32,4 +32,5 @@ export type SquozeMessage = Message & {
 export type YFinanceInfoMessage = Message & {
   type: MessageType.YfinInfo;
   data: YFinanceApiInfoResponse;
+  extraFieldNames: Array<keyof YFinanceApiInfoResponse>;
 };
