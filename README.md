@@ -19,7 +19,7 @@ $ npm install -g revere
 $ revere COMMAND
 running command...
 $ revere (-v|--version|version)
-revere/1.1.0 darwin-x64 node-v14.3.0
+revere/1.1.0 darwin-x64 node-v14.15.4
 $ revere --help [COMMAND]
 USAGE
   $ revere COMMAND
@@ -32,7 +32,7 @@ USAGE
 * [`revere help [COMMAND]`](#revere-help-command)
 * [`revere jobs OPERATION`](#revere-jobs-operation)
 * [`revere notify`](#revere-notify)
-* [`revere test [FILE]`](#revere-test-file)
+* [`revere yfin [FILE]`](#revere-yfin-file)
 
 ## `revere echo STRING`
 
@@ -102,13 +102,13 @@ OPTIONS
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/notify.ts)_
 
-## `revere test [FILE]`
+## `revere yfin [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ revere test [FILE]
+  $ revere yfin [FILE]
 
 OPTIONS
   -f, --force
@@ -116,5 +116,5 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/test.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/test.ts)_
+_See code: [src/commands/yfin.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/yfin.ts)_
 <!-- commandsstop -->
