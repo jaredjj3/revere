@@ -274,6 +274,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.51.tgz#639538575befbcf3d3861f95c41de8e47124d674"
   integrity sha512-KANw+MkL626tq90l++hGelbl67irOJzGhUJk6a1Bt8QHOeh9tztJx+L0AqttraWKinmZn7Qi5lJZJzx45Gq0dg==
 
+"@types/numeral@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/numeral/-/numeral-2.0.0.tgz#fc1ec435d46df7f3b4a50d727c319e1146724aa1"
+  integrity sha512-ibCOx5W9lj3yoBJgwbqfAGDMb5VkPDUcU+BbeEhvuFQmVI5+eT3tMxfSZFG3yO3LLNZgFXIx+QCqE5hMS/88Lw==
+
 "@types/qs@*":
   version "6.9.5"
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.9.5.tgz#434711bdd49eb5ee69d90c1d67c354a9a8ecb18b"
@@ -1740,6 +1745,11 @@ npm-run-path@^2.0.0:
   integrity sha1-NakjLfo11wZ7TLLd8jV7GHFTbF8=
   dependencies:
     path-key "^2.0.0"
+
+numeral@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/numeral/-/numeral-2.0.6.tgz#4ad080936d443c2561aed9f2197efffe25f4e506"
+  integrity sha1-StCAk21EPCVhrtnyGX7//iX05QY=
 
 object-treeify@^1.1.4:
   version "1.1.31"

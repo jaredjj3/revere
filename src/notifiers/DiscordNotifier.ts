@@ -1,9 +1,10 @@
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
+import * as numeral from 'numeral';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { Message, MessageType } from '../messages';
+import { Message, MessageType, YfinInfoMessage } from '../messages';
 import { env } from '../util';
 import { Notifier } from './types';
 
@@ -39,6 +40,21 @@ export class DiscordNotifier implements Notifier {
           .setDescription(`${message.timestamp}\n\n${message.content}`);
       case MessageType.Stdout:
         return '```' + message.content + '```';
+      case MessageType.YfinInfo:
+        // eslint-disable-next-line no-case-declarations
+        const data = (message as YfinInfoMessage).data;
+        return new Discord.MessageEmbed()
+          .setTitle(`${data.longName} (${data.symbol})`)
+          .setDescription(data.industry)
+          .setURL(data.website)
+          .setImage(data.logo_url)
+          .addFields([
+            { name: 'bid', value: numeral(data.bid).format('$0,0.00'), inline: true },
+            { name: 'ask', value: numeral(data.ask).format('$0,0.00'), inline: true },
+            { name: 'average volume', value: numeral(data.averageVolume).format('0,0'), inline: true },
+            { name: 'market cap', value: numeral(data.marketCap).format('($ 0.00 a)'), inline: true },
+            { name: 'short ratio', value: numeral(data.shortRatio).format('($ 0.00 a)'), inline: true },
+          ]);
       default:
         return message.content;
     }

@@ -1,7 +1,10 @@
+import { YFinanceApiInfoResponse } from '../apis';
+
 export enum MessageType {
   None = 'None',
   Stdout = 'Stdout',
   Squoze = 'Squoze',
+  YfinInfo = 'YfinInfo',
 }
 
 export enum Severity {
@@ -24,4 +27,9 @@ export type StdoutMessage = Message & {
 
 export type SquozeMessage = Message & {
   type: MessageType.Squoze;
+};
+
+export type YfinInfoMessage = Message & {
+  type: MessageType.YfinInfo;
+  data: YFinanceApiInfoResponse;
 };

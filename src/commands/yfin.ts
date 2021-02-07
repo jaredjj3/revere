@@ -1,14 +1,15 @@
 import { Command, flags } from '@oclif/command';
-import { difference, pick } from 'lodash';
+import { difference } from 'lodash';
 import { YFinanceApi } from '../apis';
 import { RevereError } from '../errors';
 import { $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
+import { MessageType, Severity, YfinInfoMessage } from '../messages';
 import { Notifier } from '../notifiers';
 
 type InfoFlags = {
-  symbol: string;
+  symbols: string[];
 };
 
 export default class Yfin extends Command {
@@ -16,7 +17,7 @@ export default class Yfin extends Command {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    symbol: flags.string(),
+    symbols: flags.string({ char: 's', multiple: true }),
     notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
   };
 
@@ -29,7 +30,7 @@ export default class Yfin extends Command {
 
     switch (args.subcommand) {
       case 'info':
-        this.validate<InfoFlags>([Yfin.flags.symbol.name], flags);
+        this.validate<InfoFlags>([Yfin.flags.symbols.name], flags);
         await this.info(notifiers, flags as InfoFlags);
         break;
       default:
@@ -41,16 +42,19 @@ export default class Yfin extends Command {
 
   async info(notifiers: Notifier[], flags: InfoFlags): Promise<void> {
     const api = container.get<YFinanceApi>(TYPES.YFinanceApi);
-    const info = await api.getInfo(flags.symbol);
-    const data = pick(info, [
-      'ask',
-      'askSize',
-      'averageDailyVolume10Day',
-      'averageVolume',
-      'averageVolume10days',
-      'shortName',
-    ]);
-    await $notifiers.notify(notifiers, JSON.stringify(data, null, 2));
+    const infos = await Promise.all(flags.symbols.map((symbol) => api.getInfo(symbol)));
+    const messages: YfinInfoMessage[] = infos.map((info) => ({
+      type: MessageType.YfinInfo,
+      content: 'from the yfinance api',
+      data: info,
+      severity: Severity.Info,
+      timestamp: new Date(),
+    }));
+    await Promise.all(
+      notifiers.flatMap((notifier) => {
+        return messages.map((message) => notifier.notify(message));
+      })
+    );
   }
 
   validate<T>(requiredFlagNames: string[], flags: unknown): flags is T {
