@@ -15,3 +15,6 @@ signal.signal(signal.SIGTERM, exit)
 def home(symbol):
      ticker = yf.Ticker(symbol)
      return flask.jsonify(ticker.info)
+
+if __name__ == '__main__':
+    app.run(port=5000, debug=False)

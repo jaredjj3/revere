@@ -6,6 +6,7 @@ export const TYPES = {
   Listener: 'Listener',
   CommandRunner: 'CommandRunner',
   JobRunner: 'JobRunner',
+  YFinanceApi: 'YFinanceApi',
 };
 
 export const NAMES = {

@@ -1,11 +1,14 @@
 import * as http from 'http';
+import { injectable } from 'inversify';
 
 const HOSTNAME = 'yfinance';
+const PORT = '5000';
 
+@injectable()
 export class YFinanceApi {
-  private async getInfo(symbol: string): Promise<any> {
+  async getInfo(symbol: string): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const req = http.request({ hostname: HOSTNAME, pathname: `/ticker/${symbol}` }, (res) => {
+      const req = http.request(`http://${HOSTNAME}:${PORT}/ticker/${symbol}`, (res) => {
         let str = '';
 
         res.on('data', (chunk) => {
@@ -13,8 +16,12 @@ export class YFinanceApi {
         });
 
         res.on('end', () => {
-          const json = JSON.parse(str);
-          resolve(json);
+          try {
+            const json = JSON.parse(str);
+            resolve(json);
+          } catch (err) {
+            reject(err);
+          }
         });
 
         res.on('error', (err) => {

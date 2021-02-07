@@ -1,8 +1,9 @@
 // organize-imports-ignore
-import 'reflect-metadata';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
+import 'reflect-metadata';
+import { YFinanceApi } from './apis';
 import { Detector, SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
@@ -37,3 +38,5 @@ container.bind<Listener>(TYPES.Listener).to(ConsoleListener).whenTargetNamed(NAM
 
 container.bind<CommandRunner>(TYPES.CommandRunner).to(CommandRunner);
 container.bind<JobRunner>(TYPES.JobRunner).to(JobRunner).inSingletonScope();
+
+container.bind<YFinanceApi>(TYPES.YFinanceApi).to(YFinanceApi);

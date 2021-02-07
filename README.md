@@ -19,7 +19,7 @@ $ npm install -g revere
 $ revere COMMAND
 running command...
 $ revere (-v|--version|version)
-revere/1.1.0 darwin-x64 node-v14.15.4
+revere/1.1.0 darwin-x64 node-v14.3.0
 $ revere --help [COMMAND]
 USAGE
   $ revere COMMAND
@@ -30,8 +30,9 @@ USAGE
 <!-- commands -->
 * [`revere echo STRING`](#revere-echo-string)
 * [`revere help [COMMAND]`](#revere-help-command)
-* [`revere jobs [FILE]`](#revere-jobs-file)
+* [`revere jobs OPERATION`](#revere-jobs-operation)
 * [`revere notify`](#revere-notify)
+* [`revere test [FILE]`](#revere-test-file)
 
 ## `revere echo STRING`
 
@@ -65,18 +66,22 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
-## `revere jobs [FILE]`
+## `revere jobs OPERATION`
 
-describe the command here
+list, create, update, and show jobs
 
 ```
 USAGE
-  $ revere jobs [FILE]
+  $ revere jobs OPERATION
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help                       show CLI help
+  -n, --notifiers=notifiers        [default: console]
+  --active=true|false
+  --command=command
+  --cronExpression=cronExpression
+  --description=description
+  --name=name
 ```
 
 _See code: [src/commands/jobs.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/jobs.ts)_
@@ -96,4 +101,20 @@ OPTIONS
 ```
 
 _See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/notify.ts)_
+
+## `revere test [FILE]`
+
+describe the command here
+
+```
+USAGE
+  $ revere test [FILE]
+
+OPTIONS
+  -f, --force
+  -h, --help       show CLI help
+  -n, --name=name  name to print
+```
+
+_See code: [src/commands/test.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/test.ts)_
 <!-- commandsstop -->

@@ -10,6 +10,7 @@ services:
       - docker.env
     links:
       - db
+      - yfinance
     networks:
       - default
     command: ['listen', '-l', 'discord', '-n', 'discord']
@@ -22,6 +23,7 @@ services:
       - docker.env
     links:
       - db
+      - yfinance
     networks:
       - default
     command: ['start']

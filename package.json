@@ -10,7 +10,7 @@
     "build": "docker-compose build --build-arg GIT_COMMIT_HASH=$(git rev-parse HEAD) --build-arg GIT_COMMIT_STATUS=$((git diff-index --quiet HEAD -- && echo CLEAN) || echo DIRTY)",
     "up": "yarn build && docker-compose up",
     "down": "docker-compose down",
-    "docker": "yarn build && docker-compose run --rm revere",
+    "docker": "yarn build && docker-compose run --rm listener",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "revere": "bin/run",
