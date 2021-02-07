@@ -26,6 +26,14 @@ services:
       - default
     command: ['start']
 
+  yfinance:
+    image: yfinance:latest
+    build: apis/yfinance
+    networks:
+      - default
+    ports:
+      - 5000:5000
+
   db:
     image: postgres:11
     restart: always
@@ -33,12 +41,10 @@ services:
       POSTGRES_DB: revere
       POSTGRES_USER: revere
       POSTGRES_PASSWORD: revere
+    networks:
+      - default
     ports:
       - 5432:5432
-    networks:
-      default:
-        aliases:
-          - db
     volumes:
       - ./pgdata:/var/lib/postgresql/data
 

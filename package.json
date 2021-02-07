@@ -7,7 +7,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "typecheck": "yarn tsc --noEmit",
-    "build": "docker build -t revere:latest --build-arg GIT_COMMIT_HASH=$(git rev-parse HEAD) --build-arg GIT_COMMIT_STATUS=$((git diff-index --quiet HEAD -- && echo CLEAN) || echo DIRTY) .",
+    "build": "docker-compose build --build-arg GIT_COMMIT_HASH=$(git rev-parse HEAD) --build-arg GIT_COMMIT_STATUS=$((git diff-index --quiet HEAD -- && echo CLEAN) || echo DIRTY)",
     "up": "yarn build && docker-compose up",
     "down": "docker-compose down",
     "docker": "yarn build && docker-compose run --rm revere",
