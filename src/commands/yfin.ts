@@ -29,7 +29,7 @@ export default class Yfin extends Command {
 
     switch (args.subcommand) {
       case 'info':
-        this.validate<InfoFlags>([], flags);
+        this.validate<InfoFlags>([Yfin.flags.symbol.name], flags);
         await this.info(notifiers, flags as InfoFlags);
         break;
       default:
