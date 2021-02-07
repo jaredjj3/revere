@@ -1,9 +1,10 @@
 // organize-imports-ignore
+import 'reflect-metadata';
+
 import { PrismaClient } from '@prisma/client';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
-import 'reflect-metadata';
 import { YFinanceApi } from './apis';
 import { Detector, SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
