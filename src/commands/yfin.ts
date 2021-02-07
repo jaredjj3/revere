@@ -5,7 +5,7 @@ import { RevereError } from '../errors';
 import { $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { MessageType, Severity, YfinInfoMessage } from '../messages';
+import { MessageType, Severity, YFinanceInfoMessage } from '../messages';
 import { Notifier } from '../notifiers';
 
 type InfoFlags = {
@@ -43,7 +43,7 @@ export default class Yfin extends Command {
   async info(notifiers: Notifier[], flags: InfoFlags): Promise<void> {
     const api = container.get<YFinanceApi>(TYPES.YFinanceApi);
     const infos = await Promise.all(flags.symbols.map((symbol) => api.getInfo(symbol)));
-    const messages: YfinInfoMessage[] = infos.map((info) => ({
+    const messages: YFinanceInfoMessage[] = infos.map((info) => ({
       type: MessageType.YfinInfo,
       content: 'from the yfinance api',
       data: info,

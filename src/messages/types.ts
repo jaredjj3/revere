@@ -29,7 +29,7 @@ export type SquozeMessage = Message & {
   type: MessageType.Squoze;
 };
 
-export type YfinInfoMessage = Message & {
+export type YFinanceInfoMessage = Message & {
   type: MessageType.YfinInfo;
   data: YFinanceApiInfoResponse;
 };

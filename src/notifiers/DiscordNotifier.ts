@@ -4,7 +4,7 @@ import * as numeral from 'numeral';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { Message, MessageType, YfinInfoMessage } from '../messages';
+import { Message, MessageType, YFinanceInfoMessage } from '../messages';
 import { env } from '../util';
 import { Notifier } from './types';
 
@@ -42,7 +42,7 @@ export class DiscordNotifier implements Notifier {
         return '```' + message.content + '```';
       case MessageType.YfinInfo:
         // eslint-disable-next-line no-case-declarations
-        const data = (message as YfinInfoMessage).data;
+        const data = (message as YFinanceInfoMessage).data;
         return new Discord.MessageEmbed()
           .setTitle(`${data.longName} (${data.symbol})`)
           .setDescription(data.industry)
