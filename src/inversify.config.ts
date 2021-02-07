@@ -1,4 +1,5 @@
 // organize-imports-ignore
+import { PrismaClient } from '@prisma/client';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
@@ -11,7 +12,7 @@ import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { CommandRunner } from './runners';
 import { JobRunner } from './runners/JobRunner';
-import { env } from './util';
+import { env, onExit } from './util';
 
 dotenv.config();
 
@@ -27,6 +28,10 @@ container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Di
   }
   return client;
 });
+
+const prisma = new PrismaClient();
+onExit(prisma.$disconnect);
+container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);
 
 container.bind<Detector>(TYPES.Detector).to(SquozeDetector).whenTargetNamed(NAMES.squoze);
 

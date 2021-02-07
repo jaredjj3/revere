@@ -7,6 +7,7 @@ export const TYPES = {
   CommandRunner: 'CommandRunner',
   JobRunner: 'JobRunner',
   YFinanceApi: 'YFinanceApi',
+  PrismaClient: 'PrismaClient',
 };
 
 export const NAMES = {

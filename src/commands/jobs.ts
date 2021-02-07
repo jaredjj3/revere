@@ -5,6 +5,8 @@ import * as cron from 'node-cron';
 import { RevereError } from '../errors';
 import * as customFlags from '../flags';
 import { DEFAULT_NOTIFIERS, getNotifier, notify } from '../helpers';
+import { container } from '../inversify.config';
+import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CrudAction, CrudActions } from '../util';
 
@@ -47,12 +49,11 @@ export default class Jobs extends Command {
 
   static args = [{ name: 'operation', required: true, options: CrudActions, hidden: false }];
 
-  private prisma = new PrismaClient();
-
   async run(): Promise<void> {
     const { args, flags } = this.parse(Jobs);
 
     const notifiers = flags.notifiers.map(getNotifier);
+    const prisma = container.get<PrismaClient>(TYPES.PrismaClient);
 
     switch (args.operation) {
       case CrudAction.CREATE:
@@ -60,19 +61,19 @@ export default class Jobs extends Command {
           [Jobs.flags.name.name, Jobs.flags.command.name, Jobs.flags.cronExpression.name, Jobs.flags.active.name],
           flags
         );
-        await this.create(notifiers, flags as CreateFlags);
+        await this.create(prisma, notifiers, flags as CreateFlags);
         break;
       case CrudAction.SHOW:
         this.validate<ShowFlags>([Jobs.flags.name.name], flags);
-        await this.show(notifiers, flags as ShowFlags);
+        await this.show(prisma, notifiers, flags as ShowFlags);
         break;
       case CrudAction.UPDATE:
         this.validate<UpdateFlags>([], flags);
-        await this.update(notifiers, flags as UpdateFlags);
+        await this.update(prisma, notifiers, flags as UpdateFlags);
         break;
       case CrudAction.LIST:
         this.validate<ListFlags>([], flags);
-        await this.list(notifiers, flags as ListFlags);
+        await this.list(prisma, notifiers, flags as ListFlags);
         break;
       default:
         throw new RevereError(`unknown operation: ${args.operation}`);
@@ -81,12 +82,12 @@ export default class Jobs extends Command {
     this.exit(0);
   }
 
-  async create(notifiers: Notifier[], flags: CreateFlags): Promise<void> {
+  async create(prisma: PrismaClient, notifiers: Notifier[], flags: CreateFlags): Promise<void> {
     const cronExpression = flags.cronExpression.join(' ');
     if (!cron.validate(cronExpression)) {
       throw new RevereError(`invalid cron expression: ${flags.cronExpression}`);
     }
-    const job = await this.prisma.job.create({
+    const job = await prisma.job.create({
       data: {
         name: flags.name,
         description: flags.description ? flags.description.join(' ') : null,
@@ -98,8 +99,8 @@ export default class Jobs extends Command {
     await notify(notifiers, `created job:\n${JSON.stringify(job, null, 2)}`);
   }
 
-  async show(notifiers: Notifier[], flags: ShowFlags): Promise<void> {
-    const job = await this.prisma.job.findFirst({ where: { name: flags.name } });
+  async show(prisma: PrismaClient, notifiers: Notifier[], flags: ShowFlags): Promise<void> {
+    const job = await prisma.job.findFirst({ where: { name: flags.name } });
     if (job) {
       await notify(notifiers, JSON.stringify(job, null, 2));
     } else {
@@ -107,7 +108,7 @@ export default class Jobs extends Command {
     }
   }
 
-  async update(notifiers: Notifier[], flags: UpdateFlags): Promise<void> {
+  async update(prisma: PrismaClient, notifiers: Notifier[], flags: UpdateFlags): Promise<void> {
     const args: Partial<Prisma.JobUpdateArgs> = { where: { name: flags.name } };
     args.data = {};
     if (!isUndefined(flags.description)) {
@@ -122,16 +123,16 @@ export default class Jobs extends Command {
     if (!isUndefined(flags.active)) {
       args.data.active = flags.active;
     }
-    const job = await this.prisma.job.update(args as any);
+    const job = await prisma.job.update(args as any);
     await notify(notifiers, `updated job:\n${JSON.stringify(job, null, 2)}`);
   }
 
-  async list(notifiers: Notifier[], flags: ListFlags): Promise<void> {
+  async list(prisma: PrismaClient, notifiers: Notifier[], flags: ListFlags): Promise<void> {
     const args: Partial<Prisma.JobFindManyArgs> = { where: {} };
     if (!isUndefined(flags.active)) {
       args.where!.active = flags.active;
     }
-    const jobs = await this.prisma.job.findMany(args);
+    const jobs = await prisma.job.findMany(args);
     await notify(notifiers, JSON.stringify(jobs, null, 2));
   }
 

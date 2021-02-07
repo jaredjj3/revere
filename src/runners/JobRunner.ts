@@ -1,8 +1,7 @@
 import { CommandRunSrc, Job, PrismaClient } from '@prisma/client';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
-import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { onExit } from '../util';
 import { CommandRunner } from './CommandRunner';
@@ -11,9 +10,13 @@ type Run = { job: Job; task: ScheduledTask };
 
 @injectable()
 export class JobRunner {
-  private prisma = new PrismaClient();
   private runs = new Array<Run>();
   private syncJobsTask: ScheduledTask | null = null;
+
+  constructor(
+    @inject(TYPES.PrismaClient) private prisma: PrismaClient,
+    @inject(TYPES.CommandRunner) private commandRunner: CommandRunner
+  ) {}
 
   async run(): Promise<void> {
     if (this.syncJobsTask) {
@@ -109,8 +112,7 @@ export class JobRunner {
   private async runJobOnce(job: Job): Promise<void> {
     console.log(`running job: ${job.name}`);
     try {
-      const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
-      const commandRun = await commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
+      const commandRun = await this.commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
       console.log(
         `\nJOB ${job.name} START=======================\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)

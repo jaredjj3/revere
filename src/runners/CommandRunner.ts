@@ -2,9 +2,10 @@ import Command from '@oclif/command';
 import { CommandRun, CommandRunSrc, CommandRunStatus, GitCommitStatus, Prisma, PrismaClient } from '@prisma/client';
 import { spawn } from 'child_process';
 import * as fs from 'fs';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import * as path from 'path';
 import { RevereError } from '../errors';
+import { TYPES } from '../inversify.constants';
 import { env } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'commands');
@@ -18,7 +19,7 @@ type RunOptions = {
 
 @injectable()
 export class CommandRunner {
-  private prisma = new PrismaClient();
+  constructor(@inject(TYPES.PrismaClient) private prisma: PrismaClient) {}
 
   async run(argv: string[], runOpts: Partial<RunOptions>): Promise<CommandRun> {
     const opts: RunOptions = { ...DEFAULT_RUN_OPTIONS, ...runOpts };
