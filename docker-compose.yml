@@ -13,6 +13,7 @@ services:
       - yfinance
     volumes:
       - ./src:/app/src
+      - ./.git:/app/.git
     networks:
       - default
     command: ['yarn', 'nodemon', 'bin/run', 'listen', '-l', 'discord', '-n', 'discord']
@@ -28,6 +29,7 @@ services:
       - yfinance
     volumes:
       - ./src:/app/src
+      - ./.git:/app/.git
     networks:
       - default
     command: ['yarn', 'nodemon', 'bin/run', 'start']
