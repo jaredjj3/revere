@@ -6,7 +6,7 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { onExit } from '../util';
+import { logger, onExit } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';
@@ -17,7 +17,7 @@ export class ConsoleListener implements Listener {
 
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
-    onExit(this.exit);
+    onExit(this.onExit);
     setTimeout(() => this.readline.prompt(true), 0); // flush main stack
   }
 
@@ -25,7 +25,7 @@ export class ConsoleListener implements Listener {
     const trimmed = line.trim();
 
     if (trimmed === EXIT_COMMAND) {
-      this.exit();
+      this.onExit();
     }
 
     const argv = trimmed.split(' ');
@@ -44,8 +44,8 @@ export class ConsoleListener implements Listener {
     this.readline.prompt(true);
   };
 
-  exit = (): never => {
-    console.log('farewell');
+  onExit = (): void => {
+    logger.info('farewell');
     process.exit(0);
   };
 }

@@ -5,7 +5,7 @@ import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Message, MessageType, YFinanceInfoMessage } from '../messages';
-import { env } from '../util';
+import { env, logger } from '../util';
 import { Notifier } from './types';
 
 @injectable()
@@ -15,7 +15,7 @@ export class DiscordNotifier implements Notifier {
   // https://discordjs.guide/popular-topics/faq.html#how-do-i-send-a-message-to-a-specific-channel
   async notify(message: Message): Promise<void> {
     if (!message.content) {
-      console.error(`received message with empty content, skipping: ${message} `);
+      logger.error(`received message with empty content, skipping: ${message} `);
       return;
     }
 

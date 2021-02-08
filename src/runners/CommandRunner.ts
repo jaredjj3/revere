@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import * as path from 'path';
 import { RevereError } from '../errors';
 import { TYPES } from '../inversify.constants';
-import { env } from '../util';
+import { env, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'commands');
 const REL_COMMANDS_DIR = path.join('..', 'commands');
@@ -40,7 +40,7 @@ export class CommandRunner {
 
     // run the command
     commandRun.startedAt = new Date();
-    console.log(`running '${argv.join(' ')}' with opts: ${JSON.stringify(opts)}`);
+    logger.debug(`running '${argv.join(' ')}' with opts: ${JSON.stringify(opts)}`);
     const run = spawn('bin/run', argv, { shell: false, env: { ...process.env, CMD_INPUT_SRC: opts.src } });
 
     // handle command events
@@ -80,7 +80,7 @@ export class CommandRunner {
       await Promise.race<void>([runClose, timeout]);
       commandRun.status = CommandRunStatus.SUCCESS;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       commandRun.status = CommandRunStatus.ERROR;
     }
 
@@ -135,7 +135,7 @@ export class CommandRunner {
       const CommandClass = this.getCommandClass(str);
       return (await CommandClass).hidden;
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return false;
     }
   }

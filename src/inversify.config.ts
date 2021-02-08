@@ -13,7 +13,7 @@ import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { CommandRunner } from './runners';
 import { JobRunner } from './runners/JobRunner';
-import { env, onExit } from './util';
+import { env, logger, onExit } from './util';
 
 dotenv.config();
 
@@ -32,7 +32,7 @@ container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Di
 
 const prisma = new PrismaClient();
 onExit(async () => {
-  console.log('disconnecting prisma');
+  logger.info('disconnecting prisma');
   await prisma.$disconnect();
 });
 container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);

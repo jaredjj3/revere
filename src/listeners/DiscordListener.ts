@@ -7,7 +7,7 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { env } from '../util';
+import { env, logger } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r'];
@@ -29,15 +29,15 @@ export class DiscordListener implements Listener {
     const client = await this.getClient();
 
     if (message.author.id === client.user?.id) {
-      console.debug('skipped own message');
+      logger.debug('skipped own message');
       return;
     }
     if (!this.isCommand(message.content)) {
-      console.debug('skipped non-command');
+      logger.debug('skipped non-command');
       return;
     }
     if (message.channel.id !== env('DISCORD_CHANNEL_ID')) {
-      console.debug(`skipped message for another channel: ${message.channel.id}`);
+      logger.debug(`skipped message for another channel: ${message.channel.id}`);
       return;
     }
 
@@ -45,20 +45,20 @@ export class DiscordListener implements Listener {
     const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
 
     try {
-      console.log(`received commandStr from discord: ${userInput}`);
+      logger.info(`received commandStr from discord: ${userInput}`);
 
       const argv = this.getArgv(userInput);
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
       const adverb = commandRun.status === CommandRunStatus.SUCCESS ? 'successfully' : 'unsucccessfully';
-      $notifiers.notify(
+      await $notifiers.notify(
         notifiers,
         `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)
           .join('\n=======================\n')}`
       );
     } catch (err) {
-      console.error(err);
-      $notifiers.notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);
+      logger.error(err);
+      await $notifiers.notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);
     }
   };
 

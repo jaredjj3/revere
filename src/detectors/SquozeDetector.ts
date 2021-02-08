@@ -4,6 +4,7 @@ import { inject, injectable } from 'inversify';
 import parse from 'node-html-parser';
 import { TYPES } from '../inversify.constants';
 import { MessageType, Severity, SquozeMessage } from '../messages';
+import { logger } from '../util';
 import { Detector } from './types';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
@@ -66,7 +67,7 @@ export class SquozeDetector implements Detector<SquozeMessage> {
         data: { httpStatusCode, header },
       });
     } catch (err) {
-      console.warn('http request failed');
+      logger.warn('http request failed');
       return await this.prisma.squozeResponse.create({
         data: { httpStatusCode: -1, errorMessage: err.message },
       });

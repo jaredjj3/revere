@@ -27,7 +27,7 @@ export class JobRunner {
     onExit(() => {
       if (this.syncJobsTask) {
         this.syncJobsTask.destroy();
-        this.runs.map((run) => run.task).forEach((task) => task.destroy());
+        this.runs.map((run) => run.job).forEach(this.stopJob.bind(this));
       }
       this.syncJobsTask = null;
       process.exit(0);
@@ -110,7 +110,7 @@ export class JobRunner {
   }
 
   private async runJobOnce(job: Job): Promise<void> {
-    logger.info(`running job ${job.name}: ${job.command}`);
+    logger.info(`running job ${job.name}: '${job.command}'`);
     try {
       const commandRun = await this.commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
       logger.debug(
