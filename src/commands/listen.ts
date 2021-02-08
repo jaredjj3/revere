@@ -1,7 +1,7 @@
 import { Command, flags } from '@oclif/command';
 import { uniq } from 'lodash';
 import { $listeners, $notifiers } from '../helpers';
-import { onExit } from '../util';
+import { logger } from '../util';
 
 export default class Listen extends Command {
   static hidden = true;
@@ -22,11 +22,7 @@ export default class Listen extends Command {
 
     await Promise.all(listeners.map((listener) => listener.listen(notifiers)));
 
-    console.log(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);
-    console.log(`running listeners: ${uniq(flags.listeners).join(', ')}`);
-
-    onExit(() => {
-      console.log('stopping listening');
-    });
+    logger.info(`running notifiers: ${uniq(flags.notifiers).join(', ')}`);
+    logger.info(`running listeners: ${uniq(flags.listeners).join(', ')}`);
   }
 }

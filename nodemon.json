@@ -1,5 +1,8 @@
 {
   "watch": ["bin/run", "src/"],
   "ext": "js,ts",
-  "signal": "SIGTERM"
+  "signal": "SIGTERM",
+  "events": {
+    "restart": "yarn"
+  }
 }

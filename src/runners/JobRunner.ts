@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
 import { TYPES } from '../inversify.constants';
-import { onExit } from '../util';
+import { logger, onExit } from '../util';
 import { CommandRunner } from './CommandRunner';
 
 type Run = { job: Job; task: ScheduledTask };
@@ -35,8 +35,8 @@ export class JobRunner {
   }
 
   private async syncJobs(): Promise<void> {
-    console.log('\nsyncJob CURRENT');
-    console.log(`running jobs: ${this.runs.map((run) => run.job.name)}\n`);
+    logger.debug('\nsyncJob CURRENT');
+    logger.debug(`running jobs: ${this.runs.map((run) => run.job.name)}\n`);
 
     // no mutations
     const [active, inactive, updated] = await Promise.all([
@@ -46,10 +46,10 @@ export class JobRunner {
     ]);
 
     const getName = (job: Job) => job.name;
-    console.log('\nsyncJob CHANGES');
-    console.log(`active jobs: ${active.map(getName).join(', ')}`);
-    console.log(`inactive jobs: ${inactive.map(getName).join(', ')}`);
-    console.log(`updated jobs: ${updated.map(getName).join(', ')}\n`);
+    logger.debug('\nsyncJob CHANGES');
+    logger.debug(`active jobs: ${active.map(getName).join(', ')}`);
+    logger.debug(`inactive jobs: ${inactive.map(getName).join(', ')}`);
+    logger.debug(`updated jobs: ${updated.map(getName).join(', ')}\n`);
 
     // perform mutations
     await Promise.all(inactive.map(this.stopJob.bind(this)));
@@ -88,13 +88,13 @@ export class JobRunner {
     if (!run) {
       return;
     }
-    console.log(`stopping job: ${job.name}`);
+    logger.info(`stopping job: ${job.name}`);
     run.task.destroy();
     this.runs = this.runs.filter((run) => run.job.id !== job.id);
   }
 
   private createRun(job: Job): void {
-    console.log(`starting job: ${job.name}`);
+    logger.info(`starting job: ${job.name}`);
     const run: Run = {
       job,
       task: cron.schedule(job.cronExpression, async () => {
@@ -110,16 +110,16 @@ export class JobRunner {
   }
 
   private async runJobOnce(job: Job): Promise<void> {
-    console.log(`running job: ${job.name}`);
+    logger.info(`running job ${job.name}: ${job.command}`);
     try {
       const commandRun = await this.commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
-      console.log(
+      logger.debug(
         `\nJOB ${job.name} START=======================\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)
           .join('\n')}\nJOB ${job.name} END=======================`
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
     }
   }
 }
