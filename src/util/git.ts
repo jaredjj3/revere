@@ -9,7 +9,7 @@ const GIT_DIR = path.join('..', '.git');
 
 export const gitDirExists = (): boolean => fs.existsSync(GIT_DIR);
 
-export const getCommitHash = (): Promise<string> =>
+export const getGitCommitHash = (): Promise<string> =>
   new Promise<string>((resolve, reject) => {
     if (!gitDirExists()) {
       return resolve(env('GIT_COMMIT_HASH'));

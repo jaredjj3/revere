@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import * as path from 'path';
 import { RevereError } from '../errors';
 import { TYPES } from '../inversify.constants';
-import { env, getCommitHash, getGitCommitStatus, logger } from '../util';
+import { getGitCommitHash, getGitCommitStatus, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'commands');
 const REL_COMMANDS_DIR = path.join('..', 'commands');
@@ -23,7 +23,7 @@ export class CommandRunner {
 
   async run(argv: string[], runOpts: Partial<RunOptions>): Promise<CommandRun> {
     const opts: RunOptions = { ...DEFAULT_RUN_OPTIONS, ...runOpts };
-    const [gitCommitHash, gitCommitStatus] = await Promise.all([getCommitHash(), getGitCommitStatus()]);
+    const [gitCommitHash, gitCommitStatus] = await Promise.all([getGitCommitHash(), getGitCommitStatus()]);
     const commandRun = this.buildCommandRun({
       command: argv.join(' '),
       gitCommitHash,
@@ -104,21 +104,6 @@ export class CommandRunner {
       exitCode: -1,
       ...input,
     };
-  }
-
-  private getGitCommitStatus(): GitCommitStatus {
-    try {
-      switch (env('GIT_COMMIT_STATUS')) {
-        case 'CLEAN':
-          return GitCommitStatus.CLEAN;
-        case 'DIRTY':
-          return GitCommitStatus.DIRTY;
-        default:
-          return GitCommitStatus.UNKNOWN;
-      }
-    } catch (e) {
-      return GitCommitStatus.UNKNOWN;
-    }
   }
 
   private async isHiddenCommand(str: string | undefined): Promise<boolean> {
