@@ -6,7 +6,7 @@ import { inject, injectable } from 'inversify';
 import * as path from 'path';
 import { RevereError } from '../errors';
 import { TYPES } from '../inversify.constants';
-import { env, logger } from '../util';
+import { env, getCommitHash, getGitCommitStatus, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'commands');
 const REL_COMMANDS_DIR = path.join('..', 'commands');
@@ -23,10 +23,11 @@ export class CommandRunner {
 
   async run(argv: string[], runOpts: Partial<RunOptions>): Promise<CommandRun> {
     const opts: RunOptions = { ...DEFAULT_RUN_OPTIONS, ...runOpts };
+    const [gitCommitHash, gitCommitStatus] = await Promise.all([getCommitHash(), getGitCommitStatus()]);
     const commandRun = this.buildCommandRun({
       command: argv.join(' '),
-      gitCommitHash: env('GIT_COMMIT_HASH'),
-      gitCommitStatus: this.getGitCommitStatus(),
+      gitCommitHash,
+      gitCommitStatus,
       src: opts.src,
     });
 
@@ -96,7 +97,7 @@ export class CommandRunner {
       command: '',
       src: CommandRunSrc.UNKNOWN,
       status: CommandRunStatus.UNKNOWN,
-      gitCommitHash: env('GIT_COMMIT_HASH'),
+      gitCommitHash: '',
       gitCommitStatus: GitCommitStatus.UNKNOWN,
       stderr: '',
       stdout: '',
