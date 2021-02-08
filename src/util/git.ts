@@ -1,9 +1,20 @@
 import { GitCommitStatus } from '@prisma/client';
 import { spawn } from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
 import { RevereError } from '../errors';
+import { env } from './env';
+
+const GIT_DIR = path.join('..', '.git');
+
+export const gitDirExists = (): boolean => fs.existsSync(GIT_DIR);
 
 export const getCommitHash = (): Promise<string> =>
   new Promise<string>((resolve, reject) => {
+    if (!gitDirExists()) {
+      return resolve(env('GIT_COMMIT_HASH'));
+    }
+
     const git = spawn('git', ['rev-parse', 'HEAD']);
 
     const stdout = new Array<string>();
@@ -28,6 +39,21 @@ export const getCommitHash = (): Promise<string> =>
 
 export const getGitCommitStatus = (): Promise<GitCommitStatus> =>
   new Promise<GitCommitStatus>((resolve) => {
+    if (!gitDirExists()) {
+      try {
+        switch (env('GIT_COMMIT_STATUS')) {
+          case 'CLEAN':
+            return resolve(GitCommitStatus.CLEAN);
+          case 'DIRTY':
+            return resolve(GitCommitStatus.DIRTY);
+          default:
+            return resolve(GitCommitStatus.UNKNOWN);
+        }
+      } catch (e) {
+        return resolve(GitCommitStatus.UNKNOWN);
+      }
+    }
+
     const git = spawn('git', ['status', '-s']);
 
     const stdout = new Array<string>();
