@@ -26,9 +26,11 @@ services:
     links:
       - db
       - yfinance
+    volumes:
+      - ./src:/app/src
     networks:
       - default
-    command: ['bin/run', 'start']
+    command: ['yarn', 'nodemon', 'bin/run', 'start']
 
   yfinance:
     image: yfinance:latest

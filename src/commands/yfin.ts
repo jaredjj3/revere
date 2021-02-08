@@ -20,7 +20,7 @@ export default class Yfin extends Command {
     help: flags.help({ char: 'h' }),
     symbols: flags.string({ char: 's', multiple: true }),
     notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
-    fields: flags.string({ char: 'f', multiple: true }),
+    fields: flags.string({ char: 'f', multiple: true, required: false }),
   };
 
   static args = [{ name: 'subcommand', required: true, options: ['info'], hidden: false }];

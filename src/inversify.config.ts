@@ -31,7 +31,10 @@ container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Di
 });
 
 const prisma = new PrismaClient();
-onExit(prisma.$disconnect);
+onExit(async () => {
+  console.log('disconnecting prisma');
+  await prisma.$disconnect();
+});
 container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);
 
 container.bind<Detector>(TYPES.Detector).to(SquozeDetector).whenTargetNamed(NAMES.squoze);

@@ -2,6 +2,8 @@ FROM node:14.9.0
 
 WORKDIR /app
 
+RUN npm install pm2 -g
+
 COPY package.json .
 COPY yarn.lock .
 RUN yarn

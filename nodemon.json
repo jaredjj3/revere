@@ -1,4 +1,5 @@
 {
   "watch": ["bin/run", "src/"],
-  "ext": "js,ts"
+  "ext": "js,ts",
+  "signal": "SIGTERM"
 }

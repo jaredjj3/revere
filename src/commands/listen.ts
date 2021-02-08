@@ -27,7 +27,6 @@ export default class Listen extends Command {
 
     onExit(() => {
       console.log('stopping listening');
-      this.exit();
     });
   }
 }
