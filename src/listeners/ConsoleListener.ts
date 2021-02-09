@@ -1,7 +1,7 @@
 import { CommandRunSrc } from '@prisma/client';
 import { injectable } from 'inversify';
 import { createInterface } from 'readline';
-import { $notifiers } from '../helpers';
+import { $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
@@ -37,12 +37,16 @@ export class ConsoleListener implements Listener {
 
     try {
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.CONSOLE });
-      await $notifiers.notify(
+      await $notifiers.notifyAll(
         notifiers,
-        [commandRun.stdout, commandRun.stderr].filter((str) => str.length > 0).join('\n=======================\n')
+        $messages.createStdoutMessage({
+          content: [commandRun.stdout, commandRun.stderr]
+            .filter((str) => str.length > 0)
+            .join('\n=======================\n'),
+        })
       );
     } catch (err) {
-      await $notifiers.notify(notifiers, err.message);
+      await $notifiers.notifyAll(notifiers, err.message);
     }
 
     logger.info('read');

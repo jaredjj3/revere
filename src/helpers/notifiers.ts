@@ -2,7 +2,7 @@ import { CommandRunSrc } from '@prisma/client';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
 import { NAMES, TYPES } from '../inversify.constants';
-import { MessageType, Severity } from '../messages';
+import { Message } from '../messages';
 import { Notifier } from '../notifiers';
 import { env } from '../util';
 
@@ -11,13 +11,8 @@ export const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
 export const DEFAULT_NOTIFIERS =
   CMD_INPUT_SRC.toUpperCase() === CommandRunSrc.DISCORD ? [NAMES.discord] : [NAMES.console];
 
-export const notify = async (notifiers: Notifier[], content: string): Promise<void> => {
-  const timestamp = new Date();
-  await Promise.all(
-    notifiers.map((notifier) =>
-      notifier.notify({ type: MessageType.Stdout, content, severity: Severity.Info, timestamp })
-    )
-  );
+export const notifyAll = async <M extends Message>(notifiers: Notifier[], ...messages: M[]): Promise<void> => {
+  await Promise.all(notifiers.map((notifier) => notifier.notify(...messages)));
 };
 
 export const getNotifier = (notifierName: string): Notifier => {

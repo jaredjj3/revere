@@ -3,4 +3,5 @@
 export * as $customFlags from './customFlags';
 export * as $detectors from './detectors';
 export * as $listeners from './listeners';
+export * as $messages from './messages';
 export * as $notifiers from './notifiers';

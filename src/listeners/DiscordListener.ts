@@ -2,7 +2,7 @@ import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
-import { $notifiers } from '../helpers';
+import { $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
@@ -50,15 +50,20 @@ export class DiscordListener implements Listener {
       const argv = this.getArgv(userInput);
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
       const adverb = commandRun.status === CommandRunStatus.SUCCESS ? 'successfully' : 'unsucccessfully';
-      await $notifiers.notify(
+      await $notifiers.notifyAll(
         notifiers,
-        `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
-          .filter((str) => str.length > 0)
-          .join('\n=======================\n')}`
+        $messages.createStdoutMessage({
+          content: `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
+            .filter((str) => str.length > 0)
+            .join('\n=======================\n')}`,
+        })
       );
     } catch (err) {
       logger.error(err);
-      await $notifiers.notify(notifiers, `unsuccessfully ran command: '${userInput}'\n\n${err.message}`);
+      await $notifiers.notifyAll(
+        notifiers,
+        $messages.createStdoutMessage({ content: `unsuccessfully ran command: '${userInput}'\n\n${err.message}` })
+      );
     }
   };
 

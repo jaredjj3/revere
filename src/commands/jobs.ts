@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { difference, isUndefined } from 'lodash';
 import * as cron from 'node-cron';
 import { RevereError } from '../errors';
-import { $customFlags, $notifiers } from '../helpers';
+import { $customFlags, $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
@@ -96,15 +96,21 @@ export default class Jobs extends BaseCommand {
         active: flags.active,
       },
     });
-    await $notifiers.notify(notifiers, `created job:\n${JSON.stringify(job, null, 2)}`);
+    await $notifiers.notifyAll(
+      notifiers,
+      $messages.createStdoutMessage({ content: `created job:\n${JSON.stringify(job, null, 2)}` })
+    );
   }
 
   async show(prisma: PrismaClient, notifiers: Notifier[], flags: ShowFlags): Promise<void> {
     const job = await prisma.job.findFirst({ where: { name: flags.name } });
     if (job) {
-      await $notifiers.notify(notifiers, JSON.stringify(job, null, 2));
+      await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage({ content: JSON.stringify(job, null, 2) }));
     } else {
-      await $notifiers.notify(notifiers, `no job found with name: '${name}'`);
+      await $notifiers.notifyAll(
+        notifiers,
+        $messages.createStdoutMessage({ content: `no job found with name: '${name}'` })
+      );
     }
   }
 
@@ -124,7 +130,10 @@ export default class Jobs extends BaseCommand {
       args.data.active = flags.active;
     }
     const job = await prisma.job.update(args as Prisma.JobUpdateArgs);
-    await $notifiers.notify(notifiers, `updated job:\n${JSON.stringify(job, null, 2)}`);
+    await $notifiers.notifyAll(
+      notifiers,
+      $messages.createStdoutMessage({ content: `updated job:\n${JSON.stringify(job, null, 2)}` })
+    );
   }
 
   async list(prisma: PrismaClient, notifiers: Notifier[], flags: ListFlags): Promise<void> {
@@ -134,7 +143,7 @@ export default class Jobs extends BaseCommand {
       args.where.active = flags.active;
     }
     const jobs = await prisma.job.findMany(args);
-    await $notifiers.notify(notifiers, JSON.stringify(jobs, null, 2));
+    await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage({ content: JSON.stringify(jobs, null, 2) }));
   }
 
   validate<T>(requiredFlagNames: string[], flags: unknown): flags is T {

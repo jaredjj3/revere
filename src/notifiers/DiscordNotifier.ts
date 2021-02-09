@@ -5,7 +5,7 @@ import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Message, MessageType, YFinanceInfoMessage } from '../messages';
-import { env, logger } from '../util';
+import { env } from '../util';
 import { Notifier } from './types';
 
 @injectable()
@@ -13,18 +13,13 @@ export class DiscordNotifier implements Notifier {
   isReady = false;
 
   // https://discordjs.guide/popular-topics/faq.html#how-do-i-send-a-message-to-a-specific-channel
-  async notify(message: Message): Promise<void> {
-    if (!message.content) {
-      logger.error(`received message with empty content, skipping: ${message} `);
-      return;
-    }
-
+  async notify(...messages: Message[]): Promise<void> {
     const clientProvider = container.get<DiscordClientProvider>(TYPES.DiscordClientProvider);
     const client = await clientProvider();
 
     const channelId = env('DISCORD_CHANNEL_ID');
     const channel = await client.channels.fetch(channelId);
-    const formatted = this.format(message);
+    const formatted = messages.map((message) => this.format(message));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (channel as any).send(formatted);
   }

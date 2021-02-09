@@ -1,5 +1,5 @@
 import { flags } from '@oclif/command';
-import { $notifiers } from '../helpers';
+import { $messages, $notifiers } from '../helpers';
 import { BaseCommand } from '../oclif';
 
 export default class Echo extends BaseCommand {
@@ -17,7 +17,7 @@ export default class Echo extends BaseCommand {
   async run(): Promise<void> {
     const { argv, flags } = this.parse(Echo);
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
-    await $notifiers.notify(notifiers, argv.join(' '));
+    await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage({ content: argv.join(' ') }));
     this.exit(0);
   }
 }
