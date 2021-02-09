@@ -2,10 +2,9 @@ import { flags } from '@oclif/command';
 import { difference } from 'lodash';
 import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
-import { $notifiers } from '../helpers';
+import { $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { MessageType, Severity, YFinanceInfoMessage } from '../messages';
 import { Notifier } from '../notifiers';
 import { BaseCommand } from '../oclif';
 
@@ -46,19 +45,14 @@ export default class Yfin extends BaseCommand {
   async info(notifiers: Notifier[], flags: InfoFlags): Promise<void> {
     const api = container.get<YFinanceApi>(TYPES.YFinanceApi);
     const infos = await Promise.all(flags.symbols.map((symbol) => api.getInfo(symbol)));
-    const messages: YFinanceInfoMessage[] = infos.map((info) => ({
-      type: MessageType.YfinInfo,
-      content: 'from the yfinance api',
-      data: info,
-      severity: Severity.Info,
-      timestamp: new Date(),
-      fields: (flags.fields as Array<keyof YFinanceApiInfoResponse> | undefined) || [],
-    }));
-    await Promise.all(
-      notifiers.flatMap((notifier) => {
-        return messages.map((message) => notifier.notify(message));
+    const messages = infos.map((info) =>
+      $messages.createYFinanceInfoMessage({
+        content: 'from the yfinance api',
+        data: info,
+        fields: (flags.fields as Array<keyof YFinanceApiInfoResponse> | undefined) || [],
       })
     );
+    await $notifiers.notifyAll(notifiers, ...messages);
   }
 
   validate<T>(requiredFlagNames: string[], flags: unknown): flags is T {
