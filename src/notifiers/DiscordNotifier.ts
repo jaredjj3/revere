@@ -37,7 +37,7 @@ export class DiscordNotifier implements Notifier {
         return '```' + message.content + '```';
       case MessageType.YfinInfo:
         // eslint-disable-next-line no-case-declarations
-        const { data, extraFieldNames } = message as YFinanceInfoMessage;
+        const { data, fields } = message as YFinanceInfoMessage;
         return new Discord.MessageEmbed()
           .setTitle(`${data.longName} (${data.symbol})`)
           .setDescription(data.industry)
@@ -49,7 +49,7 @@ export class DiscordNotifier implements Notifier {
             { name: 'average volume', value: numeral(data.averageVolume).format('0,0'), inline: true },
             { name: 'market cap', value: numeral(data.marketCap).format('($ 0.00 a)').toUpperCase(), inline: true },
             { name: 'short ratio', value: numeral(data.shortRatio).format('0.00'), inline: true },
-            ...extraFieldNames.map((name) => ({ name, value: data[name], inline: true })),
+            ...fields.map((name) => ({ name, value: data[name], inline: true })),
           ]);
       case MessageType.Help:
         return new Discord.MessageEmbed().setTitle('help').setDescription(message.content);

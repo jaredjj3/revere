@@ -1,6 +1,14 @@
-import { Message, MessageType, Severity, StdoutMessage } from '../messages';
+import {
+  HelpMessage,
+  Message,
+  MessageType,
+  Severity,
+  SquozeMessage,
+  StdoutMessage,
+  YFinanceInfoMessage,
+} from '../messages';
 
-export const createMessage = (attrs: Partial<Message>): Message => {
+export const createMessage = (attrs?: Partial<Message>): Message => {
   return {
     type: MessageType.None,
     content: '',
@@ -11,7 +19,19 @@ export const createMessage = (attrs: Partial<Message>): Message => {
 };
 
 export const createStdoutMessage = (attrs: Partial<StdoutMessage>): StdoutMessage => {
-  return { ...createMessage({}), type: MessageType.Stdout, ...attrs };
+  return { ...createMessage(), type: MessageType.Stdout, ...attrs };
 };
 
-// export const createSquozeMessage = (attrs: Partial<SquozeMessage>):
+export const createSquozeMessage = (attrs: Partial<SquozeMessage>): SquozeMessage => {
+  return { ...createMessage(), type: MessageType.Squoze, ...attrs };
+};
+
+export const createYFinanceInfoMessage = (
+  attrs: Partial<YFinanceInfoMessage> & Pick<YFinanceInfoMessage, 'fields' | 'data'>
+): YFinanceInfoMessage => {
+  return { ...createMessage(), type: MessageType.YfinInfo, ...attrs };
+};
+
+export const createHelpMessage = (attrs: Partial<HelpMessage>): HelpMessage => {
+  return { ...createMessage(), type: MessageType.Help, ...attrs };
+};

@@ -52,7 +52,7 @@ export default class Yfin extends BaseCommand {
       data: info,
       severity: Severity.Info,
       timestamp: new Date(),
-      extraFieldNames: (flags.fields as Array<keyof YFinanceApiInfoResponse> | undefined) || [],
+      fields: (flags.fields as Array<keyof YFinanceApiInfoResponse> | undefined) || [],
     }));
     await Promise.all(
       notifiers.flatMap((notifier) => {
