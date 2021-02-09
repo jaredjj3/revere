@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { difference } from 'lodash';
 import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
@@ -7,13 +7,14 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { MessageType, Severity, YFinanceInfoMessage } from '../messages';
 import { Notifier } from '../notifiers';
+import { BaseCommand } from '../oclif';
 
 type InfoFlags = {
   symbols: string[];
   fields?: string[];
 };
 
-export default class Yfin extends Command {
+export default class Yfin extends BaseCommand {
   static description = 'get data from the yahoo finance api';
 
   static flags = {

@@ -25,8 +25,10 @@ export const onCleanup = (() => {
   process.on('SIGTERM', cleanup);
   process.on('SIGINT', cleanup);
 
-  return (callback: ExitCallback): ExitCallback => {
-    callbacks.push(callback);
+  return (callback?: ExitCallback): ExitCallback => {
+    if (callback) {
+      callbacks.push(callback);
+    }
     return cleanup;
   };
 })();

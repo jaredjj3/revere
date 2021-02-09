@@ -1,9 +1,10 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { uniq } from 'lodash';
 import { $listeners, $notifiers } from '../helpers';
+import { BaseCommand } from '../oclif';
 import { logger } from '../util';
 
-export default class Listen extends Command {
+export default class Listen extends BaseCommand {
   static hidden = true;
   static description = 'setup a listener to wait for commands';
 

@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { difference, isUndefined } from 'lodash';
 import * as cron from 'node-cron';
@@ -7,6 +7,7 @@ import { $customFlags, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
+import { BaseCommand } from '../oclif';
 import { CrudAction, CrudActions } from '../util';
 
 type ListFlags = {
@@ -33,7 +34,7 @@ type CreateFlags = {
   active: boolean;
 };
 
-export default class Jobs extends Command {
+export default class Jobs extends BaseCommand {
   static description = 'list, create, update, and show jobs';
 
   static flags = {

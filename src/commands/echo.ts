@@ -1,7 +1,8 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { $notifiers } from '../helpers';
+import { BaseCommand } from '../oclif';
 
-export default class Echo extends Command {
+export default class Echo extends BaseCommand {
   static description = 'prints the arguments to stdout';
 
   static strict = false;

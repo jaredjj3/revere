@@ -1,11 +1,12 @@
-import { Command, flags } from '@oclif/command';
+import { flags } from '@oclif/command';
 import { flatten, sortBy, uniq } from 'lodash';
 import { Detector } from '../detectors';
 import { $detectors, $notifiers } from '../helpers';
 import { Message } from '../messages';
 import { Notifier } from '../notifiers';
+import { BaseCommand } from '../oclif';
 
-export default class Notify extends Command {
+export default class Notify extends BaseCommand {
   static description = 'runs specified detectors and notifiers';
 
   static flags = {
