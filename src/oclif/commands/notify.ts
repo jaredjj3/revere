@@ -5,6 +5,7 @@ import { $detectors, $notifiers } from '../../helpers';
 import { Message } from '../../messages';
 import { Notifier } from '../../notifiers';
 import { BaseCommand } from '../../oclif';
+import { $flags } from '../flags';
 
 export default class Notify extends BaseCommand {
   static description = 'runs specified detectors and notifiers';
@@ -12,7 +13,7 @@ export default class Notify extends BaseCommand {
   static flags = {
     help: flags.help({ char: 'h' }),
     detectors: flags.string({ char: 'd', multiple: true, default: $detectors.DEFAULT_DETECTORS }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
   };
 
   async run(): Promise<void> {

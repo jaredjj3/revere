@@ -18,7 +18,7 @@ services:
       - ./yarn.lock:/app/yarn.lock
     networks:
       - default
-    command: ['yarn', 'nodemon', 'bin/run', 'listen', '-l', 'discord', '-n', 'discord']
+    command: ['yarn', 'nodemon', 'bin/run', 'listen', '--listeners', 'discord', '--notifiers', 'discord']
 
   jobs:
     image: revere:latest

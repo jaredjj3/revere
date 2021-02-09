@@ -1,6 +1,7 @@
 import { flags } from '@oclif/command';
 import { BaseCommand } from '../';
 import { $messages, $notifiers } from '../../helpers';
+import { $flags } from '../flags';
 
 export default class Echo extends BaseCommand {
   static description = 'prints the arguments to stdout';
@@ -9,7 +10,7 @@ export default class Echo extends BaseCommand {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
   };
 
   static args = [{ name: 'string', required: true }];

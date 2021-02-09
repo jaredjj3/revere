@@ -1,4 +1,4 @@
-import { CommandRun, CommandRunSrc } from '@prisma/client';
+import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
@@ -46,30 +46,25 @@ export class DiscordListener implements Listener {
     const userInput = message.content;
     const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
     const argv = this.getArgv(userInput);
-    // TODO use this to display debug info
     const debug = COMMAND_DEBUG_PREFIXES.includes(argv[0]);
 
     logger.info(`received commandStr from discord: ${userInput}`);
 
-    let commandRun: CommandRun | undefined;
     try {
-      commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
-
+      const commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
       if (commandRun.exitCode === HELP_EXIT_CODE) {
         await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
-      } else {
+      } else if (debug || commandRun.status !== CommandRunStatus.SUCCESS) {
         await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
       }
     } catch (err) {
       logger.error(err);
-      if (commandRun) {
-        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
-      } else {
-        await $notifiers.notifyAll(
-          notifiers,
-          $messages.createMessage({ content: `unsuccessfully ran: ${toInlineCodeStr(userInput)}` })
-        );
-      }
+      await $notifiers.notifyAll(
+        notifiers,
+        $messages.createMessage({
+          content: `unsuccessfully ran: ${toInlineCodeStr(userInput)}\nerror message: ${err.message}`,
+        })
+      );
     }
   };
 

@@ -13,7 +13,7 @@ export default class List extends BaseCommand {
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
     active: $flags.booleanString(),
   };
 

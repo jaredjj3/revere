@@ -4,13 +4,14 @@ import { $notifiers } from '../../helpers';
 import { createMessage } from '../../helpers/messages';
 import { toInlineCodeStr } from '../../util';
 import { BaseCommand } from '../BaseCommand';
+import { $flags } from '../flags';
 
 export default class Cronstr extends BaseCommand {
   static description = 'translate a cron expression';
 
   static flags = {
     help: flags.help({ char: 'h' }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
   };
 
   static args = [{ name: 'cron expression' }];

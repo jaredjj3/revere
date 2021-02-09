@@ -6,13 +6,7 @@ import { Message } from '../messages';
 import { Notifier } from '../notifiers';
 import { env } from '../util';
 
-const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
 export const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-export const DEFAULT_NOTIFIERS = ([CommandRunSrc.DISCORD, CommandRunSrc.JOB] as string[]).includes(
-  CMD_INPUT_SRC.toUpperCase()
-)
-  ? [NAMES.discord]
-  : [NAMES.console];
 
 export const notifyAll = async <M extends Message>(notifiers: Notifier[], ...messages: M[]): Promise<void> => {
   await Promise.all(notifiers.map((notifier) => notifier.notify(...messages)));
@@ -23,4 +17,15 @@ export const getNotifier = (notifierName: string): Notifier => {
     throw new RevereError(`notifier not allowed: ${notifierName}`);
   }
   return container.getNamed<Notifier>(TYPES.Notifier, notifierName);
+};
+
+export const getDefaultNotifiers = (): string[] => {
+  switch (env('CMD_INPUT_SRC').toUpperCase()) {
+    case CommandRunSrc.DISCORD:
+      return [NAMES.console, NAMES.discord];
+    case CommandRunSrc.JOB:
+      return [NAMES.console, NAMES.discord];
+    default:
+      return [NAMES.console];
+  }
 };

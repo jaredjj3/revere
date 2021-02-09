@@ -6,6 +6,7 @@ import { notifyAll } from '../../../helpers/notifiers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
 import { BaseCommand } from '../../BaseCommand';
+import { $flags } from '../../flags';
 
 export default class List extends BaseCommand {
   static description = 'list command runs';
@@ -13,7 +14,7 @@ export default class List extends BaseCommand {
   static flags = {
     help: flags.help({ char: 'h' }),
     limit: flags.integer({ char: 'l', default: 10 }),
-    notifiers: flags.string({ multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
   };
 
   async run(): Promise<void> {

@@ -4,6 +4,7 @@ import { $messages, $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
 import { BaseCommand } from '../../../oclif';
+import { $flags } from '../../flags';
 
 export default class Info extends BaseCommand {
   static description = 'get basic info from the api';
@@ -11,7 +12,7 @@ export default class Info extends BaseCommand {
   static flags = {
     help: flags.help({ char: 'h' }),
     symbols: flags.string({ char: 's', multiple: true, required: true }),
-    notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
+    notifiers: $flags.notifiers(),
     fields: flags.string({ char: 'f', multiple: true }),
   };
 
