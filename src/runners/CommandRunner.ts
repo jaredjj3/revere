@@ -147,6 +147,7 @@ export class CommandRunner {
     }
 
     const parts = name.split(':');
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     parts[parts.length - 1] = `${last(parts)!}.ts`;
     const commandPath = path.join(REL_COMMANDS_DIR, ...parts);
 
