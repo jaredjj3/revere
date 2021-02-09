@@ -8,7 +8,9 @@ import { env } from '../util';
 
 const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
 export const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-export const DEFAULT_NOTIFIERS = [CommandRunSrc.DISCORD, CommandRunSrc.JOB].includes(CMD_INPUT_SRC.toUpperCase())
+export const DEFAULT_NOTIFIERS = ([CommandRunSrc.DISCORD, CommandRunSrc.JOB] as string[]).includes(
+  CMD_INPUT_SRC.toUpperCase()
+)
   ? [NAMES.discord]
   : [NAMES.console];
 
