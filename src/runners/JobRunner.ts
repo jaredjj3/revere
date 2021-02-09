@@ -3,7 +3,7 @@ import { inject, injectable } from 'inversify';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
 import { TYPES } from '../inversify.constants';
-import { logger, onExit } from '../util';
+import { logger, onCleanup } from '../util';
 import { CommandRunner } from './CommandRunner';
 
 type Run = { job: Job; task: ScheduledTask };
@@ -24,13 +24,12 @@ export class JobRunner {
     }
     await this.syncJobs();
     this.syncJobsTask = cron.schedule('* * * * *', this.syncJobs.bind(this));
-    onExit(() => {
+    onCleanup(async () => {
       if (this.syncJobsTask) {
         this.syncJobsTask.destroy();
         this.runs.map((run) => run.job).forEach(this.stopJob.bind(this));
       }
       this.syncJobsTask = null;
-      process.exit(0);
     });
   }
 

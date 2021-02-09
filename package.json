@@ -78,7 +78,6 @@
   "main": "src/index.ts",
   "oclif": {
     "commands": "./lib/commands/",
-    "helpClass": "./src/helpers/CustomHelp",
     "bin": "revere",
     "plugins": [
       "@oclif/plugin-help"

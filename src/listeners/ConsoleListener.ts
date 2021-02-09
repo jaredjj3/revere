@@ -6,7 +6,7 @@ import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { CommandRunner } from '../runners';
-import { logger, onExit } from '../util';
+import { logger, onCleanup } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';
@@ -15,9 +15,12 @@ const EXIT_COMMAND = 'exit';
 export class ConsoleListener implements Listener {
   private readline = createInterface({ input: process.stdin, output: process.stdout, prompt: 'revere> ' });
 
+  private cleanup: null | (() => Promise<void>) = null;
+
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
-    onExit(this.onExit);
+    this.readline.on('SIGINT', this.onExit);
+    this.cleanup = onCleanup(this.onExit);
     setTimeout(() => this.readline.prompt(true), 0); // flush main stack
   }
 
@@ -26,6 +29,7 @@ export class ConsoleListener implements Listener {
 
     if (trimmed === EXIT_COMMAND) {
       this.onExit();
+      return;
     }
 
     const argv = trimmed.split(' ');
@@ -33,19 +37,23 @@ export class ConsoleListener implements Listener {
 
     try {
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.CONSOLE });
-      $notifiers.notify(
+      await $notifiers.notify(
         notifiers,
         [commandRun.stdout, commandRun.stderr].filter((str) => str.length > 0).join('\n=======================\n')
       );
     } catch (err) {
-      $notifiers.notify(notifiers, err.message);
+      await $notifiers.notify(notifiers, err.message);
     }
 
+    logger.info('read');
     this.readline.prompt(true);
   };
 
-  onExit = (): void => {
+  onExit = async (): Promise<void> => {
     logger.info('farewell');
+    if (this.cleanup) {
+      await this.cleanup();
+    }
     process.exit(0);
   };
 }
