@@ -1,3 +1,4 @@
+import { CommandRunSrc } from '@prisma/client';
 import { RevereError } from '../errors';
 import { container } from '../inversify.config';
 import { NAMES, TYPES } from '../inversify.constants';
@@ -7,7 +8,8 @@ import { env } from '../util';
 
 const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
 export const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-export const DEFAULT_NOTIFIERS = CMD_INPUT_SRC.toLowerCase() === NAMES.discord ? [NAMES.discord] : [NAMES.console];
+export const DEFAULT_NOTIFIERS =
+  CMD_INPUT_SRC.toUpperCase() === CommandRunSrc.DISCORD ? [NAMES.discord] : [NAMES.console];
 
 export const notify = async (notifiers: Notifier[], content: string): Promise<void> => {
   const timestamp = new Date();

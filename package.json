@@ -21,8 +21,8 @@
   "bugs": "https://github.com/jaredjj3/revere/issues",
   "dependencies": {
     "@oclif/command": "^1",
-    "@oclif/config": "^1",
-    "@oclif/plugin-help": "^3",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.2",
     "@prisma/client": "^2.16.0",
     "@types/lodash": "^4.14.168",
     "discord.js": "^12.5.1",
@@ -78,9 +78,7 @@
   "main": "src/index.ts",
   "oclif": {
     "commands": "./lib/commands/",
-    "hooks": [
-      "./lib/hooks/command_not_found/notFound"
-    ],
+    "helpClass": "./src/helpers/CustomHelp",
     "bin": "revere",
     "plugins": [
       "@oclif/plugin-help"

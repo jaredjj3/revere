@@ -5,6 +5,7 @@ export enum MessageType {
   Stdout = 'Stdout',
   Squoze = 'Squoze',
   YfinInfo = 'YfinInfo',
+  Help = 'Help',
 }
 
 export enum Severity {
@@ -33,4 +34,8 @@ export type YFinanceInfoMessage = Message & {
   type: MessageType.YfinInfo;
   data: YFinanceApiInfoResponse;
   extraFieldNames: Array<keyof YFinanceApiInfoResponse>;
+};
+
+export type HelpMessage = Message & {
+  type: MessageType.Help;
 };

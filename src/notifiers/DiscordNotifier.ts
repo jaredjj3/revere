@@ -56,6 +56,8 @@ export class DiscordNotifier implements Notifier {
             { name: 'short ratio', value: numeral(data.shortRatio).format('0.00'), inline: true },
             ...extraFieldNames.map((name) => ({ name, value: data[name], inline: true })),
           ]);
+      case MessageType.Help:
+        return new Discord.MessageEmbed().setTitle('help').setDescription(message.content);
       default:
         return message.content;
     }
