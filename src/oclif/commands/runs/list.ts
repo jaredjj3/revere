@@ -8,7 +8,7 @@ import { TYPES } from '../../../inversify.constants';
 import { BaseCommand } from '../../BaseCommand';
 
 export default class List extends BaseCommand {
-  static description = 'list command runs matching a query';
+  static description = 'list command runs';
 
   static flags = {
     help: flags.help({ char: 'h' }),
@@ -23,9 +23,6 @@ export default class List extends BaseCommand {
     const commandRuns = await prisma.commandRun.findMany({ orderBy: { startedAt: 'desc' }, take: flags.limit });
 
     const lines = new Array<string>();
-    const addLine = (line: string) => {
-      lines.push(line);
-    };
     cli.table(
       commandRuns,
       {
@@ -46,7 +43,11 @@ export default class List extends BaseCommand {
           get: (commandRun) => commandRun.status,
         },
       },
-      { printLine: addLine }
+      {
+        printLine: (line: string) => {
+          lines.push(line);
+        },
+      }
     );
 
     const notifiers = flags.notifiers.map($notifiers.getNotifier);

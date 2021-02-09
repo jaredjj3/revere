@@ -82,6 +82,9 @@
       "runs": {
         "description": "Manage command runs"
       },
+      "jobs": {
+        "description": "Manage jobs"
+      },
       "yfin": {
         "description": "Query the Yahoo Finance API"
       }
