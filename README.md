@@ -19,7 +19,7 @@ $ npm install -g revere
 $ revere COMMAND
 running command...
 $ revere (-v|--version|version)
-revere/1.1.0 darwin-x64 node-v14.15.4
+revere/1.2.0 darwin-x64 node-v14.15.4
 $ revere --help [COMMAND]
 USAGE
   $ revere COMMAND
@@ -28,11 +28,28 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`revere cronstr CRON EXPRESSION`](#revere-cronstr-cron-expression)
 * [`revere echo STRING`](#revere-echo-string)
 * [`revere help [COMMAND]`](#revere-help-command)
-* [`revere jobs OPERATION`](#revere-jobs-operation)
+* [`revere jobs:list`](#revere-jobslist)
 * [`revere notify`](#revere-notify)
-* [`revere yfin [FILE]`](#revere-yfin-file)
+* [`revere runs:list`](#revere-runslist)
+* [`revere yfin:info`](#revere-yfininfo)
+
+## `revere cronstr CRON EXPRESSION`
+
+show the human readable version of a cron expression
+
+```
+USAGE
+  $ revere cronstr CRON EXPRESSION
+
+OPTIONS
+  -h, --help                 show CLI help
+  -n, --notifiers=notifiers  [default: console]
+```
+
+_See code: [src/oclif/commands/cronstr.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/cronstr.ts)_
 
 ## `revere echo STRING`
 
@@ -47,7 +64,7 @@ OPTIONS
   -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/echo.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/echo.ts)_
+_See code: [src/oclif/commands/echo.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/echo.ts)_
 
 ## `revere help [COMMAND]`
 
@@ -64,27 +81,23 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
-## `revere jobs OPERATION`
+## `revere jobs:list`
 
-list, create, update, and show jobs
+list jobs
 
 ```
 USAGE
-  $ revere jobs OPERATION
+  $ revere jobs:list
 
 OPTIONS
-  -h, --help                       show CLI help
-  -n, --notifiers=notifiers        [default: console]
+  -h, --help                 show CLI help
+  -n, --notifiers=notifiers  [default: console]
   --active=true|false
-  --command=command
-  --cronExpression=cronExpression
-  --description=description
-  --name=name
 ```
 
-_See code: [src/commands/jobs.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/jobs.ts)_
+_See code: [src/oclif/commands/jobs/list.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/jobs/list.ts)_
 
 ## `revere notify`
 
@@ -100,21 +113,38 @@ OPTIONS
   -n, --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/notify.ts)_
+_See code: [src/oclif/commands/notify.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/notify.ts)_
 
-## `revere yfin [FILE]`
+## `revere runs:list`
 
-describe the command here
+list command runs
 
 ```
 USAGE
-  $ revere yfin [FILE]
+  $ revere runs:list
 
 OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
+  -h, --help             show CLI help
+  -l, --limit=limit      [default: 10]
+  --notifiers=notifiers  [default: console]
 ```
 
-_See code: [src/commands/yfin.ts](https://github.com/jaredjj3/revere/blob/v1.1.0/src/commands/yfin.ts)_
+_See code: [src/oclif/commands/runs/list.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/runs/list.ts)_
+
+## `revere yfin:info`
+
+get basic info from the api
+
+```
+USAGE
+  $ revere yfin:info
+
+OPTIONS
+  -f, --fields=fields
+  -h, --help                 show CLI help
+  -n, --notifiers=notifiers  [default: console]
+  -s, --symbols=symbols      (required)
+```
+
+_See code: [src/oclif/commands/yfin/info.ts](https://github.com/jaredjj3/revere/blob/v1.2.0/src/oclif/commands/yfin/info.ts)_
 <!-- commandsstop -->
