@@ -2,17 +2,20 @@ import { flags } from '@oclif/command';
 import cronstrue from 'cronstrue';
 import { $notifiers } from '../../helpers';
 import { createMessage } from '../../helpers/messages';
+import { toInlineCodeStr } from '../../util';
 import { BaseCommand } from '../BaseCommand';
 
 export default class Cronstr extends BaseCommand {
-  static description = 'show the human readable version of a cron expression';
+  static description = 'translate a cron expression';
 
   static flags = {
     help: flags.help({ char: 'h' }),
     notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
   };
 
-  static args = [{ name: 'cron expression', required: true }];
+  static args = [{ name: 'cron expression' }];
+
+  static strict = false;
 
   async run(): Promise<void> {
     const { flags, argv } = this.parse(Cronstr);
@@ -21,7 +24,7 @@ export default class Cronstr extends BaseCommand {
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     await $notifiers.notifyAll(
       notifiers,
-      createMessage({ content: `${cronExpression} translates to: '${humanReadableStr}'` })
+      createMessage({ content: `${toInlineCodeStr(cronExpression)} translates to: _"${humanReadableStr}"_` })
     );
     this.exit(0);
   }
