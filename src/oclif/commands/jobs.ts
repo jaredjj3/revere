@@ -2,13 +2,13 @@ import { flags } from '@oclif/command';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { difference, isUndefined } from 'lodash';
 import * as cron from 'node-cron';
-import { RevereError } from '../errors';
-import { $customFlags, $messages, $notifiers } from '../helpers';
-import { container } from '../inversify.config';
-import { TYPES } from '../inversify.constants';
-import { Notifier } from '../notifiers';
-import { BaseCommand } from '../oclif';
-import { CrudAction, CrudActions } from '../util';
+import { RevereError } from '../../errors';
+import { $customFlags, $messages, $notifiers } from '../../helpers';
+import { container } from '../../inversify.config';
+import { TYPES } from '../../inversify.constants';
+import { Notifier } from '../../notifiers';
+import { BaseCommand } from '../../oclif';
+import { CrudAction, CrudActions } from '../../util';
 
 type ListFlags = {
   active?: boolean;

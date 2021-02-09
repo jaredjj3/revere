@@ -1,12 +1,12 @@
 import { flags } from '@oclif/command';
 import { difference } from 'lodash';
-import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
-import { RevereError } from '../errors';
-import { $messages, $notifiers } from '../helpers';
-import { container } from '../inversify.config';
-import { TYPES } from '../inversify.constants';
-import { Notifier } from '../notifiers';
-import { BaseCommand } from '../oclif';
+import { YFinanceApi, YFinanceApiInfoResponse } from '../../apis';
+import { RevereError } from '../../errors';
+import { $messages, $notifiers } from '../../helpers';
+import { container } from '../../inversify.config';
+import { TYPES } from '../../inversify.constants';
+import { Notifier } from '../../notifiers';
+import { BaseCommand } from '../../oclif';
 
 type InfoFlags = {
   symbols: string[];

@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command';
 import { uniq } from 'lodash';
-import { $listeners, $notifiers } from '../helpers';
-import { BaseCommand } from '../oclif';
-import { logger } from '../util';
+import { $listeners, $notifiers } from '../../helpers';
+import { BaseCommand } from '../../oclif';
+import { logger } from '../../util';
 
 export default class Listen extends BaseCommand {
   static hidden = true;

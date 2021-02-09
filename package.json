@@ -77,7 +77,7 @@
   "license": "MIT",
   "main": "src/index.ts",
   "oclif": {
-    "commands": "./lib/commands/",
+    "commands": "./lib/oclif/commands/",
     "bin": "revere",
     "plugins": [
       "@oclif/plugin-help"

@@ -9,7 +9,7 @@ import { TYPES } from '../inversify.constants';
 import { getGitCommitHash, getGitCommitStatus, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'commands');
-const REL_COMMANDS_DIR = path.join('..', 'commands');
+const REL_COMMANDS_DIR = path.join('..', '..', 'commands');
 const DEFAULT_RUN_OPTIONS: RunOptions = { src: CommandRunSrc.UNKNOWN, timeoutMs: 30000 };
 
 type RunOptions = {
