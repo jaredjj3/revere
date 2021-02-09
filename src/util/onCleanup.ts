@@ -4,7 +4,9 @@ type ExitCallback = () => Promise<void>;
 
 const catchAll = (callback: ExitCallback) => async () => {
   try {
+    logger.info('cleanup started');
     await callback();
+    logger.info('cleanup done');
   } catch (err) {
     logger.error('error caught while cleaning up', err);
   }
