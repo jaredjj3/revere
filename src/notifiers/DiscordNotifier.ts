@@ -6,7 +6,7 @@ import * as numeral from 'numeral';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { CommandRunMessage, Message, MessageType, YFinanceInfoMessage } from '../messages';
+import { CommandRunMessage, HelpMessage, Message, MessageType, YFinanceInfoMessage } from '../messages';
 import { env, toCodeBlockStr } from '../util';
 import { Notifier } from './types';
 
@@ -53,7 +53,10 @@ export class DiscordNotifier implements Notifier {
             ...fields.map((name) => ({ name, value: data[name], inline: true })),
           ]);
       case MessageType.Help:
-        return new Discord.MessageEmbed().setTitle('help').setDescription(message.content);
+        const helpMessage = message as HelpMessage;
+        return new Discord.MessageEmbed()
+          .setTitle('Help')
+          .setDescription(toCodeBlockStr(helpMessage.commandRun.stdout));
       case MessageType.CommandRun:
         const { commandRun } = message as CommandRunMessage;
         const messageEmbed = new Discord.MessageEmbed()

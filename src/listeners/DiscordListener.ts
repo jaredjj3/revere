@@ -13,7 +13,6 @@ import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r', '!rd', '!rdebug', '!reveredebug'];
 const COMMAND_DEBUG_PREFIXES = ['!rdebug', '!rd', '!reveredebug'];
-const HELP_STRINGS = ['help', '-h', '--help'];
 
 @injectable()
 export class DiscordListener implements Listener {
@@ -56,13 +55,10 @@ export class DiscordListener implements Listener {
     try {
       commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
 
-      if (debug || commandRun.exitCode === HELP_EXIT_CODE) {
-        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+      if (commandRun.exitCode === HELP_EXIT_CODE) {
+        await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
       } else {
-        await $notifiers.notifyAll(
-          notifiers,
-          $messages.createMessage({ content: `successfully ran: ${toInlineCodeStr(userInput)}` })
-        );
+        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
       }
     } catch (err) {
       logger.error(err);

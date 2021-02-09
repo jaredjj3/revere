@@ -1,5 +1,5 @@
 {
-  "watch": ["src/"],
+  "watch": ["src/", "package.json", "yarn.lock"],
   "ext": "js,ts",
   "events": {
     "restart": "yarn install --silent"

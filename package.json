@@ -80,7 +80,10 @@
     "commands": "./lib/oclif/commands/",
     "topics": {
       "runs": {
-        "description": "This topic is used to manage command runs."
+        "description": "Manage command runs"
+      },
+      "yfin": {
+        "description": "Query the Yahoo Finance API"
       }
     },
     "helpClass": "./src/oclif/CustomHelp",

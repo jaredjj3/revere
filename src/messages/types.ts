@@ -40,6 +40,7 @@ export type YFinanceInfoMessage = Message & {
 
 export type HelpMessage = Message & {
   type: MessageType.Help;
+  commandRun: CommandRun;
 };
 
 export type CommandRunMessage = Message & {

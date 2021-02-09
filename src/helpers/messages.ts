@@ -33,7 +33,7 @@ export const createYFinanceInfoMessage = (
   return { ...createMessage(), type: MessageType.YfinInfo, ...attrs };
 };
 
-export const createHelpMessage = (attrs: Partial<HelpMessage>): HelpMessage => {
+export const createHelpMessage = (attrs: Partial<HelpMessage> & Pick<HelpMessage, 'commandRun'>): HelpMessage => {
   return { ...createMessage(), type: MessageType.Help, ...attrs };
 };
 
