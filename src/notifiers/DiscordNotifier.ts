@@ -36,7 +36,7 @@ export class DiscordNotifier implements Notifier {
           .setURL('https://isthesqueezesquoze.com')
           .setDescription(`${message.timestamp}\n\n${message.content}`);
       case MessageType.Stdout:
-        return '```' + message.content + '```';
+        return toCodeBlockStr(message.content);
       case MessageType.YfinInfo:
         const { data, fields } = message as YFinanceInfoMessage;
         return new Discord.MessageEmbed()
