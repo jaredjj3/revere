@@ -1,4 +1,4 @@
-import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
+import { CallerType, CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
@@ -51,7 +51,11 @@ export class DiscordListener implements Listener {
     logger.info(`received commandStr from discord: ${userInput}`);
 
     try {
-      const commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
+      const commandRun = await commandRunner.run(argv.slice(1), {
+        src: CommandRunSrc.DISCORD,
+        callerType: message.author.bot ? CallerType.COMPUTER : CallerType.HUMAN,
+        callerId: message.author.username,
+      });
       if (commandRun.exitCode === HELP_EXIT_CODE) {
         await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
       } else if (debug || commandRun.status !== CommandRunStatus.SUCCESS) {

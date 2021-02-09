@@ -46,6 +46,12 @@ enum GitCommitStatus {
   DIRTY
 }
 
+enum CallerType {
+  UNKNOWN
+  HUMAN
+  COMPUTER
+}
+
 model CommandRun {
   id              Int              @id @default(autoincrement())
   startedAt       DateTime
@@ -58,4 +64,6 @@ model CommandRun {
   stdout          String
   stderr          String
   exitCode        Int
+  callerId        String?
+  callerType      CallerType       @default(UNKNOWN)
 }

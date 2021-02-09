@@ -1,4 +1,4 @@
-import { CommandRunSrc, Job, PrismaClient } from '@prisma/client';
+import { CallerType, CommandRunSrc, Job, PrismaClient } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
@@ -111,7 +111,10 @@ export class JobRunner {
   private async runJobOnce(job: Job): Promise<void> {
     logger.info(`running job ${job.name}: '${job.command}'`);
     try {
-      const commandRun = await this.commandRunner.run(job.command.split(' '), { src: CommandRunSrc.JOB });
+      const commandRun = await this.commandRunner.run(job.command.split(' '), {
+        src: CommandRunSrc.JOB,
+        callerType: CallerType.COMPUTER,
+      });
       logger.debug(
         `\nJOB ${job.name} START=======================\n${[commandRun.stdout, commandRun.stderr]
           .filter((str) => str.length > 0)

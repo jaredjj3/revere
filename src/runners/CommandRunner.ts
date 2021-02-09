@@ -1,5 +1,13 @@
 import Command from '@oclif/command';
-import { CommandRun, CommandRunSrc, CommandRunStatus, GitCommitStatus, Prisma, PrismaClient } from '@prisma/client';
+import {
+  CallerType,
+  CommandRun,
+  CommandRunSrc,
+  CommandRunStatus,
+  GitCommitStatus,
+  Prisma,
+  PrismaClient,
+} from '@prisma/client';
 import { spawn } from 'child_process';
 import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
@@ -17,6 +25,8 @@ const DEFAULT_RUN_OPTIONS: RunOptions = { src: CommandRunSrc.UNKNOWN, timeoutMs:
 type RunOptions = {
   src: CommandRunSrc;
   timeoutMs: number;
+  callerId?: string;
+  callerType?: CallerType;
 };
 
 @injectable()
@@ -31,6 +41,8 @@ export class CommandRunner {
       gitCommitHash,
       gitCommitStatus,
       src: opts.src,
+      callerId: opts.callerId,
+      callerType: opts.callerType,
     });
 
     // prevent hidden commands from being run
@@ -103,6 +115,8 @@ export class CommandRunner {
       stderr: '',
       stdout: '',
       exitCode: -1,
+      callerId: undefined,
+      callerType: CallerType.UNKNOWN,
       ...input,
     };
   }

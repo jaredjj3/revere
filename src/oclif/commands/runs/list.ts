@@ -43,6 +43,14 @@ export default class List extends BaseCommand {
           header: 'status',
           get: (commandRun) => commandRun.status,
         },
+        callerId: {
+          header: 'callerId',
+          get: (commandRun) => commandRun.callerId,
+        },
+        callerType: {
+          header: 'callerType',
+          get: (commandRun) => commandRun.callerType,
+        },
       },
       {
         printLine: (line: string) => {
