@@ -2,10 +2,11 @@ import { flags } from '@oclif/command';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { cli } from 'cli-ux';
 import { isUndefined } from 'lodash';
-import { $customFlags, $messages, $notifiers } from '../../../helpers';
+import { $messages, $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
 import { BaseCommand } from '../../../oclif';
+import { $flags } from '../../flags';
 
 export default class List extends BaseCommand {
   static description = 'list jobs';
@@ -13,7 +14,7 @@ export default class List extends BaseCommand {
   static flags = {
     help: flags.help({ char: 'h' }),
     notifiers: flags.string({ char: 'n', multiple: true, default: $notifiers.DEFAULT_NOTIFIERS }),
-    active: $customFlags.booleanString(),
+    active: $flags.booleanString(),
   };
 
   async run(): Promise<void> {
