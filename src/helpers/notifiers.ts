@@ -8,8 +8,9 @@ import { env } from '../util';
 
 const CMD_INPUT_SRC = env('CMD_INPUT_SRC');
 export const ALLOWED_NOTIFIERS = [NAMES.console, NAMES.discord];
-export const DEFAULT_NOTIFIERS =
-  CMD_INPUT_SRC.toUpperCase() === CommandRunSrc.DISCORD ? [NAMES.discord] : [NAMES.console];
+export const DEFAULT_NOTIFIERS = [CommandRunSrc.DISCORD, CommandRunSrc.JOB].includes(CMD_INPUT_SRC.toUpperCase())
+  ? [NAMES.discord]
+  : [NAMES.console];
 
 export const notifyAll = async <M extends Message>(notifiers: Notifier[], ...messages: M[]): Promise<void> => {
   await Promise.all(notifiers.map((notifier) => notifier.notify(...messages)));
