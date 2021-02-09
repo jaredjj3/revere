@@ -49,7 +49,6 @@ export class ConsoleListener implements Listener {
       await $notifiers.notifyAll(notifiers, err.message);
     }
 
-    logger.info('read');
     this.readline.prompt(true);
   };
 

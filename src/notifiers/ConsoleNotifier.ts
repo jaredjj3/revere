@@ -6,6 +6,9 @@ import { Notifier } from './types';
 @injectable()
 export class ConsoleNotifier implements Notifier {
   async notify(...messages: Message[]): Promise<void> {
-    logger.info(messages);
+    for (const message of messages) {
+      logger.info(message.type);
+      logger.info(message.content);
+    }
   }
 }

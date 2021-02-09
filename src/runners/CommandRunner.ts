@@ -3,13 +3,14 @@ import { CommandRun, CommandRunSrc, CommandRunStatus, GitCommitStatus, Prisma, P
 import { spawn } from 'child_process';
 import * as fs from 'fs';
 import { inject, injectable } from 'inversify';
+import { flattenDeep, last, reject } from 'lodash';
 import * as path from 'path';
 import { RevereError } from '../errors';
 import { TYPES } from '../inversify.constants';
 import { getGitCommitHash, getGitCommitStatus, logger } from '../util';
 
-const CWD_COMMANDS_DIR = path.join('src', 'commands');
-const REL_COMMANDS_DIR = path.join('..', '..', 'commands');
+const CWD_COMMANDS_DIR = path.join('src', 'oclif', 'commands');
+const REL_COMMANDS_DIR = path.join('..', 'oclif', 'commands');
 const DEFAULT_RUN_OPTIONS: RunOptions = { src: CommandRunSrc.UNKNOWN, timeoutMs: 30000 };
 
 type RunOptions = {
@@ -62,7 +63,6 @@ export class CommandRunner {
         if (run.exitCode === 0) {
           resolve();
         } else {
-          console.log('wtf');
           reject(new RevereError(commandRun.stderr));
         }
       });
@@ -82,7 +82,6 @@ export class CommandRunner {
       await Promise.race<void>([runClose, timeout]);
       commandRun.status = CommandRunStatus.SUCCESS;
     } catch (err) {
-      logger.error(err);
       commandRun.status = CommandRunStatus.ERROR;
     }
 
@@ -119,10 +118,9 @@ export class CommandRunner {
       return false;
     }
     try {
-      const CommandClass = this.getCommandClass(str);
-      return (await CommandClass).hidden;
+      const CommandClass = await this.getCommandClass(str);
+      return CommandClass.hidden;
     } catch (err) {
-      logger.error(err);
       return false;
     }
   }
@@ -132,8 +130,13 @@ export class CommandRunner {
     if (!allowedNames.includes(name)) {
       throw new RevereError(`name not allowed: ${name}`);
     }
+
+    const parts = name.split(':');
+    parts[parts.length - 1] = `${last(parts)!}.ts`;
+    const commandPath = path.join(REL_COMMANDS_DIR, ...parts);
+
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const CommandClass = require(path.join(REL_COMMANDS_DIR, `${name}.ts`)).default as unknown;
+    const CommandClass = require(commandPath).default as unknown;
     if (!this.isCommand(CommandClass)) {
       throw new RevereError(`name not command: ${name}`);
     }
@@ -141,16 +144,45 @@ export class CommandRunner {
     return CommandClass;
   }
 
-  private getAllowedNames(): Promise<string[]> {
-    return new Promise<string[]>((resolve, reject) => {
-      fs.readdir(CWD_COMMANDS_DIR, (err, files) => {
+  private async getAllowedNames(dir = CWD_COMMANDS_DIR, prefix = ''): Promise<string[]> {
+    const objs = await new Promise<string[]>((resolve, reject) => {
+      fs.readdir(dir, (err, objs) => {
         if (err) {
           reject(err);
         }
-        const names = files.filter((file) => path.extname(file) === '.ts').map((file) => file.slice(0, -3));
-        resolve(names);
+        resolve(objs);
       });
     });
+
+    const infos = await Promise.all(
+      objs.map((obj) => {
+        return new Promise<{ obj: string; stats: fs.Stats }>((resolve) => {
+          fs.lstat(path.join(dir, obj), (err, stats) => {
+            if (err) {
+              reject(err);
+            }
+            resolve({ obj, stats });
+          });
+        });
+      })
+    );
+
+    const withPrefix = (str: string): string => (prefix ? `${prefix}:${str}` : str);
+
+    const files = infos
+      .filter((info) => info.stats.isFile() && path.extname(info.obj) === '.ts')
+      .map((info) => withPrefix(info.obj));
+    let cmds = files.map((file) => file.slice(0, -3)); // '.ts' is 3 chars
+
+    const dirs = infos.filter((info) => info.stats.isDirectory()).map((info) => info.obj);
+    const nestedCmds = await Promise.all(
+      dirs.map((nestedDir) => this.getAllowedNames(path.join(dir, nestedDir), withPrefix(nestedDir)))
+    );
+
+    cmds = cmds.concat(dirs.map((dir) => withPrefix(dir)));
+    cmds = cmds.concat(flattenDeep(nestedCmds));
+
+    return cmds;
   }
 
   private isCommand(thing: unknown): thing is typeof Command {

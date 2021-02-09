@@ -78,6 +78,11 @@
   "main": "src/index.ts",
   "oclif": {
     "commands": "./lib/oclif/commands/",
+    "topics": {
+      "runs": {
+        "description": "manage command runs"
+      }
+    },
     "bin": "revere",
     "plugins": [
       "@oclif/plugin-help"
