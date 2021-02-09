@@ -1,3 +1,4 @@
+import { CommandRun } from '@prisma/client';
 import { YFinanceApiInfoResponse } from '../apis';
 
 export enum MessageType {
@@ -6,6 +7,7 @@ export enum MessageType {
   Squoze = 'Squoze',
   YfinInfo = 'YfinInfo',
   Help = 'Help',
+  CommandRun = 'CommandRun',
 }
 
 export enum Severity {
@@ -38,4 +40,9 @@ export type YFinanceInfoMessage = Message & {
 
 export type HelpMessage = Message & {
   type: MessageType.Help;
+};
+
+export type CommandRunMessage = Message & {
+  type: MessageType.CommandRun;
+  commandRun: CommandRun;
 };

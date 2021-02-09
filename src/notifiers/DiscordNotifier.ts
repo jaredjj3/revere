@@ -1,11 +1,13 @@
+/* eslint-disable no-case-declarations */
+import { CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import * as numeral from 'numeral';
 import { DiscordClientProvider } from '../discord';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
-import { Message, MessageType, YFinanceInfoMessage } from '../messages';
-import { env } from '../util';
+import { CommandRunMessage, Message, MessageType, YFinanceInfoMessage } from '../messages';
+import { env, toCodeBlockStr } from '../util';
 import { Notifier } from './types';
 
 @injectable()
@@ -36,7 +38,6 @@ export class DiscordNotifier implements Notifier {
       case MessageType.Stdout:
         return '```' + message.content + '```';
       case MessageType.YfinInfo:
-        // eslint-disable-next-line no-case-declarations
         const { data, fields } = message as YFinanceInfoMessage;
         return new Discord.MessageEmbed()
           .setTitle(`${data.longName} (${data.symbol})`)
@@ -53,6 +54,31 @@ export class DiscordNotifier implements Notifier {
           ]);
       case MessageType.Help:
         return new Discord.MessageEmbed().setTitle('help').setDescription(message.content);
+      case MessageType.CommandRun:
+        const { commandRun } = message as CommandRunMessage;
+        const messageEmbed = new Discord.MessageEmbed()
+          .setTitle(`COMMAND RUN ${commandRun.id} (${commandRun.status})`)
+          .setDescription(`${commandRun.endedAt.getTime() - commandRun.startedAt.getTime()} ms`);
+        if (commandRun.command) {
+          messageEmbed.addField('command', toCodeBlockStr(commandRun.command));
+        }
+        if (commandRun.stdout) {
+          messageEmbed.addField('stdout', toCodeBlockStr(commandRun.stdout));
+        }
+        if (commandRun.stderr) {
+          messageEmbed.addField('stderr', toCodeBlockStr(commandRun.stderr));
+        }
+        switch (commandRun.status) {
+          case CommandRunStatus.SUCCESS:
+            messageEmbed.setColor('#238823');
+            break;
+          case CommandRunStatus.ERROR:
+            messageEmbed.setColor('#d2222d');
+            break;
+          default:
+            messageEmbed.setColor('#ffbf00');
+        }
+        return messageEmbed;
       default:
         return message.content;
     }

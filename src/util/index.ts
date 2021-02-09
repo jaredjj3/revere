@@ -4,3 +4,4 @@ export * from './env';
 export * from './git';
 export * from './logger';
 export * from './onCleanup';
+export * from './toCodeBlockStr';

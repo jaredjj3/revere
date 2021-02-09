@@ -62,6 +62,7 @@ export class CommandRunner {
         if (run.exitCode === 0) {
           resolve();
         } else {
+          console.log('wtf');
           reject(new RevereError(commandRun.stderr));
         }
       });

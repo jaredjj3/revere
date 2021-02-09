@@ -1,8 +1,7 @@
 {
-  "watch": ["bin/run", "src/"],
+  "watch": ["src/"],
   "ext": "js,ts",
-  "signal": "SIGTERM",
   "events": {
-    "restart": "yarn"
+    "restart": "yarn install --silent"
   }
 }

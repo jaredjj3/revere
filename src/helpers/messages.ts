@@ -1,4 +1,5 @@
 import {
+  CommandRunMessage,
   HelpMessage,
   Message,
   MessageType,
@@ -34,4 +35,10 @@ export const createYFinanceInfoMessage = (
 
 export const createHelpMessage = (attrs: Partial<HelpMessage>): HelpMessage => {
   return { ...createMessage(), type: MessageType.Help, ...attrs };
+};
+
+export const createCommandRunMessage = (
+  attrs: Partial<CommandRunMessage> & Pick<CommandRunMessage, 'commandRun'>
+): CommandRunMessage => {
+  return { ...createMessage(), type: MessageType.CommandRun, ...attrs };
 };

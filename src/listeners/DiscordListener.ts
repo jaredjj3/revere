@@ -1,4 +1,4 @@
-import { CommandRunSrc, CommandRunStatus } from '@prisma/client';
+import { CommandRun, CommandRunSrc } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
@@ -10,7 +10,8 @@ import { CommandRunner } from '../runners';
 import { env, logger } from '../util';
 import { Listener } from './types';
 
-const COMMAND_PREFIXES = ['!revere', '!r'];
+const COMMAND_PREFIXES = ['!revere', '!r', '!rd', '!rdebug', '!reveredebug'];
+const COMMAND_DEBUG_PREFIXES = ['!rdebug', '!rd', '!reveredebug'];
 
 @injectable()
 export class DiscordListener implements Listener {
@@ -43,27 +44,23 @@ export class DiscordListener implements Listener {
 
     const userInput = message.content;
     const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
+    const argv = this.getArgv(userInput);
+    // TODO use this to display debug info
+    const debug = COMMAND_DEBUG_PREFIXES.includes(argv[0]);
 
+    logger.info(`received commandStr from discord: ${userInput}`);
+
+    let commandRun: CommandRun | undefined;
     try {
-      logger.info(`received commandStr from discord: ${userInput}`);
-
-      const argv = this.getArgv(userInput);
-      const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.DISCORD });
-      const adverb = commandRun.status === CommandRunStatus.SUCCESS ? 'successfully' : 'unsucccessfully';
-      await $notifiers.notifyAll(
-        notifiers,
-        $messages.createStdoutMessage({
-          content: `${adverb} ran command: '${userInput}'\n\n${[commandRun.stdout, commandRun.stderr]
-            .filter((str) => str.length > 0)
-            .join('\n=======================\n')}`,
-        })
-      );
+      commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
+      $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
     } catch (err) {
       logger.error(err);
-      await $notifiers.notifyAll(
-        notifiers,
-        $messages.createStdoutMessage({ content: `unsuccessfully ran command: '${userInput}'\n\n${err.message}` })
-      );
+      if (commandRun) {
+        $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+      } else {
+        $notifiers.notifyAll(notifiers, $messages.createMessage({ content: 'something went wrong' }));
+      }
     }
   };
 
@@ -74,7 +71,6 @@ export class DiscordListener implements Listener {
   private getArgv(str: string): string[] {
     const trimmed = str.trim();
     const splitted = trimmed.split(' ');
-    const sliced = splitted.slice(1);
-    return sliced;
+    return splitted;
   }
 }
