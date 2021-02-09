@@ -7,6 +7,7 @@ import { flattenDeep, last, reject } from 'lodash';
 import * as path from 'path';
 import { RevereError } from '../errors';
 import { TYPES } from '../inversify.constants';
+import { HELP_EXIT_CODE } from '../oclif/constants';
 import { getGitCommitHash, getGitCommitStatus, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'oclif', 'commands');
@@ -60,7 +61,7 @@ export class CommandRunner {
         commandRun.exitCode = typeof run.exitCode === 'number' ? run.exitCode : -1;
         commandRun.stdout = stdout.join('');
         commandRun.stderr = stderr.join('');
-        if (run.exitCode === 0) {
+        if (run.exitCode === 0 || run.exitCode === HELP_EXIT_CODE) {
           resolve();
         } else {
           reject(new RevereError(commandRun.stderr));

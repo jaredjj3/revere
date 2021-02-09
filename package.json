@@ -80,9 +80,10 @@
     "commands": "./lib/oclif/commands/",
     "topics": {
       "runs": {
-        "description": "manage command runs"
+        "description": "This topic is used to manage command runs."
       }
     },
+    "helpClass": "./src/oclif/CustomHelp",
     "bin": "revere",
     "plugins": [
       "@oclif/plugin-help"

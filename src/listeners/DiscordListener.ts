@@ -6,12 +6,14 @@ import { $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
+import { HELP_EXIT_CODE } from '../oclif/constants';
 import { CommandRunner } from '../runners';
-import { env, logger } from '../util';
+import { env, logger, toInlineCodeStr } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r', '!rd', '!rdebug', '!reveredebug'];
 const COMMAND_DEBUG_PREFIXES = ['!rdebug', '!rd', '!reveredebug'];
+const HELP_STRINGS = ['help', '-h', '--help'];
 
 @injectable()
 export class DiscordListener implements Listener {
@@ -53,13 +55,24 @@ export class DiscordListener implements Listener {
     let commandRun: CommandRun | undefined;
     try {
       commandRun = await commandRunner.run(argv.slice(1), { src: CommandRunSrc.DISCORD });
-      $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+
+      if (debug || commandRun.exitCode === HELP_EXIT_CODE) {
+        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+      } else {
+        await $notifiers.notifyAll(
+          notifiers,
+          $messages.createMessage({ content: `successfully ran: ${toInlineCodeStr(userInput)}` })
+        );
+      }
     } catch (err) {
       logger.error(err);
       if (commandRun) {
-        $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
       } else {
-        $notifiers.notifyAll(notifiers, $messages.createMessage({ content: 'something went wrong' }));
+        await $notifiers.notifyAll(
+          notifiers,
+          $messages.createMessage({ content: `unsuccessfully ran: ${toInlineCodeStr(userInput)}` })
+        );
       }
     }
   };
