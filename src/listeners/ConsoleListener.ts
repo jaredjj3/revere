@@ -5,6 +5,7 @@ import { $messages, $notifiers } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
+import { HELP_EXIT_CODE } from '../oclif/constants';
 import { CommandRunner } from '../runners';
 import { logger, onCleanup } from '../util';
 import { Listener } from './types';
@@ -37,14 +38,11 @@ export class ConsoleListener implements Listener {
 
     try {
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.CONSOLE });
-      await $notifiers.notifyAll(
-        notifiers,
-        $messages.createStdoutMessage({
-          content: [commandRun.stdout, commandRun.stderr]
-            .filter((str) => str.length > 0)
-            .join('\n=======================\n'),
-        })
-      );
+      if (commandRun.exitCode === HELP_EXIT_CODE) {
+        await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
+      } else {
+        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+      }
     } catch (err) {
       await $notifiers.notifyAll(notifiers, err.message);
     }

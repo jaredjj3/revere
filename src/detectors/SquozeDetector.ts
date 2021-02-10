@@ -2,9 +2,9 @@ import { PrismaClient, SquozeResponse } from '@prisma/client';
 import * as https from 'https';
 import { inject, injectable } from 'inversify';
 import parse from 'node-html-parser';
-import { $notifiers } from '../helpers';
+import { $messages, $notifiers } from '../helpers';
 import { TYPES } from '../inversify.constants';
-import { MessageType, Severity, SquozeMessage } from '../messages';
+import { Severity, SquozeMessage } from '../messages';
 import { Notifier } from '../notifiers';
 import { logger } from '../util';
 
@@ -22,34 +22,36 @@ export class SquozeDetector {
 
   private getMessages(prev: SquozeResponse | null, next: SquozeResponse): SquozeMessage[] {
     const timestamp = new Date();
-    const type = MessageType.Squoze;
     const messages = new Array<SquozeMessage>();
 
     if (!prev) {
-      messages.push({
-        type,
-        timestamp,
-        severity: Severity.Info,
-        content: `squoze data primed`,
-      });
+      messages.push(
+        $messages.createSquozeMessage({
+          timestamp,
+          severity: Severity.Info,
+          content: `squoze data primed`,
+        })
+      );
     }
 
     if (prev && prev.httpStatusCode !== next.httpStatusCode) {
-      messages.push({
-        type,
-        timestamp,
-        severity: Severity.Info,
-        content: `squoze changed http status codes: '${prev.httpStatusCode}' -> '${next.httpStatusCode}'`,
-      });
+      messages.push(
+        $messages.createSquozeMessage({
+          timestamp,
+          severity: Severity.Info,
+          content: `squoze changed http status codes: '${prev.httpStatusCode}' -> '${next.httpStatusCode}'`,
+        })
+      );
     }
 
     if (prev && prev.httpStatusCode === 200 && next.httpStatusCode === 200 && prev.header !== next.header) {
-      messages.push({
-        type,
-        timestamp,
-        severity: Severity.Warning,
-        content: `squoze has a new headline:\n\n'${next.header}'`,
-      });
+      messages.push(
+        $messages.createSquozeMessage({
+          timestamp,
+          severity: Severity.Warning,
+          content: `squoze has a new headline:\n\n'${next.header}'`,
+        })
+      );
     }
 
     return messages;

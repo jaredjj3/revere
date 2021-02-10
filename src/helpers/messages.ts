@@ -2,12 +2,17 @@ import {
   CommandRunMessage,
   HelpMessage,
   Message,
+  MessageByType,
   MessageType,
   Severity,
   SquozeMessage,
   StdoutMessage,
   YFinanceInfoMessage,
 } from '../messages';
+
+export const isMessageType = <T extends MessageType>(message: Message, type: T): message is MessageByType[T] => {
+  return message.type === type;
+};
 
 export const createMessage = (attrs?: Partial<Message>): Message => {
   return {

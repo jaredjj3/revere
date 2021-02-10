@@ -8,7 +8,6 @@ export enum MessageType {
   YfinInfo = 'YfinInfo',
   Help = 'Help',
   CommandRun = 'CommandRun',
-  TickerThreshold = 'TickerThreshold',
 }
 
 export enum Severity {
@@ -17,6 +16,15 @@ export enum Severity {
   Alert,
   Emergency,
 }
+
+export type MessageByType = {
+  [MessageType.None]: Message;
+  [MessageType.Stdout]: StdoutMessage;
+  [MessageType.Squoze]: SquozeMessage;
+  [MessageType.YfinInfo]: YFinanceInfoMessage;
+  [MessageType.Help]: HelpMessage;
+  [MessageType.CommandRun]: CommandRunMessage;
+};
 
 export type Message = {
   type: MessageType;
