@@ -9,6 +9,7 @@ export class ConsoleNotifier implements Notifier {
     for (const message of messages) {
       logger.info(message.type);
       logger.info(message.content);
+      logger.debug(JSON.stringify(message, null, 2));
     }
   }
 }
