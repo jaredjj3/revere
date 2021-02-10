@@ -28,9 +28,9 @@ export const createSquozeMessage = (attrs: Partial<SquozeMessage>): SquozeMessag
 };
 
 export const createYFinanceInfoMessage = (
-  attrs: Partial<YFinanceInfoMessage> & Pick<YFinanceInfoMessage, 'fields' | 'data'>
+  attrs: Partial<YFinanceInfoMessage> & Pick<YFinanceInfoMessage, 'data'>
 ): YFinanceInfoMessage => {
-  return { ...createMessage(), type: MessageType.YfinInfo, ...attrs };
+  return { ...createMessage(), type: MessageType.YfinInfo, fields: [], ...attrs };
 };
 
 export const createHelpMessage = (attrs: Partial<HelpMessage> & Pick<HelpMessage, 'commandRun'>): HelpMessage => {

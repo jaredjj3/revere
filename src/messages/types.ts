@@ -8,6 +8,7 @@ export enum MessageType {
   YfinInfo = 'YfinInfo',
   Help = 'Help',
   CommandRun = 'CommandRun',
+  TickerThreshold = 'TickerThreshold',
 }
 
 export enum Severity {

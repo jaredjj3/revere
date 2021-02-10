@@ -8,10 +8,12 @@ export const TYPES = {
   JobRunner: 'JobRunner',
   YFinanceApi: 'YFinanceApi',
   PrismaClient: 'PrismaClient',
+  TickerThresholdDetector: 'TickerThresholdDetector',
 };
 
 export const NAMES = {
   discord: 'discord',
   console: 'console',
   squoze: 'squoze',
+  ticker: 'ticker',
 };

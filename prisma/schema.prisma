@@ -67,3 +67,33 @@ model CommandRun {
   callerId        String?
   callerType      CallerType       @default(UNKNOWN)
 }
+
+enum Cmp {
+  LT
+  LTEQ
+  EQ
+  GTEQ
+  GT
+}
+
+model TickerThresholdObjective {
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  symbol              String
+  field               String
+  cmp                 Cmp
+  threshold           Float
+  message             String?
+  numNotifications    Int
+  startWatchingAt     DateTime?
+  stopWatchingAt      DateTime?
+  TickerThresholdData TickerThresholdData[]
+}
+
+model TickerThresholdData {
+  id                         Int                      @id @default(autoincrement())
+  recordedAt                 DateTime
+  value                      Float
+  tickerThresholdObjective   TickerThresholdObjective @relation(fields: [tickerThresholdObjectiveId], references: [id])
+  tickerThresholdObjectiveId Int
+}
