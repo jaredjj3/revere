@@ -5,7 +5,7 @@ export enum MessageType {
   None = 'None',
   Stdout = 'Stdout',
   Squoze = 'Squoze',
-  YfinInfo = 'YfinInfo',
+  YFinanceInfo = 'YfinInfo',
   Help = 'Help',
   CommandRun = 'CommandRun',
 }
@@ -21,7 +21,7 @@ export type MessageByType = {
   [MessageType.None]: Message;
   [MessageType.Stdout]: StdoutMessage;
   [MessageType.Squoze]: SquozeMessage;
-  [MessageType.YfinInfo]: YFinanceInfoMessage;
+  [MessageType.YFinanceInfo]: YFinanceInfoMessage;
   [MessageType.Help]: HelpMessage;
   [MessageType.CommandRun]: CommandRunMessage;
 };
@@ -42,7 +42,7 @@ export type SquozeMessage = Message & {
 };
 
 export type YFinanceInfoMessage = Message & {
-  type: MessageType.YfinInfo;
+  type: MessageType.YFinanceInfo;
   data: YFinanceApiInfoResponse;
   fields: Array<keyof YFinanceApiInfoResponse>;
 };

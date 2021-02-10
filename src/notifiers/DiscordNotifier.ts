@@ -41,7 +41,7 @@ export class DiscordNotifier implements Notifier {
       return this.formatSquozeMessage(message);
     } else if ($messages.isMessageType(message, MessageType.Stdout)) {
       return this.formatStdoutMessage(message);
-    } else if ($messages.isMessageType(message, MessageType.YfinInfo)) {
+    } else if ($messages.isMessageType(message, MessageType.YFinanceInfo)) {
       return this.formatYfinanceInfoMessage(message);
     } else if ($messages.isMessageType(message, MessageType.Help)) {
       return this.formatHelpMessage(message);
