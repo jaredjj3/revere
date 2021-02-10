@@ -1,12 +1,12 @@
 // organize-imports-ignore
 import 'reflect-metadata';
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, TickerThresholdObjective } from '@prisma/client';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
 import { YFinanceApi } from './apis';
-import { SquozeDetector } from './detectors';
+import { SquozeDetector, TickerThresholdDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
 import { ConsoleListener, DiscordListener, Listener } from './listeners';
@@ -38,6 +38,7 @@ onCleanup(async () => {
 container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);
 
 container.bind<SquozeDetector>(TYPES.SquozeDetector).to(SquozeDetector);
+container.bind<TickerThresholdDetector>(TYPES.TickerThresholdDetector).to(TickerThresholdDetector);
 
 container.bind<Notifier>(TYPES.Notifier).to(ConsoleNotifier).whenTargetNamed(NAMES.console);
 container.bind<Notifier>(TYPES.Notifier).to(DiscordNotifier).whenTargetNamed(NAMES.discord);
