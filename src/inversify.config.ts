@@ -6,7 +6,7 @@ import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
 import { YFinanceApi } from './apis';
-import { Detector, SquozeDetector } from './detectors';
+import { SquozeDetector } from './detectors';
 import { DiscordClientProvider } from './discord';
 import { NAMES, TYPES } from './inversify.constants';
 import { ConsoleListener, DiscordListener, Listener } from './listeners';
@@ -37,7 +37,7 @@ onCleanup(async () => {
 });
 container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);
 
-container.bind<Detector>(TYPES.Detector).to(SquozeDetector).whenTargetNamed(NAMES.squoze);
+container.bind<SquozeDetector>(TYPES.SquozeDetector).to(SquozeDetector);
 
 container.bind<Notifier>(TYPES.Notifier).to(ConsoleNotifier).whenTargetNamed(NAMES.console);
 container.bind<Notifier>(TYPES.Notifier).to(DiscordNotifier).whenTargetNamed(NAMES.discord);

@@ -2,21 +2,22 @@ import { PrismaClient, SquozeResponse } from '@prisma/client';
 import * as https from 'https';
 import { inject, injectable } from 'inversify';
 import parse from 'node-html-parser';
+import { $notifiers } from '../helpers';
 import { TYPES } from '../inversify.constants';
 import { MessageType, Severity, SquozeMessage } from '../messages';
+import { Notifier } from '../notifiers';
 import { logger } from '../util';
-import { Detector } from './types';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 
 @injectable()
-export class SquozeDetector implements Detector<SquozeMessage> {
+export class SquozeDetector {
   constructor(@inject(TYPES.PrismaClient) private prisma: PrismaClient) {}
 
-  async detect(): Promise<SquozeMessage[]> {
+  async detect(notifiers: Notifier[]): Promise<void> {
     const [prev, next] = await Promise.all([this.getPrevData(), this.getNextData()]);
     const messages = this.getMessages(prev, next);
-    return messages;
+    await $notifiers.notifyAll(notifiers, ...messages);
   }
 
   private getMessages(prev: SquozeResponse | null, next: SquozeResponse): SquozeMessage[] {

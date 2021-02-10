@@ -1,19 +1,18 @@
 export const TYPES = {
+  CommandRunner: 'CommandRunner',
+  Detector: 'Detector',
   DiscordClient: 'DiscordClient',
   DiscordClientProvider: 'DiscordClientProvider',
-  Detector: 'Detector',
-  Notifier: 'Notifier',
-  Listener: 'Listener',
-  CommandRunner: 'CommandRunner',
   JobRunner: 'JobRunner',
-  YFinanceApi: 'YFinanceApi',
+  Listener: 'Listener',
+  Notifier: 'Notifier',
   PrismaClient: 'PrismaClient',
+  SquozeDetector: 'SquozeDetector',
   TickerThresholdDetector: 'TickerThresholdDetector',
+  YFinanceApi: 'YFinanceApi',
 };
 
 export const NAMES = {
   discord: 'discord',
   console: 'console',
-  squoze: 'squoze',
-  ticker: 'ticker',
 };
