@@ -21,9 +21,9 @@ export class DiscordNotifier implements Notifier {
 
     const channelId = env('DISCORD_CHANNEL_ID');
     const channel = await client.channels.fetch(channelId);
-    const formatted = messages.map((message) => this.format(message));
+    const formattedMessages = messages.map((message) => this.format(message));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await (channel as any).send(formatted);
+    await Promise.all(formattedMessages.map((formattedMessage) => (channel as any).send(formattedMessage)));
   }
 
   private format(message: Message): Discord.MessageEmbed | string {

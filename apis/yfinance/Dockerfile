@@ -9,5 +9,4 @@ COPY main.py .
 
 ENV FLASK_APP=main.py
 
-ENTRYPOINT [ "python", "-m" ]
-CMD [ "flask", "run", "--host=0.0.0.0" ]
+CMD [ "gunicorn", "main:app", "-w", "2", "--threads", "2", "-b", "0.0.0.0:5000" ]
