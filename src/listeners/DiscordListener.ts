@@ -29,12 +29,14 @@ export class DiscordListener implements Listener {
 
   onMessage = (notifiers: Notifier[]) => async (message: Discord.Message): Promise<void> => {
     const client = await this.getClient();
+    const userInput = message.content;
+    const argv = this.getArgv(userInput);
 
     if (message.author.id === client.user?.id) {
       logger.debug('skipped own message');
       return;
     }
-    if (!this.isCommand(message.content)) {
+    if (!this.isCommand(argv)) {
       logger.debug('skipped non-command');
       return;
     }
@@ -43,9 +45,7 @@ export class DiscordListener implements Listener {
       return;
     }
 
-    const userInput = message.content;
     const commandRunner = container.get<CommandRunner>(TYPES.CommandRunner);
-    const argv = this.getArgv(userInput);
     const debug = COMMAND_DEBUG_PREFIXES.includes(argv[0]);
 
     logger.info(`received commandStr from discord: ${userInput}`);
@@ -72,8 +72,8 @@ export class DiscordListener implements Listener {
     }
   };
 
-  private isCommand(str: string): boolean {
-    return COMMAND_PREFIXES.some((prefix) => str.startsWith(prefix));
+  private isCommand(argv: string[]): boolean {
+    return COMMAND_PREFIXES.some((prefix) => argv[0] === prefix);
   }
 
   private getArgv(str: string): string[] {
