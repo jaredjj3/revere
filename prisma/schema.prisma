@@ -96,4 +96,5 @@ model TickerThresholdData {
   value                      Float
   tickerThresholdObjective   TickerThresholdObjective @relation(fields: [tickerThresholdObjectiveId], references: [id])
   tickerThresholdObjectiveId Int
+  meta                       Json?
 }
