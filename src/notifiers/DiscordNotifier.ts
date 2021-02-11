@@ -1,10 +1,10 @@
 import { CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
-import * as numeral from 'numeral';
-import { YFinanceApiInfoResponse } from '../apis';
+import { difference } from 'lodash';
+import { YFinanceApiInfoResponse, YFinanceApiInfoResponseKeys } from '../apis';
 import { DiscordClientProvider } from '../discord';
-import { $cmp, $messages } from '../helpers';
+import { $cmp, $formats, $messages } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import {
@@ -73,19 +73,20 @@ export class DiscordNotifier implements Notifier {
 
   private formatYfinanceInfoMessage(message: YFinanceInfoMessage): FormattedMessage {
     const { data, fields } = message;
-    return new Discord.MessageEmbed()
+    const messageEmbed = new Discord.MessageEmbed()
       .setTitle(`${data.longName} (${data.symbol})`)
       .setDescription(data.industry)
       .setURL(data.website)
-      .setImage(data.logo_url)
-      .addFields([
-        { name: 'bid', value: numeral(data.bid).format('$0,0.00'), inline: true },
-        { name: 'ask', value: numeral(data.ask).format('$0,0.00'), inline: true },
-        { name: 'average volume', value: numeral(data.averageVolume).format('0,0'), inline: true },
-        { name: 'market cap', value: numeral(data.marketCap).format('($ 0.00 a)').toUpperCase(), inline: true },
-        { name: 'short ratio', value: numeral(data.shortRatio).format('0.00'), inline: true },
-        ...fields.map((name) => ({ name, value: data[name], inline: true })),
-      ]);
+      .setImage(data.logo_url);
+
+    const baseFields = new Array<YFinanceApiInfoResponseKeys>('bid', 'ask', 'averageVolume', 'marketCap', 'shortRatio');
+    const extraFields = difference(fields, baseFields);
+    for (const field of [...baseFields, ...extraFields]) {
+      const value = $formats.yfinanceInfoField(field, data[field]);
+      messageEmbed.addField(field, value, true);
+    }
+
+    return messageEmbed;
   }
 
   private formatHelpMessage(message: HelpMessage): FormattedMessage {
@@ -166,9 +167,10 @@ export class DiscordNotifier implements Notifier {
     lines.push('_trigger conditions:_');
     messageEmbed.setDescription(lines.join('\n'));
 
-    messageEmbed.addField(`current ${objective.field}`, data.value, true);
+    const field = objective.field as YFinanceApiInfoResponseKeys;
+    messageEmbed.addField(`current ${objective.field}`, $formats.yfinanceInfoField(field, data.value), true);
     messageEmbed.addField(`cmp`, $cmp.toMathSymbol(objective.cmp), true);
-    messageEmbed.addField(`threshold ${objective.field}`, objective.threshold, true);
+    messageEmbed.addField(`threshold ${objective.field}`, $formats.yfinanceInfoField(field, objective.threshold), true);
 
     return messageEmbed;
   }

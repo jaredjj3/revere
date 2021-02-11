@@ -123,3 +123,5 @@ export type YFinanceApiInfoResponse = {
   ytdReturn: unknown;
   zip: string;
 };
+
+export type YFinanceApiInfoResponseKeys = keyof YFinanceApiInfoResponse;
