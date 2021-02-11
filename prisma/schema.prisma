@@ -83,6 +83,7 @@ model TickerThresholdObjective {
   cmp                 Cmp
   threshold           Float
   message             String?
+  author              String?
   numNotifications    Int
   TickerThresholdData TickerThresholdData[]
 }

@@ -123,15 +123,11 @@ export class DiscordNotifier implements Notifier {
     const { objective, data } = message;
     const info = data.meta as Partial<YFinanceApiInfoResponse> | null;
 
-    const value = data.value;
-    const field = objective.field;
-    const threshold = objective.threshold;
-    const cmp = objective.cmp;
-
     const longName = info?.longName;
     const symbol = info?.symbol || objective.symbol.toUpperCase();
     const industry = info?.industry;
     const logoUrl = info?.logo_url;
+    const website = info?.website;
 
     const messageEmbed = new Discord.MessageEmbed();
 
@@ -147,22 +143,32 @@ export class DiscordNotifier implements Notifier {
       messageEmbed.setImage(logoUrl);
     }
 
+    if (website) {
+      messageEmbed.setURL(website);
+    }
+
     const lines = new Array<string>();
     if (industry) {
       lines.push(industry);
       lines.push('');
     }
-    lines.push('**TICKER THRESHOLD EXCEEDANCE**');
-    lines.push('');
+
     if (objective.message) {
+      if (objective.author) {
+        lines.push(`_message from ${objective.author}:_`);
+      } else {
+        lines.push('_message:_');
+      }
       lines.push(objective.message);
+      lines.push('');
     }
 
+    lines.push('_trigger conditions:_');
     messageEmbed.setDescription(lines.join('\n'));
 
-    messageEmbed.addField(`current ${field}`, data.value, true);
+    messageEmbed.addField(`current ${objective.field}`, data.value, true);
     messageEmbed.addField(`cmp`, $cmp.toMathSymbol(objective.cmp), true);
-    messageEmbed.addField(`threshold ${field}`, objective.threshold, true);
+    messageEmbed.addField(`threshold ${objective.field}`, objective.threshold, true);
 
     return messageEmbed;
   }
