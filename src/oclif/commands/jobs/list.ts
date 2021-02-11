@@ -5,10 +5,10 @@ import { isUndefined } from 'lodash';
 import { $messages, $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { BaseCommand } from '../../../oclif';
+import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
-export default class List extends BaseCommand {
+export default class List extends ExitImmediatelyCommand {
   static description = 'list jobs';
 
   static flags = {
@@ -67,7 +67,5 @@ export default class List extends BaseCommand {
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     const message = $messages.createStdoutMessage({ content: `\n${lines.join('\n')}` });
     await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage(message));
-
-    this.exit(0);
   }
 }

@@ -3,10 +3,10 @@ import { SquozeDetector } from '../../../detectors';
 import { $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { BaseCommand } from '../../../oclif';
+import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
-export default class Squoze extends BaseCommand {
+export default class Squoze extends ExitImmediatelyCommand {
   static description = 'runs specified detectors and notifiers';
 
   static flags = {
@@ -19,6 +19,5 @@ export default class Squoze extends BaseCommand {
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     const squozeDetector = container.get<SquozeDetector>(TYPES.SquozeDetector);
     await squozeDetector.detect(notifiers);
-    this.exit(0);
   }
 }

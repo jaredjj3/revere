@@ -12,6 +12,7 @@
     "down": "docker-compose down",
     "docker": "yarn build && docker-compose run --rm listener",
     "devconsole": "docker-compose exec listener yarn nodemon bin/run listen --listeners console",
+    "db": "docker-compose exec db psql -U revere",
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "revere": "bin/run",

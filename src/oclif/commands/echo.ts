@@ -1,9 +1,9 @@
 import { flags } from '@oclif/command';
-import { BaseCommand } from '../';
 import { $messages, $notifiers } from '../../helpers';
+import { ExitImmediatelyCommand } from '../ExitImmediatelyCommand';
 import { $flags } from '../flags';
 
-export default class Echo extends BaseCommand {
+export default class Echo extends ExitImmediatelyCommand {
   static description = 'prints the arguments to stdout';
 
   static strict = false;
@@ -19,6 +19,5 @@ export default class Echo extends BaseCommand {
     const { argv, flags } = this.parse(Echo);
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage({ content: argv.join(' ') }));
-    this.exit(0);
   }
 }

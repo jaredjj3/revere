@@ -1,12 +1,10 @@
 import { logger } from './logger';
 
-type ExitCallback = () => Promise<void>;
+type CleanupCallback = () => Promise<void>;
 
-const catchAll = (callback: ExitCallback) => async () => {
+const catchAll = async (callback: CleanupCallback): Promise<void> => {
   try {
-    logger.info('cleanup started');
     await callback();
-    logger.info('cleanup done');
   } catch (err) {
     logger.error('error caught while cleaning up', err);
   }
@@ -18,16 +16,18 @@ const catchAll = (callback: ExitCallback) => async () => {
  * to cleanup resources.
  */
 export const onCleanup = (() => {
-  const callbacks = new Array<ExitCallback>();
+  const callbacks = new Array<CleanupCallback>();
 
   const cleanup = async () => {
+    logger.info('cleanup started');
     await Promise.all(callbacks.map((callback) => catchAll(callback)));
+    logger.info('cleanup done');
   };
 
   process.on('SIGTERM', cleanup);
   process.on('SIGINT', cleanup);
 
-  return (callback?: ExitCallback): ExitCallback => {
+  return (callback?: CleanupCallback): CleanupCallback => {
     if (callback) {
       callbacks.push(callback);
     }

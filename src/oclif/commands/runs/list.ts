@@ -5,10 +5,10 @@ import { $messages, $notifiers } from '../../../helpers';
 import { notifyAll } from '../../../helpers/notifiers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { BaseCommand } from '../../BaseCommand';
+import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
-export default class List extends BaseCommand {
+export default class List extends ExitImmediatelyCommand {
   static description = 'list command runs';
 
   static flags = {
@@ -62,6 +62,5 @@ export default class List extends BaseCommand {
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     const message = $messages.createStdoutMessage({ content: `\n${lines.join('\n')}` });
     await notifyAll(notifiers, message);
-    this.exit(0);
   }
 }

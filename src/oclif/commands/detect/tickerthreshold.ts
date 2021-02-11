@@ -5,8 +5,8 @@ import { RevereError } from '../../../errors';
 import { $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { BaseCommand } from '../../../oclif';
 import { env } from '../../../util';
+import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
 // when the job is spawned from a JOB context, we want to deduct the numNotifications
@@ -15,7 +15,7 @@ const CMD_INPUT_SRC = env('CMD_INPUT_SRC').toUpperCase();
 const DEFAULT_DEDUCT = CMD_INPUT_SRC === CommandRunSrc.JOB;
 const DEFAULT_NOTIFICATION_OVERRIDE = CMD_INPUT_SRC !== CommandRunSrc.JOB;
 
-export default class Tickerthreshold extends BaseCommand {
+export default class Tickerthreshold extends ExitImmediatelyCommand {
   static description = 'runs specified detectors and notifiers';
 
   static flags = {
@@ -54,7 +54,5 @@ export default class Tickerthreshold extends BaseCommand {
         });
       }
     }
-
-    this.exit(0);
   }
 }

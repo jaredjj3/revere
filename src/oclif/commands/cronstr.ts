@@ -3,10 +3,10 @@ import cronstrue from 'cronstrue';
 import { $notifiers } from '../../helpers';
 import { createMessage } from '../../helpers/messages';
 import { toInlineCodeStr } from '../../util';
-import { BaseCommand } from '../BaseCommand';
+import { ExitImmediatelyCommand } from '../ExitImmediatelyCommand';
 import { $flags } from '../flags';
 
-export default class Cronstr extends BaseCommand {
+export default class Cronstr extends ExitImmediatelyCommand {
   static description = 'translate a cron expression';
 
   static flags = {
@@ -27,6 +27,5 @@ export default class Cronstr extends BaseCommand {
       notifiers,
       createMessage({ content: `${toInlineCodeStr(cronExpression)} translates to: _"${humanReadableStr}"_` })
     );
-    this.exit(0);
   }
 }

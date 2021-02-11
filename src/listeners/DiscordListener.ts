@@ -61,11 +61,12 @@ export class DiscordListener implements Listener {
       } else if (debug || commandRun.status !== CommandRunStatus.SUCCESS) {
         await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
       }
+      logger.info(commandRun.stdout);
     } catch (err) {
       logger.error(err);
       await $notifiers.notifyAll(
         notifiers,
-        $messages.createMessage({
+        $messages.createStdoutMessage({
           content: `unsuccessfully ran: ${toInlineCodeStr(userInput)}\nerror message: ${err.message}`,
         })
       );

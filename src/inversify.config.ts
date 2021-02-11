@@ -14,6 +14,7 @@ import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { CommandRunner } from './runners';
 import { JobRunner } from './runners/JobRunner';
 import { env, logger, onCleanup } from './util';
+import { RevereError } from './errors';
 
 dotenv.config();
 

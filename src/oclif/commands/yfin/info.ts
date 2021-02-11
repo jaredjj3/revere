@@ -3,10 +3,10 @@ import { YFinanceApi, YFinanceApiInfoResponse } from '../../../apis';
 import { $messages, $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { BaseCommand } from '../../../oclif';
+import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
-export default class Info extends BaseCommand {
+export default class Info extends ExitImmediatelyCommand {
   static description = 'get basic info from the api';
 
   static flags = {
@@ -31,7 +31,5 @@ export default class Info extends BaseCommand {
 
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     await $notifiers.notifyAll(notifiers, ...messages);
-
-    this.exit(0);
   }
 }

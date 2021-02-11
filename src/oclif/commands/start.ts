@@ -1,11 +1,11 @@
 import { flags } from '@oclif/command';
 import { container } from '../../inversify.config';
 import { TYPES } from '../../inversify.constants';
-import { BaseCommand } from '../../oclif';
 import { JobRunner } from '../../runners/JobRunner';
 import { logger } from '../../util';
+import { ExitImmediatelyCommand } from '../ExitImmediatelyCommand';
 
-export default class Start extends BaseCommand {
+export default class Start extends ExitImmediatelyCommand {
   static hidden = true;
   static description = 'starts the job runner to run indefinitely';
 
