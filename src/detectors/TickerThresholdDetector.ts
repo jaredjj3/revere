@@ -50,7 +50,7 @@ export class TickerThresholdDetector {
         return data.value > objective.threshold;
       default:
         throw new RevereError(
-          `unrecognized comparison word ${objective.cmp}, can't compare threshold ${objective.threshold} and value ${value}`
+          `unrecognized comparison word ${objective.cmp}, can't compare threshold ${objective.threshold} and value ${data.value}`
         );
     }
   }
