@@ -2,8 +2,9 @@ import { CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import * as numeral from 'numeral';
+import { YFinanceApiInfoResponse } from '../apis';
 import { DiscordClientProvider } from '../discord';
-import { $messages } from '../helpers';
+import { $cmp, $messages } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import {
@@ -13,6 +14,7 @@ import {
   MessageType,
   SquozeMessage,
   StdoutMessage,
+  TickerThresholdMessage,
   YFinanceInfoMessage,
 } from '../messages';
 import { env, toCodeBlockStr } from '../util';
@@ -47,6 +49,8 @@ export class DiscordNotifier implements Notifier {
       return this.formatHelpMessage(message);
     } else if ($messages.isMessageType(message, MessageType.CommandRun)) {
       return this.formatCommandRunMessage(message);
+    } else if ($messages.isMessageType(message, MessageType.TickerThreshold)) {
+      return this.formatTickerThresholdMessage(message);
     } else {
       return this.formatNoneMessage(message);
     }
@@ -112,6 +116,54 @@ export class DiscordNotifier implements Notifier {
       default:
         messageEmbed.setColor('#ffbf00');
     }
+    return messageEmbed;
+  }
+
+  private formatTickerThresholdMessage(message: TickerThresholdMessage): FormattedMessage {
+    const { objective, data } = message;
+    const info = data.meta as Partial<YFinanceApiInfoResponse> | null;
+
+    const value = data.value;
+    const field = objective.field;
+    const threshold = objective.threshold;
+    const cmp = objective.cmp;
+
+    const longName = info?.longName;
+    const symbol = info?.symbol || objective.symbol.toUpperCase();
+    const industry = info?.industry;
+    const logoUrl = info?.logo_url;
+
+    const messageEmbed = new Discord.MessageEmbed();
+
+    messageEmbed.setColor('#238823');
+
+    if (longName) {
+      messageEmbed.setTitle(`${longName} (${symbol})`);
+    } else {
+      messageEmbed.setTitle(`(${symbol})`);
+    }
+
+    if (logoUrl) {
+      messageEmbed.setImage(logoUrl);
+    }
+
+    const lines = new Array<string>();
+    if (industry) {
+      lines.push(industry);
+      lines.push('');
+    }
+    lines.push('**TICKER THRESHOLD EXCEEDANCE**');
+    lines.push('');
+    if (objective.message) {
+      lines.push(objective.message);
+    }
+
+    messageEmbed.setDescription(lines.join('\n'));
+
+    messageEmbed.addField(`current ${field}`, data.value, true);
+    messageEmbed.addField(`cmp`, $cmp.toMathSymbol(objective.cmp), true);
+    messageEmbed.addField(`threshold ${field}`, objective.threshold, true);
+
     return messageEmbed;
   }
 }

@@ -20,7 +20,7 @@ export class TickerThresholdDetector {
       await $notifiers.notifyAll(notifiers, $messages.createTickerThresholdMessage({ objective, data }));
     } else {
       logger.info(
-        `no exceedance detected for objective ${objective.name}, retrieved value for '${objective.field}': ${data.value}`
+        `no exceedance detected for objective ${objective.id}, retrieved value for '${objective.field}': ${data.value}`
       );
     }
   }
@@ -32,7 +32,7 @@ export class TickerThresholdDetector {
       throw new RevereError(`could not get number for field ${objective.field}, got: ${value}`);
     }
     return await this.prisma.tickerThresholdData.create({
-      data: { recordedAt: new Date(), value, tickerThresholdObjectiveId: objective.id },
+      data: { recordedAt: new Date(), value, tickerThresholdObjectiveId: objective.id, meta: info as any },
     });
   }
 

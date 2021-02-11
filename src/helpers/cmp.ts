@@ -16,6 +16,23 @@ export const toCmpWord = (str: string): Cmp => {
     case '>':
       return Cmp.GT;
     default:
-      throw new RevereError(`invalid symbol '${str}', must be one of: ${ALLOWED_SYMBOLS.join(', ')}`);
+      throw new RevereError(`invalid symbol: '${str}'`);
+  }
+};
+
+export const toMathSymbol = (cmp: Cmp): string => {
+  switch (cmp) {
+    case Cmp.LT:
+      return '<';
+    case Cmp.LTEQ:
+      return '<=';
+    case Cmp.EQ:
+      return '==';
+    case Cmp.GTEQ:
+      return '>=';
+    case Cmp.GT:
+      return '>';
+    default:
+      throw new RevereError(`invalid cmp word: ${cmp}`);
   }
 };
