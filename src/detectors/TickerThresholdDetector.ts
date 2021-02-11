@@ -2,9 +2,9 @@ import { Cmp, PrismaClient, TickerThresholdData, TickerThresholdObjective } from
 import { inject, injectable } from 'inversify';
 import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
-import { $messages, $notifiers } from '../helpers';
+import { $messages } from '../helpers';
 import { TYPES } from '../inversify.constants';
-import { Notifier } from '../notifiers';
+import { TickerThresholdMessage } from '../messages';
 import { logger } from '../util';
 
 @injectable()
@@ -14,10 +14,10 @@ export class TickerThresholdDetector {
     @inject(TYPES.YFinanceApi) private api: YFinanceApi
   ) {}
 
-  async detect(notifiers: Notifier[], objective: TickerThresholdObjective): Promise<void> {
+  async detect(objective: TickerThresholdObjective): Promise<TickerThresholdMessage | void> {
     const data = await this.getData(objective);
     if (this.isThresholdExceeded(objective, data)) {
-      await $notifiers.notifyAll(notifiers, $messages.createTickerThresholdMessage({ objective, data }));
+      return $messages.createTickerThresholdMessage({ objective, data });
     } else {
       logger.info(
         `no exceedance detected for objective ${objective.id}, retrieved value for '${objective.field}': ${data.value}`
@@ -32,6 +32,7 @@ export class TickerThresholdDetector {
       throw new RevereError(`could not get number for field ${objective.field}, got: ${value}`);
     }
     return await this.prisma.tickerThresholdData.create({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: { recordedAt: new Date(), value, tickerThresholdObjectiveId: objective.id, meta: info as any },
     });
   }
