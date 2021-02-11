@@ -1,4 +1,4 @@
-import { CommandRun } from '@prisma/client';
+import { CommandRun, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
 import { YFinanceApiInfoResponse } from '../apis';
 
 export enum MessageType {
@@ -8,6 +8,7 @@ export enum MessageType {
   YFinanceInfo = 'YfinInfo',
   Help = 'Help',
   CommandRun = 'CommandRun',
+  TickerThreshold = 'TickerThreshold',
 }
 
 export enum Severity {
@@ -24,6 +25,7 @@ export type MessageByType = {
   [MessageType.YFinanceInfo]: YFinanceInfoMessage;
   [MessageType.Help]: HelpMessage;
   [MessageType.CommandRun]: CommandRunMessage;
+  [MessageType.TickerThreshold]: TickerThresholdMessage;
 };
 
 export type Message = {
@@ -55,4 +57,10 @@ export type HelpMessage = Message & {
 export type CommandRunMessage = Message & {
   type: MessageType.CommandRun;
   commandRun: CommandRun;
+};
+
+export type TickerThresholdMessage = Message & {
+  type: MessageType.TickerThreshold;
+  objective: TickerThresholdObjective;
+  data: TickerThresholdData;
 };

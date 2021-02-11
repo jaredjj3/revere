@@ -7,6 +7,7 @@ import {
   Severity,
   SquozeMessage,
   StdoutMessage,
+  TickerThresholdMessage,
   YFinanceInfoMessage,
 } from '../messages';
 
@@ -46,4 +47,10 @@ export const createCommandRunMessage = (
   attrs: Partial<CommandRunMessage> & Pick<CommandRunMessage, 'commandRun'>
 ): CommandRunMessage => {
   return { ...createMessage(), type: MessageType.CommandRun, ...attrs };
+};
+
+export const createTickerThresholdMessage = (
+  attrs: Partial<TickerThresholdMessage> & Pick<TickerThresholdMessage, 'objective' | 'data'>
+): TickerThresholdMessage => {
+  return { ...createMessage(), type: MessageType.TickerThreshold, ...attrs };
 };
