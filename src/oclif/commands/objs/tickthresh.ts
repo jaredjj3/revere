@@ -16,7 +16,7 @@ export default class Tickthresh extends ExitImmediatelyCommand {
     field: flags.string({ char: 'f', required: true }),
     lower: flags.string({ char: 'l', required: true }),
     upper: flags.string({ char: 'u', required: true }),
-    message: flags.string({ char: 'm' }),
+    message: flags.string({ char: 'm', multiple: true }),
     cronExpression: flags.string({ char: 'c', multiple: true, default: ['*/5', '0,21,8-17', '*', '*', '1-5'] }),
     numNotifications: flags.integer({ char: 'n', default: 1 }),
   };
@@ -31,7 +31,7 @@ export default class Tickthresh extends ExitImmediatelyCommand {
     const field = flags.field;
     const lowerBound = parseFloat(flags.lower);
     const upperBound = parseFloat(flags.upper);
-    const message = flags.message;
+    const message = flags.message.join(' ');
     const numNotifications = flags.numNotifications;
 
     const objective = await prisma.tickerThresholdObjective.create({
