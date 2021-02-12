@@ -2,13 +2,13 @@ import { CallerType, CommandRunSrc, CommandRunStatus } from '@prisma/client';
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
-import { $messages, $notifiers } from '../helpers';
+import { $messages, $notifiers, $util } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
+import { logger } from '../logger';
 import { Notifier } from '../notifiers';
 import { HELP_EXIT_CODE } from '../oclif/constants';
 import { CommandRunner } from '../runners';
-import { env, logger } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r', '!rd', '!rdebug', '!reveredebug'];
@@ -40,7 +40,7 @@ export class DiscordListener implements Listener {
       logger.debug('skipped non-command');
       return;
     }
-    if (message.channel.id !== env('DISCORD_CHANNEL_ID')) {
+    if (message.channel.id !== $util.env('DISCORD_CHANNEL_ID')) {
       logger.debug(`skipped message for another channel: ${message.channel.id}`);
       return;
     }

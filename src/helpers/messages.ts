@@ -1,7 +1,9 @@
 import { CommandRun, CommandRunStatus, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
-import { $cmp, $colors, $formats } from '.';
 import { YFinanceApiInfoResponse, YFinanceApiInfoResponseKeys } from '../apis';
 import { ComplexField, ComplexMessage, Message, MessageByType, MessageType, Severity } from '../messages';
+import * as $cmp from './cmp';
+import * as $colors from './colors';
+import * as $formats from './formats';
 
 export const isMessageType = <T extends MessageType>(message: Message, type: T): message is MessageByType[T] => {
   return message.type === type;

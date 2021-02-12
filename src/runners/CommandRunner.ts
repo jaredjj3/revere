@@ -14,9 +14,10 @@ import { inject, injectable } from 'inversify';
 import { flattenDeep, last, reject } from 'lodash';
 import * as path from 'path';
 import { RevereError } from '../errors';
+import { $util } from '../helpers';
 import { TYPES } from '../inversify.constants';
+import { logger } from '../logger';
 import { HELP_EXIT_CODE } from '../oclif/constants';
-import { getGitCommitHash, getGitCommitStatus, logger } from '../util';
 
 const CWD_COMMANDS_DIR = path.join('src', 'oclif', 'commands');
 const REL_COMMANDS_DIR = path.join('..', 'oclif', 'commands');
@@ -35,7 +36,7 @@ export class CommandRunner {
 
   async run(argv: string[], runOpts: Partial<RunOptions>): Promise<CommandRun> {
     const opts: RunOptions = { ...DEFAULT_RUN_OPTIONS, ...runOpts };
-    const [gitCommitHash, gitCommitStatus] = await Promise.all([getGitCommitHash(), getGitCommitStatus()]);
+    const [gitCommitHash, gitCommitStatus] = await Promise.all([$util.getGitCommitHash(), $util.getGitCommitStatus()]);
     const commandRun = this.buildCommandRun({
       command: argv.join(' '),
       gitCommitHash,

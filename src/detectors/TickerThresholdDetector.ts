@@ -4,8 +4,8 @@ import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
 import { $messages } from '../helpers';
 import { TYPES } from '../inversify.constants';
+import { logger } from '../logger';
 import { Message } from '../messages';
-import { logger } from '../util';
 
 @injectable()
 export class TickerThresholdDetector {

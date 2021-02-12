@@ -1,13 +1,13 @@
 import { CommandRunSrc } from '@prisma/client';
 import { injectable } from 'inversify';
 import { createInterface } from 'readline';
-import { $messages, $notifiers } from '../helpers';
+import { $messages, $notifiers, $util } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
+import { logger } from '../logger';
 import { Notifier } from '../notifiers';
 import { HELP_EXIT_CODE } from '../oclif/constants';
 import { CommandRunner } from '../runners';
-import { logger, onCleanup } from '../util';
 import { Listener } from './types';
 
 const EXIT_COMMAND = 'exit';
@@ -21,7 +21,7 @@ export class ConsoleListener implements Listener {
   async listen(notifiers: Notifier[]): Promise<void> {
     this.readline.on('line', this.onMessage(notifiers));
     this.readline.on('SIGINT', this.onExit);
-    this.cleanup = onCleanup(this.onExit);
+    this.cleanup = $util.onCleanup(this.onExit);
     setTimeout(() => this.readline.prompt(true), 0); // flush main stack
   }
 

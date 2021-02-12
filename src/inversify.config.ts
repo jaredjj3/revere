@@ -1,7 +1,7 @@
 // organize-imports-ignore
 import 'reflect-metadata';
 
-import { PrismaClient, TickerThresholdObjective } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as Discord from 'discord.js';
 import * as dotenv from 'dotenv';
 import { Container } from 'inversify';
@@ -13,8 +13,9 @@ import { ConsoleListener, DiscordListener, Listener } from './listeners';
 import { ConsoleNotifier, DiscordNotifier, Notifier } from './notifiers';
 import { CommandRunner } from './runners';
 import { JobRunner } from './runners/JobRunner';
-import { env, logger, onCleanup } from './util';
-import { RevereError } from './errors';
+import { $util } from './helpers';
+import { onCleanup } from './helpers/util';
+import { logger } from './logger';
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ container.bind<Discord.Client>(TYPES.DiscordClient).toConstantValue(new Discord.
 container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Discord.Client>((ctx) => async () => {
   const client = ctx.container.get<Discord.Client>(TYPES.DiscordClient);
   if (!client.readyAt) {
-    const login = client.login(env('DISCORD_BOT_TOKEN'));
+    const login = client.login($util.env('DISCORD_BOT_TOKEN'));
     const ready = new Promise<void>((resolve) => client.on('ready', resolve));
     await Promise.all([login, ready]);
   }

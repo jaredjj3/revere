@@ -1,8 +1,8 @@
 /* eslint-disable no-case-declarations */
 import { injectable } from 'inversify';
 import { isObject } from 'lodash';
+import { logger } from '../logger';
 import { Message } from '../messages';
-import { logger } from '../util';
 import { Notifier } from './types';
 
 @injectable()

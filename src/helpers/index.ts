@@ -6,3 +6,4 @@ export * as $formats from './formats';
 export * as $listeners from './listeners';
 export * as $messages from './messages';
 export * as $notifiers from './notifiers';
+export * as $util from './util';

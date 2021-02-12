@@ -17,6 +17,10 @@ export const yfinanceInfoField = (field: YFinanceApiInfoResponseKeys, value: unk
   }
 };
 
+export const capitalize = (str: string): string => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const mdInlineCodeBlock = (str: string): string => '`' + str + '`';
+
 export const mdCodeBlock = (str: string): string => '```' + str + '```';
 
 export const mdItalic = (str: string): string => `_${str}_`;

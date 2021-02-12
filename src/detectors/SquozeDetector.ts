@@ -4,8 +4,8 @@ import { inject, injectable } from 'inversify';
 import parse from 'node-html-parser';
 import { $messages } from '../helpers';
 import { TYPES } from '../inversify.constants';
+import { logger } from '../logger';
 import { Message } from '../messages';
-import { logger } from '../util';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 

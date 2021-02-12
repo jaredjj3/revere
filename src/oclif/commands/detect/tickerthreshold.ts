@@ -2,16 +2,15 @@ import { flags } from '@oclif/command';
 import { CommandRunSrc, PrismaClient } from '@prisma/client';
 import { TickerThresholdDetector } from '../../../detectors';
 import { RevereError } from '../../../errors';
-import { $notifiers } from '../../../helpers';
+import { $notifiers, $util } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
-import { env } from '../../../util';
 import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
 // when the job is spawned from a JOB context, we want to deduct the numNotifications
 // field on an objective
-const CMD_INPUT_SRC = env('CMD_INPUT_SRC').toUpperCase();
+const CMD_INPUT_SRC = $util.env('CMD_INPUT_SRC').toUpperCase();
 const DEFAULT_DEDUCT = CMD_INPUT_SRC === CommandRunSrc.JOB;
 const DEFAULT_NOTIFICATION_OVERRIDE = CMD_INPUT_SRC !== CommandRunSrc.JOB;
 

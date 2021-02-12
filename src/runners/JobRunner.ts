@@ -2,8 +2,9 @@ import { CallerType, CommandRunSrc, Job, PrismaClient } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 import * as cron from 'node-cron';
 import { ScheduledTask } from 'node-cron';
+import { $util } from '../helpers';
 import { TYPES } from '../inversify.constants';
-import { logger, onCleanup } from '../util';
+import { logger } from '../logger';
 import { CommandRunner } from './CommandRunner';
 
 type Run = { job: Job; task: ScheduledTask };
@@ -24,7 +25,7 @@ export class JobRunner {
     }
     await this.syncJobs();
     this.syncJobsTask = cron.schedule('* * * * *', this.syncJobs.bind(this));
-    onCleanup(async () => {
+    $util.onCleanup(async () => {
       if (this.syncJobsTask) {
         this.syncJobsTask.destroy();
         this.runs.map((run) => run.job).forEach(this.stopJob.bind(this));

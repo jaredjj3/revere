@@ -1,8 +1,8 @@
 import Command from '@oclif/command';
-import { onCleanup } from '../util';
+import { $util } from '../helpers';
 
 export abstract class ExitImmediatelyCommand extends Command {
-  private cleanup = onCleanup();
+  private cleanup = $util.onCleanup();
 
   async finally(err?: Error): Promise<void> {
     await Promise.all([super.finally(err), this.cleanup()]);

@@ -1,11 +1,10 @@
 import * as Discord from 'discord.js';
 import { injectable } from 'inversify';
 import { DiscordClientProvider } from '../discord';
-import { $messages } from '../helpers';
+import { $messages, $util } from '../helpers';
 import { container } from '../inversify.config';
 import { TYPES } from '../inversify.constants';
 import { ComplexMessage, Message, MessageType } from '../messages';
-import { env } from '../util';
 import { Notifier } from './types';
 
 type FormattedMessage = Discord.MessageEmbed | string;
@@ -19,7 +18,7 @@ export class DiscordNotifier implements Notifier {
     const clientProvider = container.get<DiscordClientProvider>(TYPES.DiscordClientProvider);
     const client = await clientProvider();
 
-    const channelId = env('DISCORD_CHANNEL_ID');
+    const channelId = $util.env('DISCORD_CHANNEL_ID');
     const channel = await client.channels.fetch(channelId);
     const formattedMessages = messages.map((message) => this.format(message));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

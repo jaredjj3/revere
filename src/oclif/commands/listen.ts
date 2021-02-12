@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command';
 import { uniq } from 'lodash';
 import { $listeners, $notifiers } from '../../helpers';
-import { logger } from '../../util';
+import { logger } from '../../logger';
 import { $flags } from '../flags';
 import { LongRunningCommand } from '../LongRunningCommand';
 

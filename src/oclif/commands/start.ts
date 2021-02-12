@@ -1,8 +1,8 @@
 import { flags } from '@oclif/command';
 import { container } from '../../inversify.config';
 import { TYPES } from '../../inversify.constants';
+import { logger } from '../../logger';
 import { JobRunner } from '../../runners/JobRunner';
-import { logger } from '../../util';
 import { LongRunningCommand } from '../LongRunningCommand';
 
 export default class Start extends LongRunningCommand {
