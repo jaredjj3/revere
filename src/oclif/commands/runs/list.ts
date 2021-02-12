@@ -35,22 +35,6 @@ export default class List extends ExitImmediatelyCommand {
           header: 'command',
           get: (commandRun) => commandRun.command,
         },
-        src: {
-          header: 'src',
-          get: (commandRun) => commandRun.src,
-        },
-        status: {
-          header: 'status',
-          get: (commandRun) => commandRun.status,
-        },
-        callerId: {
-          header: 'callerId',
-          get: (commandRun) => commandRun.callerId,
-        },
-        callerType: {
-          header: 'callerType',
-          get: (commandRun) => commandRun.callerType,
-        },
       },
       {
         printLine: (line: string) => {

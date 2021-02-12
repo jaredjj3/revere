@@ -40,14 +40,6 @@ export default class List extends ExitImmediatelyCommand {
           header: 'name',
           get: (job) => job.name,
         },
-        command: {
-          header: 'command',
-          get: (job) => job.command,
-        },
-        cronExpression: {
-          header: 'cronExpression',
-          get: (job) => job.cronExpression,
-        },
         active: {
           header: 'active',
           get: (job) => job.active,
