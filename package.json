@@ -90,6 +90,9 @@
       },
       "yfin": {
         "description": "Query the Yahoo Finance API"
+      },
+      "objs": {
+        "description": "Manage objectives"
       }
     },
     "helpClass": "./src/oclif/CustomHelp",
