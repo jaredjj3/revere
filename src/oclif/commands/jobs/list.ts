@@ -40,10 +40,6 @@ export default class List extends ExitImmediatelyCommand {
           header: 'name',
           get: (job) => job.name,
         },
-        description: {
-          header: 'description',
-          get: (job) => job.description,
-        },
         command: {
           header: 'command',
           get: (job) => job.command,

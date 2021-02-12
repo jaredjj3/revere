@@ -1,6 +1,14 @@
 import { CommandRun, CommandRunStatus, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
 import { YFinanceApiInfoResponse, YFinanceApiInfoResponseKeys } from '../apis';
-import { ComplexField, ComplexMessage, Message, MessageByType, MessageType, Severity } from '../messages';
+import {
+  ComplexField,
+  ComplexMessage,
+  Message,
+  MessageByType,
+  MessageType,
+  Severity,
+  SimpleMessage,
+} from '../messages';
 import * as $colors from './colors';
 import * as $formats from './formats';
 
@@ -8,9 +16,9 @@ export const isMessageType = <T extends MessageType>(message: Message, type: T):
   return message.type === type;
 };
 
-export const simple = (attrs?: Partial<Message>): Message => {
+export const simple = (attrs?: Partial<SimpleMessage>): SimpleMessage => {
   return {
-    type: MessageType.Unknown,
+    type: MessageType.Simple,
     description: '',
     severity: Severity.Info,
     timestamp: new Date(),
@@ -22,8 +30,8 @@ export const complex = (attrs: Partial<ComplexMessage> & Pick<ComplexMessage, 't
   return { ...simple(), type: MessageType.Complex, fields: [], ...attrs };
 };
 
-export const stdout = (content: string): ComplexMessage => {
-  return complex({ description: content });
+export const stdout = (content: string): SimpleMessage => {
+  return simple({ description: $formats.mdCodeBlock(content) });
 };
 
 export const squoze = (header: string): ComplexMessage => {
