@@ -1,18 +1,17 @@
 import { flags } from '@oclif/command';
 import { PrismaClient } from '@prisma/client';
-import { $messages, $notifiers } from '../../../helpers';
-import { container } from '../../../inversify.config';
-import { TYPES } from '../../../inversify.constants';
-import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
-import { $flags } from '../../flags';
+import { $messages, $notifiers } from '../../../../helpers';
+import { container } from '../../../../inversify.config';
+import { TYPES } from '../../../../inversify.constants';
+import { ExitImmediatelyCommand } from '../../../ExitImmediatelyCommand';
+import { $flags } from '../../../flags';
 
-export default class Tickthresh extends ExitImmediatelyCommand {
+export default class Create extends ExitImmediatelyCommand {
   static description = 'create a ticker threshold';
 
   static flags = {
     help: flags.help({ char: 'h' }),
     notifiers: $flags.notifiers(),
-    type: flags.enum({ options: ['TICKER_THRESHOLD'], default: 'TICKER_THRESHOLD' }),
     symbol: flags.string({ char: 's', required: true }),
     field: flags.string({ char: 'f', required: true }),
     lower: flags.string({ char: 'l', required: true }),
@@ -23,7 +22,7 @@ export default class Tickthresh extends ExitImmediatelyCommand {
   };
 
   async run(): Promise<void> {
-    const { flags } = this.parse(Tickthresh);
+    const { flags } = this.parse(Create);
 
     const prisma = container.get<PrismaClient>(TYPES.PrismaClient);
 
