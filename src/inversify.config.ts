@@ -34,7 +34,7 @@ container.bind<DiscordClientProvider>(TYPES.DiscordClientProvider).toProvider<Di
 
 const prisma = new PrismaClient();
 onCleanup(async () => {
-  logger.info('disconnecting prisma');
+  logger.debug('disconnecting prisma');
   await prisma.$disconnect();
 });
 container.bind<PrismaClient>(TYPES.PrismaClient).toConstantValue(prisma);

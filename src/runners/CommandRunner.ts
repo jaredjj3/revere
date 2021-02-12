@@ -57,7 +57,10 @@ export class CommandRunner {
     // run the command
     commandRun.startedAt = new Date();
     logger.debug(`running '${argv.join(' ')}' with opts: ${JSON.stringify(opts)}`);
-    const run = spawn('bin/run', argv, { shell: false, env: { ...process.env, CMD_INPUT_SRC: opts.src } });
+    const run = spawn('bin/run', argv, {
+      shell: false,
+      env: { ...process.env, CMD_INPUT_SRC: opts.src, LOG_LEVEL: 'DEBUG' },
+    });
 
     // handle command events
     const stdout = new Array<string>();

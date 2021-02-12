@@ -103,9 +103,9 @@ export const onCleanup = (() => {
   const callbacks = new Array<CleanupCallback>();
 
   const cleanup = async () => {
-    logger.info('cleanup started');
+    logger.debug('cleanup started');
     await Promise.all(callbacks.map((callback) => catchAll(callback)));
-    logger.info('cleanup done');
+    logger.debug('cleanup done');
   };
 
   process.on('SIGTERM', cleanup);
