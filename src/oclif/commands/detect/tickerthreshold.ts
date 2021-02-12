@@ -38,6 +38,10 @@ export default class Tickerthreshold extends ExitImmediatelyCommand {
 
     if (objective.numNotifications < 1) {
       console.warn(`objective has no more numNotifications`);
+      if (CMD_INPUT_SRC === CommandRunSrc.JOB && typeof objective.jobId === 'number') {
+        console.warn(`disabling job ${objective.jobId}`);
+        await prisma.job.update({ where: { id: objective.jobId }, data: { active: false } });
+      }
       if (!flags.notificationOverride) {
         throw new RevereError(`notification override not active, set the --notificationOverride flag`);
       }
