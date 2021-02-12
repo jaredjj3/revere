@@ -9,7 +9,7 @@ import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
 // when the job is spawned from a JOB context, we want to deduct the numNotifications
-// field on an objective
+// field on an objective by default
 const CMD_INPUT_SRC = $util.env('CMD_INPUT_SRC').toUpperCase();
 const DEFAULT_DEDUCT = CMD_INPUT_SRC === CommandRunSrc.JOB;
 const DEFAULT_NOTIFICATION_OVERRIDE = CMD_INPUT_SRC !== CommandRunSrc.JOB;
