@@ -58,7 +58,7 @@ export const help = (run: CommandRun): ComplexMessage => {
     lines.push(run.stderr);
   }
 
-  const description = lines.length > 0 ? $formats.codeBlock(lines.join('\n')) : undefined;
+  const description = lines.length > 0 ? $formats.mdCodeBlock(lines.join('\n')) : undefined;
 
   return complex({
     title: 'HELP',
@@ -83,13 +83,13 @@ export const commandRun = (run: CommandRun): ComplexMessage => {
 
   const fields = new Array<ComplexField>();
   if (run.command) {
-    fields.push({ name: 'command', value: $formats.codeBlock(run.command) });
+    fields.push({ name: 'command', value: $formats.mdCodeBlock(run.command) });
   }
   if (run.stdout) {
-    fields.push({ name: 'stdout', value: $formats.codeBlock(run.stdout) });
+    fields.push({ name: 'stdout', value: $formats.mdCodeBlock(run.stdout) });
   }
   if (run.stderr) {
-    fields.push({ name: 'stderr', value: $formats.codeBlock(run.stderr) });
+    fields.push({ name: 'stderr', value: $formats.mdCodeBlock(run.stderr) });
   }
 
   return complex({
@@ -114,7 +114,7 @@ export const tickerThreshold = (
 
   if (objective.message) {
     if (objective.author) {
-      lines.push($formats.italic(`from ${objective.author}:`));
+      lines.push($formats.mdItalic(`from ${objective.author}:`));
     }
     lines.push($formats.mdQuote(objective.message));
     lines.push('');

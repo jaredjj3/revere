@@ -17,9 +17,9 @@ export const yfinanceInfoField = (field: YFinanceApiInfoResponseKeys, value: unk
   }
 };
 
-export const codeBlock = (str: string): string => '```' + str + '```';
+export const mdCodeBlock = (str: string): string => '```' + str + '```';
 
-export const italic = (str: string): string => `_${str}_`;
+export const mdItalic = (str: string): string => `_${str}_`;
 
 export const mdQuote = (str: string): string =>
   str
