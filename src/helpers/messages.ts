@@ -1,7 +1,6 @@
 import { CommandRun, CommandRunStatus, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
 import { YFinanceApiInfoResponse, YFinanceApiInfoResponseKeys } from '../apis';
 import { ComplexField, ComplexMessage, Message, MessageByType, MessageType, Severity } from '../messages';
-import * as $cmp from './cmp';
 import * as $colors from './colors';
 import * as $formats from './formats';
 
@@ -122,6 +121,21 @@ export const tickerThreshold = (
     lines.push('');
   }
 
+  const lowerBound =
+    typeof objective.lowerBound === 'number' ? $formats.yfinanceInfoField(field, objective.lowerBound) : null;
+  const current = $formats.yfinanceInfoField(field, data.value);
+  const upperBound =
+    typeof objective.upperBound === 'number' ? $formats.yfinanceInfoField(field, objective.upperBound) : null;
+
+  const expressions = new Array<string>();
+  if (lowerBound) {
+    expressions.push(`${lowerBound} > ${current}`);
+  }
+  if (upperBound) {
+    expressions.push(`${current} > ${upperBound}`);
+  }
+  const conditions = expressions.length === 0 ? 'UNKNOWN' : expressions.join(' OR ');
+
   return complex({
     title: `${info.longName} (${info.symbol})`,
     description: lines.join('\n'),
@@ -134,9 +148,6 @@ export const tickerThreshold = (
         value: $formats.yfinanceInfoField(field, data.value),
       },
     ],
-    footer: `trigger conditions on field '${field}': ${$formats.yfinanceInfoField(
-      field,
-      data.value
-    )} ${$cmp.toMathSymbol(objective.cmp)} ${$formats.yfinanceInfoField(field, objective.threshold)}`,
+    footer: `trigger conditions on field '${field}': ${conditions}`,
   });
 };

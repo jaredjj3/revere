@@ -1,4 +1,4 @@
-import { Cmp, PrismaClient, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
+import { PrismaClient, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
 import { inject, injectable } from 'inversify';
 import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
@@ -38,21 +38,8 @@ export class TickerThresholdDetector {
   }
 
   private isThresholdExceeded(objective: TickerThresholdObjective, data: TickerThresholdData): boolean {
-    switch (objective.cmp) {
-      case Cmp.LT:
-        return data.value < objective.threshold;
-      case Cmp.LTEQ:
-        return data.value <= objective.threshold;
-      case Cmp.EQ:
-        return data.value === objective.threshold;
-      case Cmp.GTEQ:
-        return data.value >= objective.threshold;
-      case Cmp.GT:
-        return data.value > objective.threshold;
-      default:
-        throw new RevereError(
-          `unrecognized comparison word ${objective.cmp}, can't compare threshold ${objective.threshold} and value ${data.value}`
-        );
-    }
+    const lowerBound = typeof objective.lowerBound === 'number' ? objective.lowerBound : -Number.NEGATIVE_INFINITY;
+    const higherBound = typeof objective.upperBound === 'number' ? objective.upperBound : Number.POSITIVE_INFINITY;
+    return lowerBound > data.value || data.value > higherBound;
   }
 }

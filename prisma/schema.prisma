@@ -16,14 +16,15 @@ model SquozeResponse {
 }
 
 model Job {
-  id             Int      @id @default(autoincrement())
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  name           String   @unique
-  description    String?
-  command        String
-  cronExpression String
-  active         Boolean
+  id                       Int                        @id @default(autoincrement())
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  name                     String                     @unique
+  description              String?
+  command                  String
+  cronExpression           String
+  active                   Boolean
+  TickerThresholdObjective TickerThresholdObjective[]
 }
 
 enum CommandRunStatus {
@@ -68,24 +69,18 @@ model CommandRun {
   callerType      CallerType       @default(UNKNOWN)
 }
 
-enum Cmp {
-  LT
-  LTEQ
-  EQ
-  GTEQ
-  GT
-}
-
 model TickerThresholdObjective {
   id                  Int                   @id @default(autoincrement())
   symbol              String
   field               String
-  cmp                 Cmp
-  threshold           Float
+  lowerBound          Float?
+  upperBound          Float?
   message             String?
   author              String?
   numNotifications    Int
   TickerThresholdData TickerThresholdData[]
+  job                 Job?                  @relation(fields: [jobId], references: [id])
+  jobId               Int?
 }
 
 model TickerThresholdData {
