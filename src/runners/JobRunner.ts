@@ -115,6 +115,7 @@ export class JobRunner {
       const commandRun = await this.commandRunner.run(job.command.split(' '), {
         src: CommandRunSrc.JOB,
         callerType: CallerType.COMPUTER,
+        callerId: job.id.toString(),
       });
       logger.debug(
         `\nJOB ${job.name} START=======================\n${[commandRun.stdout, commandRun.stderr]

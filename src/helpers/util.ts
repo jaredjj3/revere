@@ -100,11 +100,11 @@ const catchAll = async (callback: CleanupCallback): Promise<void> => {
  * to cleanup resources.
  */
 export const onCleanup = (() => {
-  const callbacks = new Array<CleanupCallback>();
+  const callbacks = new Set<CleanupCallback>();
 
   const cleanup = async () => {
     logger.debug('cleanup started');
-    await Promise.all(callbacks.map((callback) => catchAll(callback)));
+    await Promise.all(Array.from(callbacks).map((callback) => catchAll(callback)));
     logger.debug('cleanup done');
   };
 
@@ -113,7 +113,7 @@ export const onCleanup = (() => {
 
   return (callback?: CleanupCallback): CleanupCallback => {
     if (callback) {
-      callbacks.push(callback);
+      callbacks.add(callback);
     }
     return cleanup;
   };
