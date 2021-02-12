@@ -1,4 +1,5 @@
-import { CommandRun, CommandRunStatus, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
+import { CommandRun, CommandRunStatus, Job, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
+import cronstrue from 'cronstrue';
 import { YFinanceApiInfoResponse, YFinanceApiInfoResponseKeys } from '../apis';
 import {
   ComplexField,
@@ -157,5 +158,24 @@ export const tickerThreshold = (
       },
     ],
     footer: `trigger conditions on field '${field}': ${conditions}`,
+  });
+};
+
+export const job = (job: Job): ComplexMessage => {
+  const activeStr = job.active ? 'ACTIVE' : 'INACTIVE';
+  const color = job.active ? $colors.GREEN : $colors.YELLOW;
+
+  return complex({
+    title: `${job.name} (${activeStr})`,
+    description: job.description || '',
+    color,
+    fields: [
+      { name: 'created at', value: job.createdAt.toISOString(), inline: false },
+      { name: 'updated at', value: job.updatedAt.toISOString(), inline: false },
+      { name: 'command', value: $formats.mdInlineCodeBlock(job.command), inline: false },
+      { name: 'cron', value: $formats.mdInlineCodeBlock(job.cronExpression), inline: false },
+      { name: 'cron translation', value: cronstrue.toString(job.cronExpression), inline: false },
+    ],
+    footer: `id ${job.id}`,
   });
 };
