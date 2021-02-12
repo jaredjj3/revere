@@ -36,7 +36,7 @@ services:
       - ./yarn.lock:/app/yarn.lock
     networks:
       - default
-    command: ['yarn', 'nodemon', 'bin/run', 'start']
+    command: ['yarn', 'nodemon', 'bin/run', 'jobs:start']
 
   yfinance:
     image: yfinance:latest
