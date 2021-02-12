@@ -83,19 +83,19 @@
     "commands": "./lib/oclif/commands/",
     "topics": {
       "detect": {
-        "description": "Run detectors"
+        "description": "run detectors"
       },
       "runs": {
-        "description": "Manage command runs"
+        "description": "manage command runs"
       },
       "jobs": {
-        "description": "Manage jobs"
+        "description": "manage jobs"
       },
       "yfin": {
-        "description": "Query the Yahoo Finance API"
+        "description": "query the Yahoo Finance API"
       },
       "objs": {
-        "description": "Manage objectives"
+        "description": "manage objectives"
       }
     },
     "helpClass": "./src/oclif/CustomHelp",
