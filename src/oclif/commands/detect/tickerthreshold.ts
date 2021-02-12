@@ -15,7 +15,7 @@ const DEFAULT_DEDUCT = CMD_INPUT_SRC === CommandRunSrc.JOB;
 const DEFAULT_NOTIFICATION_OVERRIDE = CMD_INPUT_SRC !== CommandRunSrc.JOB;
 
 export default class Tickerthreshold extends ExitImmediatelyCommand {
-  static description = 'runs specified detectors and notifiers';
+  static description = 'runs the ticker threshold detector';
 
   static flags = {
     help: flags.help({ char: 'h' }),

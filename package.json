@@ -82,6 +82,9 @@
   "oclif": {
     "commands": "./lib/oclif/commands/",
     "topics": {
+      "detect": {
+        "description": "Run detectors"
+      },
       "runs": {
         "description": "Manage command runs"
       },

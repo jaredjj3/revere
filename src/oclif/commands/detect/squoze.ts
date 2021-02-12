@@ -7,7 +7,7 @@ import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
 
 export default class Squoze extends ExitImmediatelyCommand {
-  static description = 'runs specified detectors and notifiers';
+  static description = 'runs the squoze detector';
 
   static flags = {
     help: flags.help({ char: 'h' }),
