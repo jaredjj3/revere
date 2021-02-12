@@ -1,9 +1,9 @@
-/* eslint-disable no-case-declarations */
 import { injectable } from 'inversify';
-import { isObject } from 'lodash';
-import { logger } from '../logger';
+import { isObject, times } from 'lodash';
 import { Message } from '../messages';
 import { Notifier } from './types';
+
+// console.log is used instead of logger.info to make it easier to read
 
 @injectable()
 export class ConsoleNotifier implements Notifier {
@@ -20,14 +20,35 @@ export class ConsoleNotifier implements Notifier {
   }
 
   private log(message: Message): void {
-    logger.info(`${message.type} MESSAGE START===================`);
+    console.log(`${message.type} MESSAGE START===================`);
     for (const [key, val] of Object.entries(message)) {
-      let str = val;
       if (isObject(val)) {
-        str = JSON.stringify(val, null, 2);
+        console.log(`${key}:`);
+        this.logProps(val);
+      } else {
+        console.log(`${key}: ${val}`);
       }
-      logger.info(`${key}: ${str}`);
     }
-    logger.info(`${message.type} MESSAGE END=====================`);
+    console.log(`${message.type} MESSAGE END=====================`);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private logProps(thing: any, depth = 1): void {
+    const spaces = times(depth, () => '  ').join('');
+    for (const [key, val] of Object.entries(thing)) {
+      if (isObject(val)) {
+        console.log(`${spaces}${key}:`);
+        this.logProps(val, depth + 1);
+      } else {
+        let str = val;
+        if (typeof val === 'string') {
+          str = val
+            .split('\n')
+            .map((line, ndx) => (ndx === 0 ? line : `${spaces}  ${line}`))
+            .join('\n');
+        }
+        console.log(`${spaces}${key}: ${str}`);
+      }
+    }
   }
 }
