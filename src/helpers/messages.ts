@@ -101,6 +101,12 @@ export const commandRun = (run: CommandRun): ComplexMessage => {
   if (run.stderr) {
     fields.push({ name: 'stderr', value: $formats.mdCodeBlock(run.stderr) });
   }
+  if (run.callerType) {
+    fields.push({ name: 'callerType', value: $formats.mdCodeBlock(run.callerType) });
+  }
+  if (run.callerId) {
+    fields.push({ name: 'callerId', value: $formats.mdCodeBlock(run.callerId) });
+  }
 
   return complex({
     title: `COMMAND RUN ${run.id} (${run.status})`,
