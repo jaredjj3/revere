@@ -38,7 +38,7 @@ export class TickerThresholdDetector {
   }
 
   private isThresholdExceeded(objective: TickerThresholdObjective, data: TickerThresholdData): boolean {
-    const lowerBound = typeof objective.lowerBound === 'number' ? objective.lowerBound : -Number.NEGATIVE_INFINITY;
+    const lowerBound = typeof objective.lowerBound === 'number' ? objective.lowerBound : Number.NEGATIVE_INFINITY;
     const higherBound = typeof objective.upperBound === 'number' ? objective.upperBound : Number.POSITIVE_INFINITY;
     return lowerBound > data.value || data.value > higherBound;
   }
