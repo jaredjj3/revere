@@ -136,10 +136,10 @@ export const tickerThreshold = (
     typeof objective.upperBound === 'number' ? $formats.yfinanceInfoField(field, objective.upperBound) : null;
 
   const expressions = new Array<string>();
-  if (lowerBound) {
+  if (lowerBound && lowerBound > current) {
     expressions.push(`${lowerBound} > ${current}`);
   }
-  if (upperBound) {
+  if (upperBound && current > upperBound) {
     expressions.push(`${current} > ${upperBound}`);
   }
   const conditions = expressions.length === 0 ? 'UNKNOWN' : expressions.join(' OR ');
