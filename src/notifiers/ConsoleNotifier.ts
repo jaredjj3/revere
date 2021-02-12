@@ -20,7 +20,7 @@ export class ConsoleNotifier implements Notifier {
   }
 
   private log(message: Message): void {
-    this.logHeader(message);
+    logger.info(`${message.type} MESSAGE START===================`);
     for (const [key, val] of Object.entries(message)) {
       let str = val;
       if (isObject(val)) {
@@ -28,14 +28,6 @@ export class ConsoleNotifier implements Notifier {
       }
       logger.info(`${key}: ${str}`);
     }
-    this.logFooter(message);
-  }
-
-  private logHeader(message: Message): void {
-    logger.info(`${message.type} MESSAGE START===================`);
-  }
-
-  private logFooter(message: Message): void {
     logger.info(`${message.type} MESSAGE END=====================`);
   }
 }
