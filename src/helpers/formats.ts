@@ -16,3 +16,13 @@ export const yfinanceInfoField = (field: YFinanceApiInfoResponseKeys, value: unk
       return `${value}`;
   }
 };
+
+export const codeBlock = (str: string): string => '```' + str + '```';
+
+export const italic = (str: string): string => `_${str}_`;
+
+export const mdQuote = (str: string): string =>
+  str
+    .split('\n')
+    .map((line) => `> ${line}`)
+    .join('\n');

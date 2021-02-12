@@ -1,7 +1,7 @@
 import { flags } from '@oclif/command';
 import cronstrue from 'cronstrue';
 import { $notifiers } from '../../helpers';
-import { createMessage } from '../../helpers/messages';
+import { simple } from '../../helpers/messages';
 import { toInlineCodeStr } from '../../util';
 import { ExitImmediatelyCommand } from '../ExitImmediatelyCommand';
 import { $flags } from '../flags';
@@ -25,7 +25,7 @@ export default class Cronstr extends ExitImmediatelyCommand {
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     await $notifiers.notifyAll(
       notifiers,
-      createMessage({ content: `${toInlineCodeStr(cronExpression)} translates to: _"${humanReadableStr}"_` })
+      simple({ description: `${toInlineCodeStr(cronExpression)} translates to: _"${humanReadableStr}"_` })
     );
   }
 }

@@ -8,7 +8,7 @@ import { TYPES } from '../inversify.constants';
 import { Notifier } from '../notifiers';
 import { HELP_EXIT_CODE } from '../oclif/constants';
 import { CommandRunner } from '../runners';
-import { env, logger, toInlineCodeStr } from '../util';
+import { env, logger } from '../util';
 import { Listener } from './types';
 
 const COMMAND_PREFIXES = ['!revere', '!r', '!rd', '!rdebug', '!reveredebug'];
@@ -57,17 +57,15 @@ export class DiscordListener implements Listener {
         callerId: message.author.username,
       });
       if (commandRun.exitCode === HELP_EXIT_CODE) {
-        await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
+        await $notifiers.notifyAll(notifiers, $messages.help(commandRun));
       } else if (debug || commandRun.status !== CommandRunStatus.SUCCESS) {
-        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+        await $notifiers.notifyAll(notifiers, $messages.commandRun(commandRun));
       }
     } catch (err) {
       logger.error(err);
       await $notifiers.notifyAll(
         notifiers,
-        $messages.createStdoutMessage({
-          content: `unsuccessfully ran: ${toInlineCodeStr(userInput)}\nerror message: ${err.message}`,
-        })
+        $messages.stdout(`unsuccessfully ran: ${userInput}\nerror message: ${err.message}`)
       );
     }
   };

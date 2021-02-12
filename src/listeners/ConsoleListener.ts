@@ -39,9 +39,9 @@ export class ConsoleListener implements Listener {
     try {
       const commandRun = await commandRunner.run(argv, { src: CommandRunSrc.CONSOLE });
       if (commandRun.exitCode === HELP_EXIT_CODE) {
-        await $notifiers.notifyAll(notifiers, $messages.createHelpMessage({ commandRun }));
+        await $notifiers.notifyAll(notifiers, $messages.help(commandRun));
       } else {
-        await $notifiers.notifyAll(notifiers, $messages.createCommandRunMessage({ commandRun }));
+        await $notifiers.notifyAll(notifiers, $messages.commandRun(commandRun));
       }
     } catch (err) {
       await $notifiers.notifyAll(notifiers, err.message);

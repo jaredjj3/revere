@@ -3,9 +3,9 @@ import { container } from '../../inversify.config';
 import { TYPES } from '../../inversify.constants';
 import { JobRunner } from '../../runners/JobRunner';
 import { logger } from '../../util';
-import { ExitImmediatelyCommand } from '../ExitImmediatelyCommand';
+import { LongRunningCommand } from '../LongRunningCommand';
 
-export default class Start extends ExitImmediatelyCommand {
+export default class Start extends LongRunningCommand {
   static hidden = true;
   static description = 'starts the job runner to run indefinitely';
 

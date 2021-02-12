@@ -1,14 +1,7 @@
-import { CommandRun, TickerThresholdData, TickerThresholdObjective } from '@prisma/client';
-import { YFinanceApiInfoResponse } from '../apis';
-
 export enum MessageType {
-  None = 'None',
-  Stdout = 'Stdout',
-  Squoze = 'Squoze',
-  YFinanceInfo = 'YfinInfo',
-  Help = 'Help',
-  CommandRun = 'CommandRun',
-  TickerThreshold = 'TickerThreshold',
+  Unknown = 'Unknown',
+  Simple = 'Simple',
+  Complex = 'Complex',
 }
 
 export enum Severity {
@@ -19,48 +12,35 @@ export enum Severity {
 }
 
 export type MessageByType = {
-  [MessageType.None]: Message;
-  [MessageType.Stdout]: StdoutMessage;
-  [MessageType.Squoze]: SquozeMessage;
-  [MessageType.YFinanceInfo]: YFinanceInfoMessage;
-  [MessageType.Help]: HelpMessage;
-  [MessageType.CommandRun]: CommandRunMessage;
-  [MessageType.TickerThreshold]: TickerThresholdMessage;
+  [MessageType.Unknown]: Message;
+  [MessageType.Simple]: SimpleMessage;
+  [MessageType.Complex]: ComplexMessage;
 };
 
 export type Message = {
   type: MessageType;
   timestamp: Date;
   severity: Severity;
-  content: string;
+  description: string;
 };
 
-export type StdoutMessage = Message & {
-  type: MessageType.Stdout;
+export type SimpleMessage = Message & {
+  type: MessageType.Simple;
 };
 
-export type SquozeMessage = Message & {
-  type: MessageType.Squoze;
+export type ComplexField = {
+  name: string;
+  value: string;
+  inline?: boolean;
 };
 
-export type YFinanceInfoMessage = Message & {
-  type: MessageType.YFinanceInfo;
-  data: YFinanceApiInfoResponse;
-  fields: Array<keyof YFinanceApiInfoResponse>;
-};
-
-export type HelpMessage = Message & {
-  type: MessageType.Help;
-  commandRun: CommandRun;
-};
-
-export type CommandRunMessage = Message & {
-  type: MessageType.CommandRun;
-  commandRun: CommandRun;
-};
-
-export type TickerThresholdMessage = Message & {
-  type: MessageType.TickerThreshold;
-  objective: TickerThresholdObjective;
-  data: TickerThresholdData;
+export type ComplexMessage = Message & {
+  type: MessageType.Complex;
+  author?: string;
+  title?: string;
+  fields: ComplexField[];
+  url?: string;
+  color?: string;
+  image?: string;
+  footer?: string;
 };

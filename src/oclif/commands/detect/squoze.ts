@@ -16,8 +16,10 @@ export default class Squoze extends ExitImmediatelyCommand {
 
   async run(): Promise<void> {
     const { flags } = this.parse(Squoze);
-    const notifiers = flags.notifiers.map($notifiers.getNotifier);
     const squozeDetector = container.get<SquozeDetector>(TYPES.SquozeDetector);
-    await squozeDetector.detect(notifiers);
+    const messages = await squozeDetector.detect();
+
+    const notifiers = flags.notifiers.map($notifiers.getNotifier);
+    await $notifiers.notifyAll(notifiers, ...messages);
   }
 }

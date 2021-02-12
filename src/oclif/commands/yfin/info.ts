@@ -1,10 +1,12 @@
 import { flags } from '@oclif/command';
-import { YFinanceApi, YFinanceApiInfoResponse } from '../../../apis';
+import { YFinanceApi, YFinanceApiInfoResponseKeys } from '../../../apis';
 import { $messages, $notifiers } from '../../../helpers';
 import { container } from '../../../inversify.config';
 import { TYPES } from '../../../inversify.constants';
 import { ExitImmediatelyCommand } from '../../ExitImmediatelyCommand';
 import { $flags } from '../../flags';
+
+const BASE_FIELDS = new Array<YFinanceApiInfoResponseKeys>('bid', 'ask', 'averageVolume', 'marketCap', 'shortRatio');
 
 export default class Info extends ExitImmediatelyCommand {
   static description = 'get basic info from the api';
@@ -21,13 +23,7 @@ export default class Info extends ExitImmediatelyCommand {
 
     const api = container.get<YFinanceApi>(TYPES.YFinanceApi);
     const datas = await Promise.all(flags.symbols.map((symbol) => api.getInfo(symbol)));
-    const messages = datas.map((data) =>
-      $messages.createYFinanceInfoMessage({
-        data,
-        content: 'from the yfinance api',
-        fields: (flags.fields as Array<keyof YFinanceApiInfoResponse> | undefined) || [],
-      })
-    );
+    const messages = datas.map((data) => $messages.yfinanceInfo(data, BASE_FIELDS));
 
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
     await $notifiers.notifyAll(notifiers, ...messages);

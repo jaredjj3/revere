@@ -60,7 +60,7 @@ export default class List extends ExitImmediatelyCommand {
     );
 
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
-    const message = $messages.createStdoutMessage({ content: `\n${lines.join('\n')}` });
+    const message = $messages.stdout(lines.join('\n'));
     await notifyAll(notifiers, message);
   }
 }

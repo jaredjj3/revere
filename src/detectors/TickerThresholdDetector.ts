@@ -4,7 +4,7 @@ import { YFinanceApi, YFinanceApiInfoResponse } from '../apis';
 import { RevereError } from '../errors';
 import { $messages } from '../helpers';
 import { TYPES } from '../inversify.constants';
-import { TickerThresholdMessage } from '../messages';
+import { Message } from '../messages';
 import { logger } from '../util';
 
 @injectable()
@@ -14,10 +14,10 @@ export class TickerThresholdDetector {
     @inject(TYPES.YFinanceApi) private api: YFinanceApi
   ) {}
 
-  async detect(objective: TickerThresholdObjective): Promise<TickerThresholdMessage | void> {
+  async detect(objective: TickerThresholdObjective): Promise<Message | void> {
     const data = await this.getData(objective);
     if (this.isThresholdExceeded(objective, data)) {
-      return $messages.createTickerThresholdMessage({ objective, data });
+      return $messages.tickerThreshold(objective, data, data.meta as YFinanceApiInfoResponse);
     } else {
       logger.info(
         `no exceedance detected for objective ${objective.id}, retrieved value for '${objective.field}': ${data.value}`

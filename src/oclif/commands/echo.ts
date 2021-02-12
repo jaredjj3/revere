@@ -18,6 +18,6 @@ export default class Echo extends ExitImmediatelyCommand {
   async run(): Promise<void> {
     const { argv, flags } = this.parse(Echo);
     const notifiers = flags.notifiers.map($notifiers.getNotifier);
-    await $notifiers.notifyAll(notifiers, $messages.createStdoutMessage({ content: argv.join(' ') }));
+    await $notifiers.notifyAll(notifiers, $messages.stdout(argv.join(' ')));
   }
 }

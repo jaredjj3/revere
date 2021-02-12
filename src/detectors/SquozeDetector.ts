@@ -2,10 +2,9 @@ import { PrismaClient, SquozeResponse } from '@prisma/client';
 import * as https from 'https';
 import { inject, injectable } from 'inversify';
 import parse from 'node-html-parser';
-import { $messages, $notifiers } from '../helpers';
+import { $messages } from '../helpers';
 import { TYPES } from '../inversify.constants';
-import { Severity, SquozeMessage } from '../messages';
-import { Notifier } from '../notifiers';
+import { Message } from '../messages';
 import { logger } from '../util';
 
 const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
@@ -14,44 +13,32 @@ const SQUOZE_HOSTNAME = 'isthesqueezesquoze.com';
 export class SquozeDetector {
   constructor(@inject(TYPES.PrismaClient) private prisma: PrismaClient) {}
 
-  async detect(notifiers: Notifier[]): Promise<void> {
+  async detect(): Promise<Message[]> {
     const [prev, next] = await Promise.all([this.getPrevData(), this.getNextData()]);
-    const messages = this.getMessages(prev, next);
-    await $notifiers.notifyAll(notifiers, ...messages);
+    return this.getMessages(prev, next);
   }
 
-  private getMessages(prev: SquozeResponse | null, next: SquozeResponse): SquozeMessage[] {
-    const timestamp = new Date();
-    const messages = new Array<SquozeMessage>();
+  private getMessages(prev: SquozeResponse | null, next: SquozeResponse): Message[] {
+    const messages = new Array<Message>();
 
     if (!prev) {
-      messages.push(
-        $messages.createSquozeMessage({
-          timestamp,
-          severity: Severity.Info,
-          content: `squoze data primed`,
-        })
-      );
+      messages.push($messages.stdout(`squoze data primed`));
     }
 
     if (prev && prev.httpStatusCode !== next.httpStatusCode) {
       messages.push(
-        $messages.createSquozeMessage({
-          timestamp,
-          severity: Severity.Info,
-          content: `squoze changed http status codes: '${prev.httpStatusCode}' -> '${next.httpStatusCode}'`,
-        })
+        $messages.stdout(`squoze changed http status codes: '${prev.httpStatusCode}' -> '${next.httpStatusCode}'`)
       );
     }
 
-    if (prev && prev.httpStatusCode === 200 && next.httpStatusCode === 200 && prev.header !== next.header) {
-      messages.push(
-        $messages.createSquozeMessage({
-          timestamp,
-          severity: Severity.Warning,
-          content: `squoze has a new headline:\n\n'${next.header}'`,
-        })
-      );
+    if (
+      prev &&
+      prev.httpStatusCode === 200 &&
+      next.httpStatusCode === 200 &&
+      prev.header !== next.header &&
+      next.header
+    ) {
+      messages.push($messages.squoze(next.header));
     }
 
     return messages;
