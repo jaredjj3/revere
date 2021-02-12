@@ -12,6 +12,7 @@ export default class Tickthresh extends ExitImmediatelyCommand {
   static flags = {
     help: flags.help({ char: 'h' }),
     notifiers: $flags.notifiers(),
+    type: flags.enum({ options: ['TICKER_THRESHOLD'], default: 'TICKER_THRESHOLD' }),
     symbol: flags.string({ char: 's', required: true }),
     field: flags.string({ char: 'f', required: true }),
     lower: flags.string({ char: 'l', required: true }),
