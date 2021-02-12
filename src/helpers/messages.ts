@@ -110,6 +110,7 @@ export const commandRun = (run: CommandRun): ComplexMessage => {
 
   return complex({
     title: `COMMAND RUN ${run.id} (${run.status})`,
+    timestamp: run.startedAt,
     description,
     color,
     fields,
